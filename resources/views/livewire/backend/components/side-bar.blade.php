@@ -24,6 +24,69 @@
                         <span class="nav-link-text ms-1">Dashboard</span>
                     </a>
                 </li>
+
+
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#settings"
+                        class="nav-link {{ Request::is('admin/settings*') ? 'active' : '' }}" aria-controls="settings"
+                        role="button" aria-expanded="false">
+                        <div
+                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Settings</span>
+                    </a>
+                    <div class="collapse {{ Request::is('admin/settings*') ? 'show' : '' }}" id="settings">
+                        <ul class="nav ms-4">
+
+                            <!-- Site Settings -->
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/settings/site') ? 'active' : '' }}"
+                                    href="{{ route('admin.settings.site') }}">
+                                    <i class="fas fa-cog sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Site Settings </span>
+                                </a>
+                            </li>
+
+                            <!-- Mail Settings -->
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/settings/mail') ? 'active' : '' }}"
+                                    href="{{ route('admin.settings.mail') }}">
+                                    <i class="fas fa-envelope sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Mail Settings </span>
+                                </a>
+                            </li>
+
+                            <!-- Payment Settings -->
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/settings/payment') ? 'active' : '' }}"
+                                    href="{{ route('admin.settings.payment') }}">
+                                    <i class="fas fa-credit-card sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Payment Settings </span>
+                                </a>
+                            </li>
+
+                            <!-- Password Settings -->
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/settings/password') ? 'active' : '' }}"
+                                    href="{{ route('admin.settings.password') }}">
+                                    <i class="fas fa-lock sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Password Settings </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </li>
+
+
+
+
+
+
+
+
+
                 {{-- 
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('admin/manage-books') ? 'active' : '' }}"

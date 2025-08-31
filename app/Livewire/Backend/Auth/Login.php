@@ -23,10 +23,6 @@ class Login extends Component
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password, 'user_type' => 'admin'])) {
             /* user type admin and login is successful */
             return redirect('admin/dashboard');
-        }
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password, 'user_type' => 'user'])) {
-            /* user type admin and login is successful */
-            return redirect('/user/dashboard');
         } else {
             /* if the credentials are incorrect */
             return $this->addError('login_error', 'Invalid Email/Password');
