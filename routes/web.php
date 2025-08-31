@@ -12,7 +12,6 @@ Route::get('/', [Login::class, '__invoke'])->name('login');
 require __DIR__ . '/admin.php';
 
 
-// clear all those cache from application
 Route::get('/clear', function () {
     Artisan::call('route:cache');
     Artisan::call('config:cache');
