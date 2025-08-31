@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
-    <title>@yield('title', 'Spondon Library')</title>
+    <title>@yield('title', siteSetting()->site_title)</title>
 
+    <link rel="icon" type="image/png" href="{{ siteSetting()->favicon_url }}">
 
     <link href="{{ asset('assets/css/poppinsfont.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/nucleo-icons.css') }}" rel="stylesheet" />

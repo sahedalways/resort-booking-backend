@@ -87,6 +87,9 @@ class SiteSettings extends Component
         $settings->save();
 
 
+        cache()->forget('site_settings');
+
+
         $this->dispatch('toast', message: "Site Settings Updated Successfully!", notify: 'success');
     }
 }

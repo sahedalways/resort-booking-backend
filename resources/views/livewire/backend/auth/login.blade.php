@@ -7,10 +7,15 @@
                     <div class="col-lg-4 col-md-7">
                         <div class="card border-0 mb-0">
                             <div class="card-header bg-transparent text-center">
-                                <div class="d-flex align-items-center justify-content-center mt-2 mb-2">
-                                    {{-- <img src="{{asset(getSiteLogo())}}" class="login-logo"> --}}
-                                    <h4 class="text-dark ms-3 mb-0 text-uppercase">Resort Booking</h4>
+                                <div class="d-flex flex-column align-items-center justify-content-center mt-4 mb-4">
+                                    <div class="d-flex align-items-center justify-content-center mb-2">
+                                        <img src="{{ siteSetting()->logo_url }}" alt="Logo" class="login-logo me-3">
+                                        <h4 class="text-dark mb-0 text-uppercase">{{ siteSetting()->site_title }}</h4>
+                                    </div>
+
+                                    <h6 class="text-primary">Welcome to Admin Panel</h6>
                                 </div>
+
                             </div>
                             <div class="card-body px-lg-5 pt-0" x-data="{ resetpassword: false, success: @entangle('success') }" x-transition.fade>
                                 <div class="" x-show="resetpassword == false">
@@ -51,7 +56,7 @@
                                             <p
                                                 class="text-sm fw-500 mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3">
                                                 Powered by <a href="{{ url('/') }}" class="text-dark fw-600"
-                                                    target="_blank"> Resort Booking</a>
+                                                    target="_blank"> {{ siteSetting()->site_title }}</a>
                                             </p>
                                         </div>
 
