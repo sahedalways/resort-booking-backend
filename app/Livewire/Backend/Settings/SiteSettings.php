@@ -3,6 +3,7 @@
 namespace App\Livewire\Backend\Settings;
 
 use App\Models\SiteSetting;
+use App\Traits\ToastTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -10,6 +11,7 @@ use Livewire\WithFileUploads;
 
 class SiteSettings extends Component
 {
+    use ToastTrait;
     public $site_title, $logo, $favicon, $hero_image, $site_phone_number, $site_email, $copyright_text;
     public $old_favicon, $old_logo, $old_hero_image;
     use WithFileUploads;
@@ -90,6 +92,6 @@ class SiteSettings extends Component
         cache()->forget('site_settings');
 
 
-        $this->dispatch('toast', message: "Site Settings Updated Successfully!", notify: 'success');
+        $this->toast('Site Settings Updated Successfully!', 'success');
     }
 }

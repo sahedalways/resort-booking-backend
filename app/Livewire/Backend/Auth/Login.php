@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Backend\Auth;
 
+use App\Traits\ToastTrait;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Login extends Component
 {
+    use ToastTrait;
+
     public $email, $password, $success = false;
     //Render Page
     public function render()
@@ -25,7 +28,8 @@ class Login extends Component
             return redirect('admin/dashboard');
         } else {
             /* if the credentials are incorrect */
-            return $this->addError('login_error', 'Invalid Email/Password');
+            $this->toast('Invalid Email or Password', 'error');
+            return;
         }
     }
     //Initialize Variables
