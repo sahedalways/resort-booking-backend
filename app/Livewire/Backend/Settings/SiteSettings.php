@@ -3,7 +3,7 @@
 namespace App\Livewire\Backend\Settings;
 
 use App\Models\SiteSetting;
-use App\Services\SiteSettingService;
+use App\Services\SettingService;
 use App\Traits\ToastTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -55,43 +55,19 @@ class SiteSettings extends Component
 
 
     /* save the Site settings data */
-    public function save(SiteSettingService $service)
+    public function save(SettingService $service)
     {
         $this->validate();
 
-        $settings = SiteSetting::firstOrNew(['id' => 1]);
-
-        $settings->site_title = $this->site_title;
-        $settings->site_phone_number = $this->site_phone_number;
-        $settings->site_email = $this->site_email;
-        $settings->copyright_text = $this->copyright_text;
-
-        // Handle Logo
-        if ($this->logo) {
-            $ext = $this->logo->getClientOriginalExtension();
-            $this->logo->storeAs('image/settings', 'logo.' . $ext, 'public');
-            $settings->logo = $ext;
-        }
-
-        // Handle Favicon
-        if ($this->favicon) {
-            $ext = $this->favicon->getClientOriginalExtension();
-            $this->favicon->storeAs('image/settings', 'favicon.' . $ext, 'public');
-            $settings->favicon = $ext;
-        }
-
-        // Handle Hero Image
-        if ($this->hero_image) {
-            $ext = $this->hero_image->getClientOriginalExtension();
-            $this->hero_image->storeAs('image/settings', 'hero.' . $ext, 'public');
-            $settings->hero_image = $ext;
-        }
-
-        $settings->save();
-
-
-        cache()->forget('site_settings');
-
+        $service->saveSiteSettings([
+            'site_title'        => $this->site_title,
+            'site_phone_number' => $this->site_phone_number,
+            'site_email'        => $this->site_email,
+            'copyright_text'    => $this->copyright_text,
+            'logo'              => $this->logo,
+            'favicon'           => $this->favicon,
+            'hero_image'        => $this->hero_image,
+        ]);
 
         $this->toast('Site Settings Updated Successfully!', 'success');
     }

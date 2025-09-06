@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Repositories\SettingRepository;
 use Illuminate\Http\UploadedFile;
 
-class SiteSettingService
+class SettingService
 {
   protected $repository;
 
@@ -15,12 +15,12 @@ class SiteSettingService
   }
 
   /**
-   * Update site settings
+   * save site settings
    *
    * @param array $data
    * @return void
    */
-  public function update(array $data): void
+  public function saveSiteSettings(array $data): void
   {
     $settings = $this->repository->getSiteSettings();
 

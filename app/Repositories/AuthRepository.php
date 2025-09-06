@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Services\AuthService;
-use Illuminate\Support\Facades\Auth;
+
 
 class AuthRepository
 {
