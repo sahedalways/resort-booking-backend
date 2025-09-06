@@ -1,4 +1,4 @@
-@section('title', 'Resort & Hotel Booking - Dashboard')
+@section('title', siteSetting()->site_title)
 
 
 <div>
