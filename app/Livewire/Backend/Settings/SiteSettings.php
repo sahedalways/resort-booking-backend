@@ -3,6 +3,7 @@
 namespace App\Livewire\Backend\Settings;
 
 use App\Models\SiteSetting;
+use App\Services\SiteSettingService;
 use App\Traits\ToastTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -54,7 +55,7 @@ class SiteSettings extends Component
 
 
     /* save the Site settings data */
-    public function save()
+    public function save(SiteSettingService $service)
     {
         $this->validate();
 

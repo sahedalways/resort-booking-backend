@@ -2,17 +2,10 @@
 
 namespace App\Services;
 
-use App\Repositories\AuthRepository;
+use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
-  protected $authRepository;
-
-  public function __construct(AuthRepository $authRepository)
-  {
-    $this->authRepository = $authRepository;
-  }
-
   /**
    * Admin login logic
    *
@@ -22,6 +15,10 @@ class AuthService
    */
   public function loginAdmin(string $email, string $password): bool
   {
-    return $this->authRepository->loginAdmin($email, $password);
+    return Auth::attempt([
+      'email'     => $email,
+      'password'  => $password,
+      'user_type' => 'admin',
+    ]);
   }
 }
