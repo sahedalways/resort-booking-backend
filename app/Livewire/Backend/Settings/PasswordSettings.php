@@ -2,14 +2,12 @@
 
 namespace App\Livewire\Backend\Settings;
 
+use App\Livewire\Backend\Components\BaseComponent;
 use App\Services\UserService;
-use App\Traits\ToastTrait;
-use Livewire\Component;
 
-class PasswordSettings extends Component
+
+class PasswordSettings extends BaseComponent
 {
-
-    use ToastTrait;
 
     public $old_password;
     public $new_password;

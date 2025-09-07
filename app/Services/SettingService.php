@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\EmailSetting;
 use App\Repositories\SettingRepository;
 use Illuminate\Http\UploadedFile;
 
@@ -54,5 +55,16 @@ class SettingService
 
     // Clear cache
     cache()->forget('site_settings');
+  }
+
+  /**
+   * Save mail settings
+   *
+   * @param array $data
+   * @return EmailSetting
+   */
+  public function saveMailSettings(array $data): EmailSetting
+  {
+    return $this->repository->saveMailSettings($data);
   }
 }

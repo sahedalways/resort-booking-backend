@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Backend\Settings;
 
+use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\SiteSetting;
 use App\Services\SettingService;
 use App\Traits\ToastTrait;
@@ -10,9 +11,9 @@ use Livewire\WithFileUploads;
 
 
 
-class SiteSettings extends Component
+class SiteSettings extends BaseComponent
 {
-    use ToastTrait;
+
     public $site_title, $logo, $favicon, $hero_image, $site_phone_number, $site_email, $copyright_text;
     public $old_favicon, $old_logo, $old_hero_image;
     use WithFileUploads;

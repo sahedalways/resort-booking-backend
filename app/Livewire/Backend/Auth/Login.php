@@ -2,15 +2,12 @@
 
 namespace App\Livewire\Backend\Auth;
 
+use App\Livewire\Backend\Components\BaseComponent;
 use App\Repositories\AuthRepository;
-use App\Traits\ToastTrait;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
 
-class Login extends Component
+
+class Login extends BaseComponent
 {
-    use ToastTrait;
-
     public $email, $password, $success = false;
 
 
