@@ -44,7 +44,7 @@
                             <li class="nav-item">
                                 <a class="nav-link {{ Request::is('admin/users/manage') ? 'active' : '' }}"
                                     href="{{ route('admin.users.manage') }}">
-                                    <i class="fas fa-cog sidenav-mini-icon side-bar-inner"></i>
+                                    <i class="fas fa-users sidenav-mini-icon side-bar-inner"></i>
                                     <span class="sidenav-normal side-bar-inner"> Users Management </span>
                                 </a>
                             </li>
