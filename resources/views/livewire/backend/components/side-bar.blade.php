@@ -28,6 +28,35 @@
 
 
                 <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#users"
+                        class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}" aria-controls="users"
+                        role="button" aria-expanded="false">
+                        <div
+                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="fas fa-users text-primary text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Users</span>
+                    </a>
+                    <div class="collapse {{ Request::is('admin/users*') ? 'show' : '' }}" id="users">
+                        <ul class="nav ms-4">
+
+                            <!-- Users Management -->
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/users/manage') ? 'active' : '' }}"
+                                    href="{{ route('admin.users.manage') }}">
+                                    <i class="fas fa-cog sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Users Management </span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+
+
+
+                <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#settings"
                         class="nav-link {{ Request::is('admin/settings*') ? 'active' : '' }}" aria-controls="settings"
                         role="button" aria-expanded="false">
@@ -79,10 +108,6 @@
                     </div>
 
                 </li>
-
-
-
-
 
 
 

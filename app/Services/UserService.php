@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Repositories\UserRepository;
+use App\Models\User;
+
 
 class UserService
 {
@@ -31,5 +33,41 @@ class UserService
     $this->userRepo->updatePassword($user, $newPassword);
 
     return ['success' => true, 'message' => 'Password updated successfully'];
+  }
+
+
+
+
+  public function register(array $data): User
+  {
+
+    return $this->userRepo->create($data);
+  }
+
+  public function updateUser(User $user, array $data): User
+  {
+
+    return $this->userRepo->update($user, $data);
+  }
+
+  public function getUser($id): ?User
+  {
+    return $this->userRepo->find($id);
+  }
+
+  public function getAllUsers()
+  {
+    return $this->userRepo->getAllUsers();
+  }
+
+  public function deleteUser($id): bool
+  {
+    $user = $this->getUser($id);
+
+    if (!$user) {
+      return false;
+    }
+
+    return $this->userRepo->delete($user);
   }
 }

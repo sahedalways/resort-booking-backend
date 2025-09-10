@@ -19,6 +19,7 @@ class UserTableSeeder extends Seeder
       'f_name' => 'Mr',
       'l_name' => 'Admin',
       'email' => 'admin@admin.com',
+      'phone_no' => '0177xxxxxxx',
       'password' => 12345678,
       'user_type' => 'admin',
     ]);
@@ -29,6 +30,7 @@ class UserTableSeeder extends Seeder
       'f_name' => 'Mr',
       'l_name' => 'User',
       'email' => 'user@user.com',
+      'phone_no' => '0154xxxxxxx',
       'password' => 12345678,
       'user_type' => 'user',
     ]);

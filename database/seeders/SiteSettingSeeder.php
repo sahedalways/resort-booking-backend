@@ -10,13 +10,13 @@ class SiteSettingSeeder extends Seeder
   public function run(): void
   {
     SiteSetting::create([
-      'site_title'        => 'Resort & Hotel Booking',
-      'logo'              => 'png',
-      'favicon'           => 'ico',
-      'hero_image'        => 'jpg',
+      'site_title'        => 'Prokiti Booking',
+      'logo'              => 'jpeg',
+      'favicon'           => 'jpeg',
+      'hero_image'        => 'png',
       'site_phone_number' => '+880171200000',
       'site_email'             => 'info@example.com',
-      'copyright_text'    => '© ' . date('Y') . ' Resort Booking. All rights reserved.',
+      'copyright_text'    => '© ' . date('Y') . ' Prokiti Booking. All rights reserved.',
     ]);
   }
 }
