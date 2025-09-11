@@ -9,28 +9,24 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\MatchPincodeRequest;
 use App\Http\Requests\RegisterEmailConfirmOTPRequest;
 use App\Http\Requests\RegisterUserRequest;
-use App\Models\User;
-use App\Services\AuthService;
-use App\Services\EmailVerificationService;
-use App\Services\ForgotPasswordService;
-use App\Services\UserService;
+use App\Services\API\EmailVerificationService;
+use App\Services\API\ForgotPasswordService;
+use App\Services\API\FrontAuthService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 
 
 
 
 class AuthController extends BaseController
 {
-
-    protected UserService $userService;
-    protected AuthService $authService;
+    protected FrontAuthService $authService;
     protected ForgotPasswordService $forgotPasswordService;
     protected EmailVerificationService $emailVerificationService;
 
-    public function __construct(UserService $userService, ForgotPasswordService $ForgotPasswordService, AuthService $authService, EmailVerificationService $emailVerificationService)
+
+    public function __construct(ForgotPasswordService $ForgotPasswordService, FrontAuthService $authService, EmailVerificationService $emailVerificationService)
     {
-        $this->userService = $userService;
         $this->forgotPasswordService = $ForgotPasswordService;
         $this->authService = $authService;
         $this->emailVerificationService = $emailVerificationService;

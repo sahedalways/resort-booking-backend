@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\API;
 
 use App\Models\EmailVerification;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class EmailVerificationRepository

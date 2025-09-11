@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\API;
 
 use App\Models\PasswordReset;
-use Illuminate\Support\Facades\DB;
+
 
 class PasswordResetRepository
 {

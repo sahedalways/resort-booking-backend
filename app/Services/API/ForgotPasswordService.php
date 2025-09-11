@@ -1,20 +1,27 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\API;
 
-use App\Repositories\AuthRepository;
-use App\Repositories\UserRepository;
-use App\Repositories\PasswordResetRepository;
+use App\Repositories\API\FrontAuthRepository;
+use App\Repositories\API\FrontUserRepository;
+use App\Repositories\API\PasswordResetRepository;
 use Illuminate\Support\Facades\Mail;
 use Twilio\Rest\Client;
 
 class ForgotPasswordService
 {
-  public function __construct(
-    protected UserRepository $userRepository,
-    protected PasswordResetRepository $passwordResetRepository,
-    protected AuthRepository $authRepository
-  ) {}
+  protected FrontUserRepository $userRepository;
+  protected PasswordResetRepository $passwordResetRepository;
+  protected FrontAuthRepository $authRepository;
+
+  public function __construct(FrontUserRepository $userRepository, PasswordResetRepository $passwordResetRepository, FrontAuthRepository $authRepository)
+  {
+    $this->userRepository = $userRepository;
+    $this->passwordResetRepository = $passwordResetRepository;
+    $this->authRepository = $authRepository;
+  }
+
+
 
   public function handle(?string $email, ?string $phone): array
   {

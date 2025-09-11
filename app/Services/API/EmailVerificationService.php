@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\API;
 
 use App\Models\User;
-use App\Repositories\EmailVerificationRepository;
+use App\Repositories\API\EmailVerificationRepository;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 
@@ -15,6 +15,9 @@ class EmailVerificationService
   {
     $this->repository = $repository;
   }
+
+
+
 
   public function sendOtp(string $email): void
   {
