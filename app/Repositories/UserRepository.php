@@ -73,6 +73,11 @@ class UserRepository
     return User::where('id', $id)->where('user_type', 'user')->first();
   }
 
+  public function findByEmail($email): ?User
+  {
+    return User::where('email', $email)->where('user_type', 'user')->first();
+  }
+
 
   public function delete(User $user): bool
   {
@@ -83,5 +88,12 @@ class UserRepository
   public function getAllUsers()
   {
     return User::where('user_type', 'user')->latest()->get();
+  }
+
+  public function updatePasswordByAPI(string $identifier, string $hashedPassword): bool
+  {
+    return User::where('email', $identifier)
+      ->orWhere('phone_no', $identifier)
+      ->update(['password' => $hashedPassword]) > 0;
   }
 }
