@@ -16,8 +16,6 @@ use Illuminate\Http\Request;
 
 
 
-
-
 class AuthController extends BaseController
 {
     protected FrontAuthService $authService;
