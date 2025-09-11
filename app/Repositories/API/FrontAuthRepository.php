@@ -11,15 +11,6 @@ use Illuminate\Support\Facades\DB;
 class FrontAuthRepository
 {
 
-
-  protected $authService;
-
-  public function __construct(FrontAuthService $authService)
-  {
-    $this->authService = $authService;
-  }
-
-
   public function createByAPI(array $data): User
   {
     return User::create($data);
