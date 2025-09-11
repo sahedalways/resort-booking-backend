@@ -15,6 +15,7 @@ Route::middleware(['cors'])->group(function () {
         // for authentication routes
         Route::post('register', 'register');
         Route::post('login', 'login');
+        Route::post('verify-email-otp', 'verifyEmailOtp');
 
         // for for forger password routes
         Route::post('forgot-password', 'forgotPassword');
