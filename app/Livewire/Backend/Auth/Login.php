@@ -6,7 +6,6 @@ use App\Livewire\Backend\Components\BaseComponent;
 use App\Repositories\AuthRepository;
 
 
-
 class Login extends BaseComponent
 {
     public $email, $password, $success = false;
@@ -28,8 +27,6 @@ class Login extends BaseComponent
     public function login(AuthRepository $authRepository)
     {
         $this->validate();
-
-
         if ($authRepository->loginAdmin($this->email, $this->password)) {
             return redirect()->intended('admin/dashboard');
         }
