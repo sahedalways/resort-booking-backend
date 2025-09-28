@@ -340,7 +340,19 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" wire:click.prevent="update()">Update</button>
+
+                        <div class="col-12 d-flex align-items-center justify-content-end mt-3">
+                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                                wire:target="update">
+                                <span wire:loading wire:target="update">
+                                    <i class="fas fa-spinner fa-spin me-2"></i> updating...
+                                </span>
+                                <span wire:loading.remove wire:target="update">
+                                    Update
+                                </span>
+                            </button>
+                        </div>
+
                     </div>
                 </form>
             </div>

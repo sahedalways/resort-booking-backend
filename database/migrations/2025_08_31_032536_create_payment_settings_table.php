@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payment_settings', function (Blueprint $table) {
             $table->id();
-            $table->enum('gateway', ['bkash', 'nagad']);
+            $table->string('gateway')->default('bkash');
             $table->string('app_key')->nullable();
             $table->string('app_secret')->nullable();
             $table->string('username')->nullable();

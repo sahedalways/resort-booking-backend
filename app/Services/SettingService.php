@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\EmailSetting;
+use App\Models\PaymentSetting;
 use App\Repositories\SettingRepository;
 use Illuminate\Http\UploadedFile;
 
@@ -66,5 +67,32 @@ class SettingService
   public function saveMailSettings(array $data): EmailSetting
   {
     return $this->repository->saveMailSettings($data);
+  }
+
+
+
+  /**
+   * Save or update payment settings
+   *
+   * @param array $data
+   * @return void
+   */
+  public function savePaymentSettings(array $data): void
+  {
+    $settings = PaymentSetting::first();
+
+    if (!$settings) {
+      $settings = new PaymentSetting();
+    }
+
+    $settings->gateway    = $data['gateway'] ?? 'bkash';
+    $settings->app_key    = $data['app_key'] ?? null;
+    $settings->app_secret = $data['app_secret'] ?? null;
+    $settings->username   = $data['username'] ?? null;
+    $settings->password   = $data['password'] ?? null;
+    $settings->base_url   = $data['base_url'] ?? null;
+    $settings->is_active  = $data['is_active'] ?? false;
+
+    $settings->save();
   }
 }
