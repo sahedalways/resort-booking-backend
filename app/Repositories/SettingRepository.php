@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\ContactInfoSettings;
 use App\Models\EmailSetting;
 use App\Models\PaymentSetting;
 use App\Models\SiteSetting;
@@ -49,13 +50,25 @@ class SettingRepository
 
 
   /**
-   * Get or create mail settings (id = 1).
+   * Get or create social settings (id = 1).
    *
    * @return \App\Models\SocialInfoSettings
    */
   public function getSocialSettings(): SocialInfoSettings
   {
     return SocialInfoSettings::firstOrNew(['id' => 1]);
+  }
+
+
+
+  /**
+   * Get or create contact settings (id = 1).
+   *
+   * @return \App\Models\ContactInfoSettings
+   */
+  public function getContactInfoSettings(): ContactInfoSettings
+  {
+    return ContactInfoSettings::firstOrNew(['id' => 1]);
   }
 
 
@@ -165,6 +178,23 @@ class SettingRepository
     $settings->instagram = $data['instagram'] ?? null;
     $settings->linkedin  = $data['linkedin']  ?? null;
     $settings->youtube   = $data['youtube']   ?? null;
+
+    $settings->save();
+
+    return $settings;
+  }
+
+
+
+
+  public function saveContactInfoSettings(array $data): ContactInfoSettings
+  {
+    $settings = $this->getContactInfoSettings();
+
+    $settings->email                 = $data['email']                  ?? null;
+    $settings->phone                 = $data['phone']                  ?? null;
+    $settings->dhaka_office_address  = $data['dhaka_office_address']   ?? null;
+    $settings->gazipur_office_address = $data['gazipur_office_address'] ?? null;
 
     $settings->save();
 

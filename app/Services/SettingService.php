@@ -66,4 +66,16 @@ class SettingService
   {
     $this->repository->saveSocialSettings($data);
   }
+
+
+  /**
+   * Save or update contact info settings
+   *
+   * @param array $data
+   * @return void
+   */
+  public function saveContactInfoSettings(array $data): void
+  {
+    $this->repository->saveContactInfoSettings($data);
+  }
 }
