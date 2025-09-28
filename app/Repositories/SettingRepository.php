@@ -6,7 +6,8 @@ use App\Models\EmailSetting;
 use App\Models\PaymentSetting;
 use App\Models\SiteSetting;
 use Illuminate\Http\UploadedFile;
-use Intervention\Image\Image;
+use Intervention\Image\Laravel\Facades\Image;
+
 
 class SettingRepository
 {
@@ -73,19 +74,16 @@ class SettingRepository
       $settings->favicon = $ext;
     }
 
-    // Handle Hero Image with WebP compression
     if (isset($data['hero_image']) && $data['hero_image'] instanceof UploadedFile) {
       $image = $data['hero_image'];
-      $img = Image::make($image->getPathname());
 
-      $img->resize(1200, null, function ($constraint) {
-        $constraint->aspectRatio();
-        $constraint->upsize();
-      });
+      $img = Image::read($image);
+
+      $img->resize(1200, 100);
 
       $filename = 'hero.webp';
       $path = storage_path('app/public/image/settings/' . $filename);
-      $img->encode('webp', 75)->save($path);
+      $img->save($path);
 
       $settings->hero_image = 'webp';
     }
