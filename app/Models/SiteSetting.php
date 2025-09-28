@@ -24,7 +24,7 @@ class SiteSetting extends Model
     {
         return $this->logo
             ? Storage::url("image/settings/logo.{$this->logo}")
-            : asset('images/default-logo.png');
+            : asset('assets/img/default-image.jpg');
     }
 
     // Accessor for Favicon URL
@@ -32,7 +32,7 @@ class SiteSetting extends Model
     {
         return $this->favicon
             ? Storage::url("image/settings/favicon.{$this->favicon}")
-            : asset('images/default-favicon.png');
+            : asset('assets/img/default-image.jpg');
     }
 
     // Accessor for Hero Image URL
@@ -40,6 +40,6 @@ class SiteSetting extends Model
     {
         return $this->hero_image
             ? Storage::url("image/settings/hero.{$this->hero_image}")
-            : asset('images/default-hero.jpg');
+            : asset('assets/img/default-image.jpg');
     }
 }

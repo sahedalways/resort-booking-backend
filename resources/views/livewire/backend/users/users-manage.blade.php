@@ -234,7 +234,19 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" wire:click.prevent="store()">Save</button>
+
+                        <div class="">
+                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                                wire:target="store">
+                                <span wire:loading wire:target="store">
+                                    <i class="fas fa-spinner fa-spin me-2"></i> Saving...
+                                </span>
+                                <span wire:loading.remove wire:target="store">
+                                    Save
+                                </span>
+                            </button>
+                        </div>
+
                     </div>
                 </form>
             </div>

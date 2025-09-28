@@ -20,6 +20,6 @@ class EventHero extends Model
     {
         return $this->hero_image
             ? Storage::url("image/event/event-hero.{$this->hero_image}")
-            : asset('images/default-logo.png');
+            : asset('assets/img/default-image.jpg');
     }
 }
