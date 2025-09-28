@@ -8,10 +8,11 @@
                         <div class="card border-0 mb-0">
                             <div class="card-header bg-transparent text-center">
                                 <div class="d-flex flex-column align-items-center justify-content-center mt-4 mb-4">
-                                    <div class="d-flex align-items-center justify-content-center mb-2">
-                                        <img src="{{ siteSetting()->logo_url }}" alt="Logo" class="login-logo me-3">
+                                    <div class="d-flex flex-column align-items-center justify-content-center mb-2">
+                                        <img src="{{ siteSetting()->logo_url }}" alt="Logo" class="login-logo mb-4">
                                         <h4 class="text-dark mb-0 text-uppercase">{{ siteSetting()->site_title }}</h4>
                                     </div>
+
 
                                     <h6 class="text-primary">Welcome to Admin Panel</h6>
                                 </div>
