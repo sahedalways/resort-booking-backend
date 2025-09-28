@@ -167,7 +167,7 @@
                             <!-- Thumbnail -->
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Thumbnail Image <span class="text-danger">*</span></label>
-                                <input type="file" required class="form-control" wire:model="thumbnail">
+                                <input type="file" class="form-control" wire:model="thumbnail">
 
                                 <div class="mt-2">
                                     @if ($thumbnail)

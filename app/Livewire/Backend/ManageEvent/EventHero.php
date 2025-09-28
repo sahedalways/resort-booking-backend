@@ -14,10 +14,10 @@ class EventHero extends BaseComponent
     public $title, $sub_title, $hero_image, $phone_number, $old_hero_image;
 
     protected $rules = [
-        'title'        => 'nullable|string|max:255',
-        'sub_title'        => 'nullable|string|max:255',
-        'hero_image'   => 'nullable|image|max:2096',
-        'phone_number' => 'nullable|string|max:20',
+        'title'        => 'required|string|max:255',
+        'sub_title'        => 'required|string|max:255',
+        'hero_image'   => 'required|image|max:2096',
+        'phone_number' => 'required|string|max:20',
     ];
 
     /* set value at the time of render */

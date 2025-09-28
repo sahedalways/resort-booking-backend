@@ -128,8 +128,16 @@ class EventRepository
   public function deleteEventService(EventService $eventService): bool
   {
 
-    if ($eventService->thumbnail && Storage::exists($eventService->thumbnail)) {
-      Storage::delete($eventService->thumbnail);
+    foreach ($eventService->images as $image) {
+      if ($image->image && Storage::disk('public')->exists($image->image)) {
+        Storage::disk('public')->delete($image->image);
+      }
+      $image->delete();
+    }
+
+
+    if ($eventService->thumbnail && Storage::disk('public')->exists($eventService->thumbnail)) {
+      Storage::disk('public')->delete($eventService->thumbnail);
     }
 
 
