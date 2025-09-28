@@ -13,7 +13,7 @@ class SiteSettingSeeder extends Seeder
       'site_title'        => 'Prokiti Booking',
       'logo'              => 'jpeg',
       'favicon'           => 'jpeg',
-      'hero_image'        => 'png',
+      'hero_image'        => 'webp',
       'site_phone_number' => '+880171200000',
       'site_email'             => 'info@example.com',
       'copyright_text'    => '© ' . date('Y') . ' Prokiti Booking. All rights reserved.',
