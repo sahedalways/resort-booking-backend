@@ -8,7 +8,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body p-3">
-                    <form class="row g-3 align-items-center">
+
+                    <form class="row g-3 align-items-center" wire:submit.prevent="save">
 
                         <hr>
                         <div class="col-md-4">
@@ -90,19 +91,16 @@
                         </div>
 
 
-                        <div class="d-flex align-items-center justify-content-end">
-                            <div class="col-12 d-flex align-items-center justify-content-end mt-3">
-                                <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
-                                    wire:target="save">
-                                    <span wire:loading wire:target="save">
-                                        <i class="fas fa-spinner fa-spin me-2"></i> Saving...
-                                    </span>
-                                    <span wire:loading.remove wire:target="save">
-                                        Save
-                                    </span>
-                                </button>
-                            </div>
-
+                        <div class="col-12 d-flex align-items-center justify-content-end mt-3">
+                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                                wire:target="save">
+                                <span wire:loading wire:target="save">
+                                    <i class="fas fa-spinner fa-spin me-2"></i> Saving...
+                                </span>
+                                <span wire:loading.remove wire:target="save">
+                                    Save
+                                </span>
+                            </button>
                         </div>
                     </form>
                 </div>

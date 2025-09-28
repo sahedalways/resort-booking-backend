@@ -3,7 +3,10 @@
 namespace App\Repositories;
 
 use App\Models\EmailSetting;
+use App\Models\PaymentSetting;
 use App\Models\SiteSetting;
+use Illuminate\Http\UploadedFile;
+use Intervention\Image\Image;
 
 class SettingRepository
 {
@@ -17,15 +20,83 @@ class SettingRepository
     return SiteSetting::firstOrNew(['id' => 1]);
   }
 
+
   /**
-   * Save site settings
+   * Get or create payment settings (id = 1).
    *
-   * @param \App\Models\SiteSetting $settings
-   * @return void
+   * @return \App\Models\PaymentSetting
    */
-  public function saveSiteSettings(SiteSetting $settings): void
+  public function getPaymentSettings(): PaymentSetting
   {
+    return PaymentSetting::firstOrNew(['id' => 1]);
+  }
+
+
+
+  /**
+   * Get or create mail settings (id = 1).
+   *
+   * @return \App\Models\EmailSetting
+   */
+  public function getMailSettings(): EmailSetting
+  {
+    return EmailSetting::firstOrNew(['id' => 1]);
+  }
+
+  /**
+   * Save or update site settings
+   *
+   * @param array $data
+   * @return SiteSetting
+   */
+  public function saveSiteSettings(array $data): SiteSetting
+
+  {
+    $settings = $this->getSiteSettings();
+
+    $settings->site_title        = $data['site_title'] ?? $settings->site_title;
+    $settings->site_phone_number = $data['site_phone_number'] ?? $settings->site_phone_number;
+    $settings->site_email        = $data['site_email'] ?? $settings->site_email;
+    $settings->copyright_text    = $data['copyright_text'] ?? $settings->copyright_text;
+
+    // Handle Logo
+    if (isset($data['logo']) && $data['logo'] instanceof UploadedFile) {
+      $ext = $data['logo']->getClientOriginalExtension();
+      $data['logo']->storeAs('image/settings', 'logo.' . $ext, 'public');
+      $settings->logo = $ext;
+    }
+
+    // Handle Favicon
+    if (isset($data['favicon']) && $data['favicon'] instanceof UploadedFile) {
+      $ext = $data['favicon']->getClientOriginalExtension();
+      $data['favicon']->storeAs('image/settings', 'favicon.' . $ext, 'public');
+      $settings->favicon = $ext;
+    }
+
+    // Handle Hero Image with WebP compression
+    if (isset($data['hero_image']) && $data['hero_image'] instanceof UploadedFile) {
+      $image = $data['hero_image'];
+      $img = Image::make($image->getPathname());
+
+      $img->resize(1200, null, function ($constraint) {
+        $constraint->aspectRatio();
+        $constraint->upsize();
+      });
+
+      $filename = 'hero.webp';
+      $path = storage_path('app/public/image/settings/' . $filename);
+      $img->encode('webp', 75)->save($path);
+
+      $settings->hero_image = 'webp';
+    }
+
     $settings->save();
+
+
+    // Clear cache
+    cache()->forget('site_settings');
+
+    return $settings;
   }
 
 
@@ -38,7 +109,7 @@ class SettingRepository
    */
   public function saveMailSettings(array $data): EmailSetting
   {
-    $settings = EmailSetting::firstOrNew(['id' => 1]);
+    $settings = $this->getMailSettings();
 
     $settings->mail_mailer       = $data['mail_mailer'] ?? null;
     $settings->mail_host         = $data['mail_host'] ?? null;
@@ -48,6 +119,24 @@ class SettingRepository
     $settings->mail_encryption   = $data['mail_encryption'] ?? null;
     $settings->mail_from_address = $data['mail_from_address'] ?? null;
     $settings->mail_from_name    = $data['mail_from_name'] ?? null;
+
+    $settings->save();
+
+    return $settings;
+  }
+
+
+  public function savePaymentSettings(array $data): PaymentSetting
+  {
+    $settings = $this->getPaymentSettings();
+
+    $settings->gateway    = $data['gateway'] ?? 'bkash';
+    $settings->app_key    = $data['app_key'] ?? null;
+    $settings->app_secret = $data['app_secret'] ?? null;
+    $settings->username   = $data['username'] ?? null;
+    $settings->password   = $data['password'] ?? null;
+    $settings->base_url   = $data['base_url'] ?? null;
+    $settings->is_active  = $data['is_active'] ?? false;
 
     $settings->save();
 

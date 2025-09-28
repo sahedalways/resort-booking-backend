@@ -4,8 +4,9 @@ namespace App\Services;
 
 use App\Models\EmailSetting;
 use App\Models\PaymentSetting;
+use App\Models\SiteSetting;
 use App\Repositories\SettingRepository;
-use Illuminate\Http\UploadedFile;
+
 
 class SettingService
 {
@@ -16,47 +17,20 @@ class SettingService
     $this->repository = $repository;
   }
 
+
   /**
-   * save site settings
+   * Save site settings
    *
    * @param array $data
-   * @return void
+   * @return SiteSetting
    */
-  public function saveSiteSettings(array $data): void
+  public function saveSiteSettings(array $data): SiteSetting
   {
-    $settings = $this->repository->getSiteSettings();
 
-    $settings->site_title        = $data['site_title'] ?? $settings->site_title;
-    $settings->site_phone_number = $data['site_phone_number'] ?? $settings->site_phone_number;
-    $settings->site_email        = $data['site_email'] ?? $settings->site_email;
-    $settings->copyright_text    = $data['copyright_text'] ?? $settings->copyright_text;
-
-    // Handle Logo
-    if (isset($data['logo']) && $data['logo'] instanceof UploadedFile) {
-      $ext = $data['logo']->getClientOriginalExtension();
-      $data['logo']->storeAs('image/settings', 'logo.' . $ext, 'public');
-      $settings->logo = $ext;
-    }
-
-    // Handle Favicon
-    if (isset($data['favicon']) && $data['favicon'] instanceof UploadedFile) {
-      $ext = $data['favicon']->getClientOriginalExtension();
-      $data['favicon']->storeAs('image/settings', 'favicon.' . $ext, 'public');
-      $settings->favicon = $ext;
-    }
-
-    // Handle Hero Image
-    if (isset($data['hero_image']) && $data['hero_image'] instanceof UploadedFile) {
-      $ext = $data['hero_image']->getClientOriginalExtension();
-      $data['hero_image']->storeAs('image/settings', 'hero.' . $ext, 'public');
-      $settings->hero_image = $ext;
-    }
-
-    $this->repository->saveSiteSettings($settings);
-
-    // Clear cache
-    cache()->forget('site_settings');
+    return $this->repository->saveSiteSettings($data);
   }
+
+
 
   /**
    * Save mail settings
@@ -66,9 +40,9 @@ class SettingService
    */
   public function saveMailSettings(array $data): EmailSetting
   {
+
     return $this->repository->saveMailSettings($data);
   }
-
 
 
   /**
@@ -79,20 +53,6 @@ class SettingService
    */
   public function savePaymentSettings(array $data): void
   {
-    $settings = PaymentSetting::first();
-
-    if (!$settings) {
-      $settings = new PaymentSetting();
-    }
-
-    $settings->gateway    = $data['gateway'] ?? 'bkash';
-    $settings->app_key    = $data['app_key'] ?? null;
-    $settings->app_secret = $data['app_secret'] ?? null;
-    $settings->username   = $data['username'] ?? null;
-    $settings->password   = $data['password'] ?? null;
-    $settings->base_url   = $data['base_url'] ?? null;
-    $settings->is_active  = $data['is_active'] ?? false;
-
-    $settings->save();
+    $this->repository->savePaymentSettings($data);
   }
 }

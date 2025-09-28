@@ -338,10 +338,11 @@
                         </div>
                     </div>
 
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
-                        <div class="col-12 d-flex align-items-center justify-content-end mt-3">
+                        <div class="">
                             <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
                                 wire:target="update">
                                 <span wire:loading wire:target="update">
