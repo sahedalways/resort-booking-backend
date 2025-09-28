@@ -37,7 +37,7 @@ class EventServices extends BaseComponent
 
     protected $rules = [
         'title' => 'required|string|max:255',
-        'description' => 'required|string',
+        'description' => 'required|string|max:255',
         'thumbnail' => 'required|image|max:2048',
     ];
 

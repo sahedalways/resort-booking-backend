@@ -27,7 +27,7 @@ class SiteSettings extends BaseComponent
     protected $rules = [
         'site_title' => 'required|string|max:255',
         'site_phone_number' => 'required|string|max:20',
-        'site_email'   => 'required|email',
+        'site_email'   => 'required|email|max:255',
         'copyright_text' => 'required|string|max:255',
         'logo' => 'nullable|image|max:2048',
         'favicon' => 'nullable|image|max:1024',

@@ -13,14 +13,14 @@ class MailSettings extends BaseComponent
 
 
     protected $rules = [
-        'mail_mailer'       => 'required|string',
-        'mail_host'         => 'required|string',
-        'mail_port'         => 'required|string',
-        'mail_username'     => 'required|string',
-        'mail_password'     => 'required|string',
-        'mail_encryption'   => 'required|string',
-        'mail_from_address' => 'required|email',
-        'mail_from_name'    => 'required|string',
+        'mail_mailer'       => 'required|string|max:255',
+        'mail_host'         => 'required|string|max:255',
+        'mail_port'         => 'required|string|max:255',
+        'mail_username'     => 'required|string|max:255',
+        'mail_password'     => 'required|string|max:255',
+        'mail_encryption'   => 'required|string|max:255',
+        'mail_from_address' => 'required|email|max:255',
+        'mail_from_name'    => 'required|string|max:255',
     ];
 
 
