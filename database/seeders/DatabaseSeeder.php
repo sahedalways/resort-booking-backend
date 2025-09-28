@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             SiteSettingSeeder::class,
             EmailSettingSeeder::class,
             PaymentSettingSeeder::class,
+            SocialSettingSeeder::class,
+            ContactInfoSettingSeeder::class,
         ]);
     }
 }

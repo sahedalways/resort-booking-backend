@@ -55,4 +55,15 @@ class SettingService
   {
     $this->repository->savePaymentSettings($data);
   }
+
+  /**
+   * Save or update social settings
+   *
+   * @param array $data
+   * @return void
+   */
+  public function saveSocialSettings(array $data): void
+  {
+    $this->repository->saveSocialSettings($data);
+  }
 }

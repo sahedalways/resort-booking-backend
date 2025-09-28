@@ -96,6 +96,28 @@
                                 </a>
                             </li>
 
+
+
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/settings/social') ? 'active' : '' }}"
+                                    href="{{ route('admin.settings.social') }}">
+                                    <i class="fab fa-facebook-f sidenav-mini-icon side-bar-inner"></i>
+
+                                    <span class="sidenav-normal side-bar-inner"> Social Settings </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/settings/contact-info') ? 'active' : '' }}"
+                                    href="{{ route('admin.settings.contact-info') }}">
+                                    <i class="fas fa-address-book sidenav-mini-icon side-bar-inner"></i>
+                                    <!-- contact icon -->
+                                    <span class="sidenav-normal side-bar-inner"> Contact Info Settings </span>
+                                </a>
+                            </li>
+
+
+
                             <!-- Password Settings -->
                             <li class="nav-item">
                                 <a class="nav-link {{ Request::is('admin/settings/password') ? 'active' : '' }}"

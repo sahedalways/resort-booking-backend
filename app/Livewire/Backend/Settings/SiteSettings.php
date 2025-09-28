@@ -33,7 +33,7 @@ class SiteSettings extends BaseComponent
         'copyright_text' => 'required|string|max:255',
         'logo' => 'nullable|image|max:2048',
         'favicon' => 'nullable|image|max:1024',
-        'hero_image' => 'nullable|mimes:webp|max:2096',
+        'hero_image' => 'nullable|image|max:2096',
     ];
 
     /* set value at the time of render */
@@ -58,6 +58,7 @@ class SiteSettings extends BaseComponent
     /* save the Site settings data */
     public function save(SettingService $service)
     {
+
         $this->validate();
 
 

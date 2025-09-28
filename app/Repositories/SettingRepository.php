@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\EmailSetting;
 use App\Models\PaymentSetting;
 use App\Models\SiteSetting;
+use App\Models\SocialInfoSettings;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Laravel\Facades\Image;
 
@@ -44,6 +45,20 @@ class SettingRepository
     return EmailSetting::firstOrNew(['id' => 1]);
   }
 
+
+
+
+  /**
+   * Get or create mail settings (id = 1).
+   *
+   * @return \App\Models\SocialInfoSettings
+   */
+  public function getSocialSettings(): SocialInfoSettings
+  {
+    return SocialInfoSettings::firstOrNew(['id' => 1]);
+  }
+
+
   /**
    * Save or update site settings
    *
@@ -78,8 +93,6 @@ class SettingRepository
       $image = $data['hero_image'];
 
       $img = Image::read($image);
-
-      $img->resize(1200, 100);
 
       $filename = 'hero.webp';
       $path = storage_path('app/public/image/settings/' . $filename);
@@ -135,6 +148,23 @@ class SettingRepository
     $settings->password   = $data['password'] ?? null;
     $settings->base_url   = $data['base_url'] ?? null;
     $settings->is_active  = $data['is_active'] ?? false;
+
+    $settings->save();
+
+    return $settings;
+  }
+
+
+
+  public function saveSocialSettings(array $data): SocialInfoSettings
+  {
+    $settings = $this->getSocialSettings();
+
+    $settings->facebook  = $data['facebook']  ?? null;
+    $settings->twitter   = $data['twitter']   ?? null;
+    $settings->instagram = $data['instagram'] ?? null;
+    $settings->linkedin  = $data['linkedin']  ?? null;
+    $settings->youtube   = $data['youtube']   ?? null;
 
     $settings->save();
 
