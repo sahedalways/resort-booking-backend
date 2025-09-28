@@ -21,7 +21,7 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">App Logo <span class="text-danger">*</span></label>
-                                <input type="file" class="form-control" wire:model="logo">
+                                <input type="file" class="form-control" wire:model="logo" accept="image/*">
 
                                 {{-- Preview --}}
                                 <div class="mt-2">
@@ -38,7 +38,7 @@
 
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Favicon <span class="text-danger">*</span></label>
-                                <input type="file" class="form-control" wire:model="favicon">
+                                <input type="file" class="form-control" wire:model="favicon" accept="image/*">
 
                                 {{-- Preview --}}
                                 <div class="mt-2">
@@ -55,7 +55,7 @@
 
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Hero Image <span class="text-danger">*</span></label>
-                                <input type="file" class="form-control" wire:model="hero_image">
+                                <input type="file" class="form-control" wire:model="hero_image" accept="image/*">
 
                                 {{-- Preview --}}
                                 <div class="mt-2">

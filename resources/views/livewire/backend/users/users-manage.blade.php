@@ -136,12 +136,14 @@
 
 
     <div wire:ignore.self class="modal fade" id="adduser" tabindex="-1" role="dialog" aria-labelledby="adduser"
-        aria-hidden="true">
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title fw-600" id="adduser">Add User</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
+                        <i class="fas fa-times" style="color:black;"></i>
+                    </button>
                 </div>
 
                 <form>
@@ -254,12 +256,14 @@
     </div>
 
     <div wire:ignore.self class="modal fade" id="edituser" tabindex="-1" role="dialog"
-        aria-labelledby="edituser" aria-hidden="true">
+        aria-labelledby="edituser" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title fw-600" id="edituser">Edit User</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
+                        <i class="fas fa-times" style="color:black;"></i>
+                    </button>
                 </div>
 
                 <form>

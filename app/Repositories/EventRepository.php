@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\EventHero;
 use App\Models\EventService;
+use App\Models\EventServiceImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
@@ -121,5 +122,60 @@ class EventRepository
     $eventService->save();
 
     return $eventService;
+  }
+
+
+  public function deleteEventService(EventService $eventService): bool
+  {
+
+    if ($eventService->thumbnail && Storage::exists($eventService->thumbnail)) {
+      Storage::delete($eventService->thumbnail);
+    }
+
+
+    return $eventService->delete();
+  }
+
+
+  public function saveServiceImagesGallery(int $eventServiceId, array $images, array $removedImages): void
+  {
+    foreach ($removedImages as $img) {
+      $old = EventServiceImage::where('image', $img)->first();
+      if ($old) {
+        if (file_exists(storage_path('app/public/' . $old->image))) {
+          unlink(storage_path('app/public/' . $old->image));
+        }
+        $old->delete();
+      }
+    }
+
+
+    foreach ($images as $image) {
+      if (!$image instanceof UploadedFile) continue;
+
+      $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
+
+      $img = Image::read($image->getRealPath());
+
+      $path = storage_path('app/public/image/event/services/gallery/' . $filename);
+      $img->save($path);
+
+      EventServiceImage::create([
+        'event_service_id' => $eventServiceId,
+        'image'            => 'image/event/services/gallery/' . $filename,
+      ]);
+    }
+  }
+
+
+
+  public function getServiceImagesGallery(int $eventServiceId)
+  {
+    return EventServiceImage::where('event_service_id', $eventServiceId)
+      ->get()
+      ->map(function ($image) {
+        $image->url = getFileUrl($image->image);
+        return $image;
+      });
   }
 }

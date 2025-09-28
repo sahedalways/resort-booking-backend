@@ -11,7 +11,12 @@ use Livewire\WithFileUploads;
 
 class EventServices extends BaseComponent
 {
-    public $eventServices, $service,  $service_id, $title, $description, $thumbnail, $search;
+    public $eventServices, $service,  $service_id, $title, $description, $thumbnail, $old_thumbnail, $search;
+    public $images = [];
+    public $removedImages = [];
+    public $imageInputs = [0];
+
+
     use WithFileUploads;
 
     public $editMode = false;
@@ -61,6 +66,10 @@ class EventServices extends BaseComponent
         $this->title = '';
         $this->description = '';
         $this->thumbnail = '';
+        $this->old_thumbnail = '';
+        $this->service_id = '';
+        $this->images = [];
+        $this->imageInputs = [0];
         $this->resetErrorBag();
     }
 
@@ -107,24 +116,25 @@ class EventServices extends BaseComponent
 
         $this->title = $this->service->title;
         $this->description = $this->service->description;
-        $this->thumbnail = getFileUrl($this->service->thumbnailUrl);
+        $this->old_thumbnail = $this->service->thumbnail;
     }
 
     public function update()
     {
         $this->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'required|string|max:255',
             'thumbnail' => 'nullable|image|max:2048',
         ]);
 
-        if (!$this->eventService) {
+
+        if (!$this->service) {
             $this->toast('Event service not found!', 'error');
             return;
         }
 
 
-        $this->repository->updateEventService($this->eventService, [
+        $this->eventService->updateEventService($this->service, [
             'title'       => $this->title,
             'description' => $this->description,
             'thumbnail'   => $this->thumbnail,
@@ -217,10 +227,66 @@ class EventServices extends BaseComponent
 
     public function deleteService($id)
     {
-        $this->eventService->deleteService($id);
+        $this->eventService->deleteEventService($id);
 
         $this->reloadEventServices();
 
         $this->toast('Service has been deleted!', 'success');
+    }
+
+
+    public function addServiceImages($id)
+    {
+        $this->resetInputFields();
+        $this->service_id = $id;
+
+        $savedImages = $this->eventService->getServiceImagesGallery($id);
+
+        $this->images = $savedImages->pluck('image')->toArray();
+
+
+        $this->imageInputs = [];
+
+
+        foreach ($this->images as $key => $image) {
+            $this->imageInputs[] = $key;
+        }
+        $this->imageInputs[] = count($this->images);
+    }
+
+
+    public function addImageInput()
+    {
+        $this->imageInputs[] = count($this->imageInputs);
+    }
+
+    public function removeImageInput($index)
+    {
+
+        if (isset($this->images[$index]) && is_string($this->images[$index])) {
+            $this->removedImages[] = $this->images[$index];
+        }
+
+
+        unset($this->images[$index]);
+        $this->imageInputs = array_values(array_diff($this->imageInputs, [$index]));
+    }
+
+
+    public function saveImages()
+    {
+
+        $this->eventService->saveServiceImagesGallery($this->service_id, $this->images, $this->removedImages);
+
+
+        $this->refresh();
+        $this->resetInputFields();
+        $this->editMode = false;
+
+
+        $this->dispatch('closemodal');
+
+
+        $this->toast('Images saved successfully!', 'success');
     }
 }

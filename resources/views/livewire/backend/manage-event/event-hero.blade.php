@@ -28,7 +28,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Hero Image <span class="text-danger">*</span></label>
-                            <input type="file" class="form-control" wire:model="hero_image">
+                            <input type="file" class="form-control" wire:model="hero_image" accept="image/*">
 
                             {{-- Preview --}}
                             <div class="mt-2">

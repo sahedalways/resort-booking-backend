@@ -59,7 +59,29 @@ class EventService
 
   public function updateEventService(ModelsEventService $eventService, array $data): ModelsEventService
   {
-
     return $this->repository->updateEventService($eventService, $data);
+  }
+
+
+  public function deleteEventService($id): bool
+  {
+    $service = $this->getEventService($id);
+
+    if (!$service) {
+      return false;
+    }
+
+    return $this->repository->deleteEventService($service);
+  }
+
+  public function saveServiceImagesGallery(int $eventServiceId, array $images, array $removedImages)
+  {
+    return $this->repository->saveServiceImagesGallery($eventServiceId, $images,  $removedImages);
+  }
+
+
+  public function getServiceImagesGallery(int $eventServiceId)
+  {
+    return $this->repository->getServiceImagesGallery($eventServiceId);
   }
 }

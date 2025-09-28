@@ -75,13 +75,19 @@
 
                                             <a data-bs-toggle="modal" data-bs-target="#editService"
                                                 wire:click="edit({{ $row->id }})" type="button"
-                                                class="badge badge-xs badge-warning fw-600 text-xs">
+                                                class="badge badge-xs badge-warning fw-600 text-xs text-dark">
                                                 Edit Info
                                             </a>
 
-                                            <a href="#" class="badge badge-xs badge-danger fw-600 text-xs"
+                                            <a href="#" class="badge badge-xs badge-danger fw-600 text-xs "
                                                 wire:click.prevent="$dispatch('confirmDelete', {{ $row->id }})">
                                                 Delete
+                                            </a>
+
+                                            <a data-bs-toggle="modal" data-bs-target="#addServiceImages"
+                                                wire:click="addServiceImages({{ $row->id }})" type="button"
+                                                class="badge badge-xs badge-primary fw-600 text-xs text-dark">
+                                                Manage Image Gallery
                                             </a>
                                         </td>
                                     </tr>
@@ -121,12 +127,14 @@
 
 
     <div wire:ignore.self class="modal fade" id="addService" tabindex="-1" role="dialog" aria-labelledby="addService"
-        aria-hidden="true">
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title fw-600" id="addService">Add Event Service</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
+                        <i class="fas fa-times" style="color:black;"></i>
+                    </button>
                 </div>
 
                 <form wire:submit.prevent="store">
@@ -142,6 +150,19 @@
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
+
+
+                            <!-- Description -->
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Description <span class="text-danger">*</span></label>
+                                <textarea class="form-control" wire:model="description" rows="3" placeholder="Optional description"></textarea>
+                                @error('description')
+                                    <span class="error text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+
 
                             <!-- Thumbnail -->
                             <div class="col-md-12 mb-2">
@@ -159,15 +180,6 @@
                                 </div>
 
                                 @error('thumbnail')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <!-- Description -->
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label">Description <span class="text-danger">*</span></label>
-                                <textarea class="form-control" wire:model="description" rows="3" placeholder="Optional description"></textarea>
-                                @error('description')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -197,99 +209,65 @@
 
 
 
-    {{-- <div wire:ignore.self class="modal fade" id="edituser" tabindex="-1" role="dialog"
-        aria-labelledby="edituser" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="editService" tabindex="-1" role="dialog"
+        aria-labelledby="editService" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title fw-600" id="edituser">Edit User</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h6 class="modal-title fw-600" id="editService">Edit Event Service</h6>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
+                        <i class="fas fa-times" style="color:black;"></i>
+                    </button>
                 </div>
 
-                <form>
+                <form wire:submit.prevent="update">
                     <div class="modal-body">
                         <div class="row g-2 align-items-center">
 
-
-                            <!-- First Name -->
-                            <div class="col-md-12 mb-1">
-                                <label class="form-label">First Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter First Name"
-                                    wire:model="first_name">
-                                @error('first_name')
+                            <!-- Service Title -->
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Service Title <span class="text-danger">*</span></label>
+                                <input type="text" required class="form-control" placeholder="Enter Service Title"
+                                    wire:model="title">
+                                @error('title')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <!-- Last Name -->
-                            <div class="col-md-12 mb-1">
-                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter Last Name"
-                                    wire:model="last_name">
-                                @error('last_name')
+
+                            <!-- Description -->
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Description <span class="text-danger">*</span></label>
+                                <textarea class="form-control" wire:model="description" rows="3" placeholder="Optional description"></textarea>
+                                @error('description')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <!-- Email -->
-                            <div class="col-md-12 mb-1">
-                                <label class="form-label">Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" placeholder="Enter Email Address"
-                                    wire:model="email">
-                                @error('email')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
 
-                            <!-- Phone Number -->
-                            <div class="col-md-12 mb-1">
-                                <label class="form-label">Phone Number <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter Phone Number"
-                                    wire:model="phone_no">
-                                @error('phone_no')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
+                            <!-- Thumbnail -->
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Thumbnail Image <span class="text-danger">*</span></label>
+                                <input type="file" class="form-control" wire:model="thumbnail">
 
-                            <!-- Password (Optional in Edit) -->
-                            <div class="col-md-12 mb-1">
-                                <label class="form-label">Password (Leave blank if not changing)</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" placeholder="Enter New Password"
-                                        wire:model="password" id="edit_password">
-                                    <span class="input-group-text" onclick="togglePassword('edit_password')">
-                                        <i id="edit-password-icon" class="fas fa-eye-slash"></i>
-                                    </span>
+                                <div class="mt-2">
+                                    @if ($thumbnail)
+                                        <img src="{{ $thumbnail->temporaryUrl() }}" class="img-thumbnail"
+                                            width="120">
+                                    @elseif ($old_thumbnail)
+                                        <img src="{{ getFileUrl($old_thumbnail) }}" class="img-thumbnail"
+                                            width="120">
+                                    @else
+                                        <img src="{{ asset('assets/img/default-image.jpg') }}" class="img-thumbnail"
+                                            width="120" alt="No Logo">
+                                    @endif
                                 </div>
-                                @error('password')
+
+                                @error('thumbnail')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
-
-                            <div class="col-md-12 mb-1">
-                                <label class="form-label">Confirm Password</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" placeholder="Confirm Password"
-                                        wire:model="password_confirmation" id="edit_password_confirmation">
-                                    <span class="input-group-text"
-                                        onclick="togglePassword('edit_password_confirmation')">
-                                        <i id="edit-confirm-password-icon" class="fas fa-eye-slash"></i>
-                                    </span>
-                                </div>
-                                @error('password_confirmation')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-
-                            <div class="col-md-12 mb-1">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="edit_is_active"
-                                        wire:model="is_active">
-                                    <label class="form-check-label" for="edit_is_active">Is Active ?</label>
-                                </div>
-                            </div>
 
                         </div>
                     </div>
@@ -314,7 +292,88 @@
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div>
+
+
+
+    <div wire:ignore.self class="modal fade" id="addServiceImages" tabindex="-1" role="dialog"
+        aria-labelledby="addServiceImages" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-600">Manage Image Gallery</h6>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
+                        <i class="fas fa-times" style="color:black;"></i>
+                    </button>
+
+
+
+                </div>
+
+                <form wire:submit.prevent="saveImages">
+                    <div class="modal-body">
+                        <div class="row g-2 align-items-center">
+                            @foreach ($imageInputs as $index)
+                                <div class="col-md-12 mb-2 d-flex align-items-center"
+                                    wire:key="image-{{ $index }}">
+                                    <input type="file" wire:model="images.{{ $index }}"
+                                        class="form-control me-2" accept="image/*">
+
+                                    @if (isset($images[$index]))
+                                        @if (!is_string($images[$index]))
+                                            <img src="{{ $images[$index]->temporaryUrl() }}" class="img-thumbnail"
+                                                width="80">
+                                        @elseif (is_string($images[$index]))
+                                            <!-- Saved image -->
+                                            <img src="{{ asset(getFileUrl($images[$index])) }}" class="img-thumbnail"
+                                                width="80">
+                                        @endif
+                                    @endif
+
+
+
+                                    <button type="button" class="btn btn-sm btn-danger ms-2 p-1"
+                                        wire:click.prevent="removeImageInput({{ $index }})"
+                                        style="line-height: 1;">
+                                        <i class="fas fa-times" style="font-size: 0.75rem;"></i>
+                                    </button>
+
+
+                                    @error("images.$index")
+                                        <span class="error text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            @endforeach
+
+                            <div class="col-12 mt-2">
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    wire:click.prevent="addImageInput">
+                                    + Add Another Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                        <div class="">
+                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                                wire:target="saveImages">
+                                <span wire:loading wire:target="saveImages">
+                                    <i class="fas fa-spinner fa-spin me-2"></i> Saving...
+                                </span>
+                                <span wire:loading.remove wire:target="saveImages">
+                                    Save
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
 
 
