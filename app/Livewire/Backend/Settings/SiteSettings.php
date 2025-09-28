@@ -5,8 +5,6 @@ namespace App\Livewire\Backend\Settings;
 use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\SiteSetting;
 use App\Services\SettingService;
-use App\Traits\ToastTrait;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 
 

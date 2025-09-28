@@ -1,6 +1,8 @@
 <?php
 
 use App\Livewire\Backend\Dashboard;
+use App\Livewire\Backend\ManageEvent\EventHero;
+use App\Livewire\Backend\ManageEvent\EventServices;
 use App\Livewire\Backend\Settings\ContactInfoSettings;
 use App\Livewire\Backend\Settings\MailSettings;
 use App\Livewire\Backend\Settings\PasswordSettings;
@@ -26,6 +28,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
     Route::get('/social', SocialSettings::class)->name('social');
     Route::get('/contact-info', ContactInfoSettings::class)->name('contact-info');
   });
+
+
+  // for event manage group routes
+  Route::prefix('/event-manage')->name('event-manage.')->group(function () {
+    Route::get('/hero', EventHero::class)->name('hero');
+    Route::get('/services', EventServices::class)->name('services');
+  });
+
 
 
   // users management routes

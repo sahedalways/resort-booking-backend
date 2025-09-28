@@ -53,6 +53,42 @@
                     </div>
                 </li>
 
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#eventManage"
+                        class="nav-link {{ Request::is('admin/event-manage*') ? 'active' : '' }}"
+                        aria-controls="eventManage" role="button" aria-expanded="false">
+                        <div
+                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Manage Event</span>
+                    </a>
+
+                    <div class="collapse {{ Request::is('admin/event-manage*') ? 'show' : '' }}" id="eventManage">
+                        <ul class="nav ms-4">
+
+                            <!-- Hero & Call Now -->
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/event-manage/hero') ? 'active' : '' }}"
+                                    href="{{ route('admin.event-manage.hero') }}">
+                                    <i class="fas fa-image sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Hero Settings </span>
+                                </a>
+                            </li>
+
+                            <!-- Event Services -->
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/event-manage/services') ? 'active' : '' }}"
+                                    href="{{ route('admin.event-manage.services') }}">
+                                    <i class="fas fa-th-large sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Event Services </span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
 
 
 
@@ -135,17 +171,7 @@
 
 
 
-                {{-- 
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('admin/manage-books') ? 'active' : '' }}"
-                        href="{{ route('admin.manage-books') }}">
-                        <div
-                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                            <i class="fa-solid fa-book text-danger text-sm opacity-10"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">{{ __('messages.manage_books') }}</span>
-                    </a>
-                </li> --}}
+
 
 
 

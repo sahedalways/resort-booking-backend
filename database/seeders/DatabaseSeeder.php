@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             PaymentSettingSeeder::class,
             SocialSettingSeeder::class,
             ContactInfoSettingSeeder::class,
+            EventHeroSettingSeeder::class,
         ]);
     }
 }
