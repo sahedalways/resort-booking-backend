@@ -79,15 +79,17 @@
                                                 Edit Info
                                             </a>
 
-                                            <a href="#" class="badge badge-xs badge-danger fw-600 text-xs "
-                                                wire:click.prevent="$dispatch('confirmDelete', {{ $row->id }})">
-                                                Delete
-                                            </a>
+
 
                                             <a data-bs-toggle="modal" data-bs-target="#addServiceImages"
                                                 wire:click="addServiceImages({{ $row->id }})" type="button"
                                                 class="badge badge-xs badge-primary fw-600 text-xs text-dark">
                                                 Manage Image Gallery
+                                            </a>
+
+                                            <a href="#" class="badge badge-xs badge-danger fw-600 text-xs "
+                                                wire:click.prevent="$dispatch('confirmDelete', {{ $row->id }})">
+                                                Delete
                                             </a>
                                         </td>
                                     </tr>
