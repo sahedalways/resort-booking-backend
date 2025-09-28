@@ -16,6 +16,10 @@
                             <label class="form-label">Hero Title</label>
                             <input type="text" class="form-control" placeholder="Enter Hero Title"
                                 wire:model="title">
+
+                            @error('title')
+                                <span class="error text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
 
@@ -23,6 +27,10 @@
                             <label class="form-label">Hero Sub-Title</label>
                             <input type="text" class="form-control" placeholder="Enter Hero Sub Title"
                                 wire:model="sub_title">
+
+                            @error('sub_title')
+                                <span class="error text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
 
@@ -41,6 +49,10 @@
                                         width="120">
                                 @endif
                             </div>
+
+                            @error('hero_image')
+                                <span class="error text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
 
@@ -51,6 +63,11 @@
                             <label class="form-label">Call Now Number</label>
                             <input type="text" class="form-control" placeholder="Enter Phone Number"
                                 wire:model="phone_number">
+
+
+                            @error('phone_number')
+                                <span class="error text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <!-- Save Button -->
