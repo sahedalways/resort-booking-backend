@@ -157,8 +157,8 @@
 
                             <!-- Description -->
                             <div class="col-md-12 mb-2">
-                                <label class="form-label">Description <span class="text-danger">*</span></label>
-                                <textarea class="form-control" wire:model="description" rows="3" placeholder="Optional description"></textarea>
+                                <label class="form-label">Description </label>
+                                <textarea class="form-control" wire:model="description" rows="3" placeholder="Enter description"></textarea>
                                 @error('description')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
@@ -239,8 +239,8 @@
 
                             <!-- Description -->
                             <div class="col-md-12 mb-2">
-                                <label class="form-label">Description <span class="text-danger">*</span></label>
-                                <textarea class="form-control" wire:model="description" rows="3" placeholder="Optional description"></textarea>
+                                <label class="form-label">Description </label>
+                                <textarea class="form-control" wire:model="description" rows="3" placeholder="Enter description"></textarea>
                                 @error('description')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
