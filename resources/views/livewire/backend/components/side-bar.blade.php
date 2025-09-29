@@ -53,6 +53,38 @@
                     </div>
                 </li>
 
+
+
+
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#resortManage"
+                        class="nav-link {{ Request::is('admin/resort-manage*') ? 'active' : '' }}"
+                        aria-controls="resortManage" role="button" aria-expanded="false">
+                        <div
+                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="ni ni-building text-danger text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Manage Resort</span>
+                    </a>
+
+                    <div class="collapse {{ Request::is('admin/resort-manage*') ? 'show' : '' }}" id="resortManage">
+                        <ul class="nav ms-4">
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/resort-manage/service-type') ? 'active' : '' }}"
+                                    href="{{ route('admin.resort-manage.service-type') }}">
+                                    <i class="fas fa-concierge-bell sidenav-mini-icon side-bar-inner"></i>
+
+                                    <span class="sidenav-normal side-bar-inner"> Service Type </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
+
+
+
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#eventManage"
                         class="nav-link {{ Request::is('admin/event-manage*') ? 'active' : '' }}"
@@ -125,8 +157,8 @@
 
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#settings"
-                        class="nav-link {{ Request::is('admin/settings*') ? 'active' : '' }}" aria-controls="settings"
-                        role="button" aria-expanded="false">
+                        class="nav-link {{ Request::is('admin/settings*') ? 'active' : '' }}"
+                        aria-controls="settings" role="button" aria-expanded="false">
                         <div
                             class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
                             <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>

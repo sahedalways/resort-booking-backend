@@ -4,6 +4,7 @@ use App\Livewire\Backend\Dashboard;
 use App\Livewire\Backend\ManageContent\FeaturesImages;
 use App\Livewire\Backend\ManageEvent\EventHero;
 use App\Livewire\Backend\ManageEvent\EventServices;
+use App\Livewire\Backend\ManageResort\ServiceType;
 use App\Livewire\Backend\Settings\ContactInfoSettings;
 use App\Livewire\Backend\Settings\MailSettings;
 use App\Livewire\Backend\Settings\PasswordSettings;
@@ -41,6 +42,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
   // for content manage group routes
   Route::prefix('/content-manage')->name('content-manage.')->group(function () {
     Route::get('/features-images', FeaturesImages::class)->name('features-images');
+  });
+
+
+  // for resort manage group routes
+  Route::prefix('/resort-manage')->name('resort-manage.')->group(function () {
+    Route::get('/service-type', ServiceType::class)->name('service-type');
   });
 
 
