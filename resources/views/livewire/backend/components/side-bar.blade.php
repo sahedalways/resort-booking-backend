@@ -84,6 +84,14 @@
                                     <span class="sidenav-normal side-bar-inner"> Package Type </span>
                                 </a>
 
+
+                                <a class="nav-link {{ Request::is('admin/resort-manage/manage-facilities') ? 'active' : '' }}"
+                                    href="{{ route('admin.resort-manage.manage-facilities') }}">
+                                    <i class="fas fa-concierge-bell sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Manage Facilities </span>
+                                </a>
+
+
                             </li>
                         </ul>
                     </div>
