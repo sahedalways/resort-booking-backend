@@ -3,6 +3,7 @@
 namespace App\Repositories\ResortManage;
 
 use App\Models\ResortRoomFacility;
+use App\Models\ResortRoomFacilityOption;
 
 
 class FacilityManageRepository
@@ -53,5 +54,28 @@ class FacilityManageRepository
   {
     $data = $this->getFacilitySingleData($id);
     $data->delete();
+  }
+
+
+
+  public function saveFacilityOptions(int $itemId, array $options, array $removedOptions): void
+  {
+
+    ResortRoomFacilityOption::where('facility_id', $itemId)->delete();
+
+
+    foreach ($options as $item) {
+      ResortRoomFacilityOption::create([
+        'facility_id' => $itemId,
+        'name'            => $item,
+      ]);
+    }
+  }
+
+
+
+  public function getFacilityOptions(int $itemId)
+  {
+    return ResortRoomFacilityOption::where('facility_id', $itemId)->latest()->get();
   }
 }

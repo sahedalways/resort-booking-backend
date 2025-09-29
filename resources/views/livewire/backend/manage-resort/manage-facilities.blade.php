@@ -62,6 +62,12 @@
                                                 Edit Info
                                             </a>
 
+                                            <a data-bs-toggle="modal" data-bs-target="#manageFacilityOptions"
+                                                wire:click="manageFacilityOptions({{ $row->id }})" type="button"
+                                                class="badge badge-xs badge-success fw-600 text-xs text-dark">
+                                                Manage Options
+                                            </a>
+
                                             <a href="#" class="badge badge-xs badge-danger fw-600 text-xs "
                                                 wire:click.prevent="$dispatch('confirmDelete', {{ $row->id }})">
                                                 Delete
@@ -161,8 +167,8 @@
         </div>
     </div>
 
-    <div wire:ignore.self class="modal fade" id="editItem" tabindex="-1" role="dialog" aria-labelledby="editItem"
-        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div wire:ignore.self class="modal fade" id="editItem" tabindex="-1" role="dialog"
+        aria-labelledby="editItem" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -225,6 +231,75 @@
             </div>
         </div>
     </div>
+
+
+
+    <div wire:ignore.self class="modal fade" id="manageFacilityOptions" tabindex="-1" role="dialog"
+        aria-labelledby="manageFacilityOptions" aria-hidden="true" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document"><!-- ✅ Added modal-lg -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-600"> Manage Facility Options</h6>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
+                        <i class="fas fa-times" style="color:black;"></i>
+                    </button>
+                </div>
+
+                <form wire:submit.prevent="saveOptions">
+                    <div class="modal-body">
+                        <div class="row g-2 align-items-center">
+
+                            @foreach ($optionInputs as $index)
+                                <div class="col-md-12 mb-2 d-flex align-items-center"
+                                    wire:key="option-{{ $index }}">
+
+                                    <div class="flex-grow-1">
+                                        <input type="text" required class="form-control"
+                                            placeholder="Enter Option Name" wire:model="options.{{ $index }}">
+                                        @error("options.$index")
+                                            <span class="error text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+
+                                    <button type="button" class="btn btn-sm btn-danger ms-2 p-1"
+                                        wire:click.prevent="removeOptionInput({{ $index }})"
+                                        style="line-height: 1;">
+                                        <i class="fas fa-times" style="font-size: 0.75rem;"></i>
+                                    </button>
+                                </div>
+                            @endforeach
+
+                            <div class="col-12 mt-2">
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    wire:click.prevent="addOptionInput">
+                                    + Add Another Option
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                        <div class="">
+                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                                wire:target="saveOptions">
+                                <span wire:loading wire:target="saveOptions">
+                                    <i class="fas fa-spinner fa-spin me-2"></i> Saving...
+                                </span>
+                                <span wire:loading.remove wire:target="saveOptions">
+                                    Save
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
 
 </div>

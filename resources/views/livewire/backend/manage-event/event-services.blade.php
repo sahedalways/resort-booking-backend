@@ -83,7 +83,7 @@
 
                                             <a data-bs-toggle="modal" data-bs-target="#addServiceImages"
                                                 wire:click="addServiceImages({{ $row->id }})" type="button"
-                                                class="badge badge-xs badge-primary fw-600 text-xs text-dark">
+                                                class="badge badge-xs badge-success fw-600 text-xs text-dark">
                                                 Manage Image Gallery
                                             </a>
 

@@ -48,4 +48,16 @@ class FacilitiesManageService
   {
     return $this->repository->deleteFacilityData($id);
   }
+
+
+  public function saveFacilityOptions(int $itemId, array $options, array $removedOptions)
+  {
+    return $this->repository->saveFacilityOptions($itemId, $options,  $removedOptions);
+  }
+
+
+  public function getFacilityOptions(int $itemId)
+  {
+    return $this->repository->getFacilityOptions($itemId);
+  }
 }

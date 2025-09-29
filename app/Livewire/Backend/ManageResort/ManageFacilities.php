@@ -24,6 +24,11 @@ class ManageFacilities extends BaseComponent
 
     protected $listeners = ['deleteItem'];
 
+    public $options = [];
+    public $removedOptions = [];
+
+    public $optionInputs = [0];
+
 
     public function boot(FacilitiesManageService $facilitiesManageService)
     {
@@ -61,6 +66,9 @@ class ManageFacilities extends BaseComponent
         $this->icon = '';
         $this->name = '';
         $this->old_icon = '';
+        $this->options = [];
+        $this->removedOptions = [];
+        $this->optionInputs = [0];
         $this->resetErrorBag();
     }
 
@@ -223,5 +231,66 @@ class ManageFacilities extends BaseComponent
         $this->reloadFacilitiesData();
 
         $this->toast('Facility item has been deleted!', 'success');
+    }
+
+
+
+
+
+    public function manageFacilityOptions($id)
+    {
+        $this->resetInputFields();
+        $this->itemId = $id;
+
+        $savedOptions = $this->facilitiesManageService->getFacilityOptions($id);
+
+        $this->options = $savedOptions->pluck('name')->toArray();
+
+
+        $this->optionInputs = [];
+
+
+        foreach ($this->options as $key => $item) {
+            $this->optionInputs[] = $key;
+        }
+        $this->optionInputs[] = count($this->options);
+    }
+
+
+
+
+    public function addOptionInput()
+    {
+        $this->optionInputs[] = count($this->optionInputs);
+    }
+
+    public function removeOptionInput($index)
+    {
+
+        if (isset($this->options[$index]) && is_string($this->options[$index])) {
+            $this->removedOptions[] = $this->options[$index];
+        }
+
+
+        unset($this->options[$index]);
+        $this->optionInputs = array_values(array_diff($this->optionInputs, [$index]));
+    }
+
+
+    public function saveOptions()
+    {
+
+        $this->facilitiesManageService->saveFacilityOptions($this->itemId, $this->options, $this->removedOptions);
+
+
+        $this->refresh();
+        $this->resetInputFields();
+        $this->editMode = false;
+
+
+        $this->dispatch('closemodal');
+
+
+        $this->toast('Options saved successfully!', 'success');
     }
 }
