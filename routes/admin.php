@@ -4,6 +4,7 @@ use App\Livewire\Backend\Dashboard;
 use App\Livewire\Backend\ManageContent\FeaturesImages;
 use App\Livewire\Backend\ManageEvent\EventHero;
 use App\Livewire\Backend\ManageEvent\EventServices;
+use App\Livewire\Backend\ManageResort\PackageType;
 use App\Livewire\Backend\ManageResort\ServiceType;
 use App\Livewire\Backend\Settings\ContactInfoSettings;
 use App\Livewire\Backend\Settings\MailSettings;
@@ -48,6 +49,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
   // for resort manage group routes
   Route::prefix('/resort-manage')->name('resort-manage.')->group(function () {
     Route::get('/service-type', ServiceType::class)->name('service-type');
+    Route::get('/package-type', PackageType::class)->name('package-type');
   });
 
 

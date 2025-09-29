@@ -18,22 +18,19 @@ class ServiceTypeManageRepository
   }
 
 
-  public function getSTSingleData(int $id): ?ResortServiceType
+  public function getSTSingleData(int $id)
   {
-    return ResortServiceType::find($id);
+    return ResortServiceType::where('id', $id)->first();
   }
 
 
   public function updateResortSTSingleData(ResortServiceType $stItem, array $data): ?ResortServiceType
   {
-    $stItem->type_name    = $data['type_name'];
-    $stItem->icon    = $data['icon'];
-
-
-    $stItem->save();
-
+    $stItem->update($data);
     return $stItem;
   }
+
+
 
 
   public function saveResortST(array $data): ?ResortServiceType

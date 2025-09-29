@@ -3,15 +3,15 @@
 namespace App\Livewire\Backend\ManageResort;
 
 use App\Livewire\Backend\Components\BaseComponent;
-use App\Models\ResortServiceType;
-use App\Services\ResortMange\ServiceTypeManageService;
+use App\Models\ResortPackageType;
+use App\Services\ResortMange\PackageTypeManageService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Pagination\Cursor;
 
 
-class ServiceType extends BaseComponent
+class PackageType extends BaseComponent
 {
-    public $st_infos, $stItem, $st_id, $type_name, $icon, $old_icon, $search;
+    public $pt_infos, $pt_item, $pt_id, $type_name, $icon, $old_icon, $is_refundable,  $search;
 
 
     public $editMode = false;
@@ -19,20 +19,21 @@ class ServiceType extends BaseComponent
     protected $currentCursor;
     public $hasMorePages;
 
-    protected $resortST;
+    protected $resortPT;
 
-    protected $listeners = ['deleteST'];
+    protected $listeners = ['deletePT'];
 
 
-    public function boot(ServiceTypeManageService $resortST)
+    public function boot(PackageTypeManageService $resortPT)
     {
-        $this->resortST = $resortST;
+        $this->resortPT = $resortPT;
     }
 
 
     protected $rules = [
         'type_name' => 'required|string|max:255',
         'icon' => 'required|string|max:255',
+        'is_refundable' => 'required|boolean',
     ];
 
 
@@ -40,26 +41,27 @@ class ServiceType extends BaseComponent
     public function mount()
     {
 
-        $this->st_infos = new EloquentCollection();
+        $this->pt_infos = new EloquentCollection();
 
 
-        $this->loadResortStData();
+        $this->loadResortPtData();
     }
 
 
     public function render()
     {
-        return view('livewire.backend.manage-resort.service-type');
+        return view('livewire.backend.manage-resort.package-type');
     }
 
 
     /* reset input file */
     public function resetInputFields()
     {
-        $this->stItem = '';
+        $this->pt_item = '';
         $this->icon = '';
         $this->type_name = '';
         $this->old_icon = '';
+        $this->is_refundable;
         $this->resetErrorBag();
     }
 
@@ -69,17 +71,18 @@ class ServiceType extends BaseComponent
     {
         $this->validate();
 
-        $this->resortST->saveResortST([
+        $this->resortPT->saveResortPT([
             'type_name' => $this->type_name,
             'icon'  => $this->icon,
+            'is_refundable'  => $this->is_refundable,
         ]);
 
-        $this->st_infos =  $this->resortST->getAllResortSTData();
+        $this->pt_infos =  $this->resortPT->getAllResortPTData();
 
         $this->resetInputFields();
         $this->dispatch('closemodal');
 
-        $this->toast('Service Type saved Successfully!', 'success');
+        $this->toast('Package Type saved Successfully!', 'success');
     }
 
 
@@ -87,7 +90,7 @@ class ServiceType extends BaseComponent
     /* process while update */
     public function updated()
     {
-        $this->reloadResortStData();
+        $this->reloadResortPtData();
     }
 
 
@@ -95,33 +98,34 @@ class ServiceType extends BaseComponent
     public function edit($id)
     {
         $this->editMode = true;
-        $this->stItem = $this->resortST->getSTSingleData($id);
+        $this->pt_item = $this->resortPT->getPTSingleData($id);
 
-        if (!$this->stItem) {
-            $this->toast('Service type not found!', 'error');
+        if (!$this->pt_item) {
+            $this->toast('Package Type not found!', 'error');
             return;
         }
 
-        $this->type_name = $this->stItem->type_name;
-        $this->icon = $this->stItem->icon;
-        $this->old_icon = $this->stItem->icon;
+        $this->type_name = $this->pt_item->type_name;
+        $this->icon = $this->pt_item->icon;
+        $this->old_icon = $this->pt_item->icon;
+        $this->is_refundable = $this->pt_item->is_refundable;
     }
 
     public function update()
     {
         $this->validate();
 
-
-        if (!$this->stItem) {
-            $this->toast('Service type not found!', 'error');
+        if (!$this->pt_item) {
+            $this->toast('Package Type not found!', 'error');
             return;
         }
 
-        $this->resortST->updateResortSTSingleData($this->stItem, [
+
+        $this->resortPT->updateResortPTSingleData($this->pt_item, [
             'type_name'       => $this->type_name,
             'icon' => $this->icon,
+            'is_refundable' => $this->is_refundable,
         ]);
-
 
 
         $this->refresh();
@@ -130,23 +134,23 @@ class ServiceType extends BaseComponent
 
 
         $this->dispatch('closemodal');
-        $this->toast('Service type has been updated successfully!', 'success');
+        $this->toast('Package Type has been updated successfully!', 'success');
     }
 
 
 
     /* process while update */
-    public function searchST()
+    public function searchPT()
     {
         if ($this->search != '') {
-            $this->st_infos = ResortServiceType::where('type_name', 'like', '%' . $this->search)
+            $this->pt_infos = ResortPackageType::where('type_name', 'like', '%' . $this->search)
                 ->latest()
                 ->get();
         } elseif ($this->search == '') {
-            $this->st_infos = new EloquentCollection();
+            $this->pt_infos = new EloquentCollection();
         }
 
-        $this->reloadResortStData();
+        $this->reloadResortPtData();
     }
 
 
@@ -156,26 +160,26 @@ class ServiceType extends BaseComponent
     {
 
         if ($this->search == '') {
-            $this->st_infos = $this->st_infos->fresh();
+            $this->pt_infos = $this->pt_infos->fresh();
         }
     }
-    public function loadResortStData()
+    public function loadResortPtData()
     {
         if ($this->hasMorePages !== null && !$this->hasMorePages) {
             return;
         }
-        $stList = $this->filterdata();
-        $this->st_infos->push(...$stList->items());
-        if ($this->hasMorePages = $stList->hasMorePages()) {
-            $this->nextCursor = $stList->nextCursor()->encode();
+        $ptList = $this->filterdata();
+        $this->pt_infos->push(...$ptList->items());
+        if ($this->hasMorePages = $ptList->hasMorePages()) {
+            $this->nextCursor = $ptList->nextCursor()->encode();
         }
-        $this->currentCursor = $stList->cursor();
+        $this->currentCursor = $ptList->cursor();
     }
 
 
     public function filterdata()
     {
-        $query = ResortServiceType::query();
+        $query = ResortPackageType::query();
 
         if ($this->search && $this->search != '') {
             $searchTerm = '%' . $this->search . '%';
@@ -191,16 +195,16 @@ class ServiceType extends BaseComponent
     }
 
 
-    public function reloadResortStData()
+    public function reloadResortPtData()
     {
-        $this->st_infos = new EloquentCollection();
+        $this->pt_infos = new EloquentCollection();
         $this->nextCursor = null;
         $this->hasMorePages = null;
         if ($this->hasMorePages !== null && !$this->hasMorePages) {
             return;
         }
         $data = $this->filterdata();
-        $this->st_infos->push(...$data->items());
+        $this->pt_infos->push(...$data->items());
         if ($this->hasMorePages = $data->hasMorePages()) {
             $this->nextCursor = $data->nextCursor()->encode();
         }
@@ -208,12 +212,12 @@ class ServiceType extends BaseComponent
     }
 
 
-    public function deleteST($id)
+    public function deletePT($id)
     {
-        $this->resortST->deleteResortST($id);
+        $this->resortPT->deleteResortPT($id);
 
-        $this->reloadResortStData();
+        $this->reloadResortPtData();
 
-        $this->toast('Service type has been deleted!', 'success');
+        $this->toast('Package Type has been deleted!', 'success');
     }
 }

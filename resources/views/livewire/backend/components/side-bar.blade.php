@@ -76,6 +76,14 @@
 
                                     <span class="sidenav-normal side-bar-inner"> Service Type </span>
                                 </a>
+
+
+                                <a class="nav-link {{ Request::is('admin/resort-manage/package-type') ? 'active' : '' }}"
+                                    href="{{ route('admin.resort-manage.package-type') }}">
+                                    <i class="fas fa-box-open sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Package Type </span>
+                                </a>
+
                             </li>
                         </ul>
                     </div>

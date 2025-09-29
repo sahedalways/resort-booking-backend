@@ -26,16 +26,16 @@ class ServiceTypeManageService
   }
 
 
-  public function getSTSingleData(int $id): ?ResortServiceType
+  public function getSTSingleData(int $id)
   {
 
     return $this->repository->getSTSingleData($id);
   }
 
 
-  public function updateResortSTSingleData(ResortServiceType $st_item, array $data): ResortServiceType
+  public function updateResortSTSingleData(ResortServiceType $stItem, array $data): ResortServiceType
   {
-    return $this->repository->updateResortSTSingleData($st_item, $data);
+    return $this->repository->updateResortSTSingleData($stItem, $data);
   }
 
 

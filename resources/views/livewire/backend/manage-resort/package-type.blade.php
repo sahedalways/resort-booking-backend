@@ -1,12 +1,12 @@
 <div>
     <div class="row align-items-center justify-content-between mb-4">
         <div class="col">
-            <ces class="fw-500 text-white">Resort Service Types</ces>
+            <ces class="fw-500 text-white">Resort Package Types</ces>
         </div>
         <div class="col-auto">
-            <a data-bs-toggle="modal" data-bs-target="#addServiceType" wire:click="resetInputFields"
+            <a data-bs-toggle="modal" data-bs-target="#addPackageType" wire:click="resetInputFields"
                 class="btn btn-icon btn-3 btn-white text-primary mb-0">
-                <i class="fa fa-plus me-2"></i> Add New Service Type
+                <i class="fa fa-plus me-2"></i> Add New Package Type
             </a>
         </div>
     </div>
@@ -16,10 +16,10 @@
                 <div class="card-header p-4">
                     <div class="row">
                         <div class="col-md-12" wire:ignore>
-                            <input type="text" class="form-control" placeholder="Search by service type name."
+                            <input type="text" class="form-control" placeholder="Search by package type name."
                                 wire:model="search" />
 
-                            <button type="button" wire:click="searchST" class="btn btn-primary mt-2">
+                            <button type="button" wire:click="searchPT" class="btn btn-primary mt-2">
                                 Search
                             </button>
                         </div>
@@ -34,7 +34,10 @@
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xs opacity-7">#</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
-                                        Service Type</th>
+                                        Package Type</th>
+
+                                    <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
+                                        Is Refundable</th>
 
                                     <th class="text-secondary opacity-7"> Action</th>
                                 </tr>
@@ -44,7 +47,7 @@
                                     $i = 1;
                                 @endphp
 
-                                @foreach ($st_infos as $row)
+                                @foreach ($pt_infos as $row)
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>
@@ -53,10 +56,14 @@
                                                 {{ $row->type_name }}
                                             </p>
                                         </td>
-
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">
+                                                {{ getRefundableText($row->is_refundable) }}
+                                            </p>
+                                        </td>
                                         <td>
 
-                                            <a data-bs-toggle="modal" data-bs-target="#editST"
+                                            <a data-bs-toggle="modal" data-bs-target="#editPT"
                                                 wire:click="edit({{ $row->id }})" type="button"
                                                 class="badge badge-xs badge-warning fw-600 text-xs text-dark">
                                                 Edit Info
@@ -77,7 +84,7 @@
                                     let observer = new IntersectionObserver((entries) => {
                                         entries.forEach(entry => {
                                             if (entry.isIntersecting) {
-                                                @this.call('loadResortStData')
+                                                @this.call('loadResortPtData')
                                                 console.log('loading...')
                                             }
                                         })
@@ -103,12 +110,12 @@
     </div>
 
 
-    <div wire:ignore.self class="modal fade" id="addServiceType" tabindex="-1" role="dialog"
-        aria-labelledby="addServiceType" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div wire:ignore.self class="modal fade" id="addPackageType" tabindex="-1" role="dialog"
+        aria-labelledby="addPackageType" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title fw-600" id="addServiceType">Add Service Type</h6>
+                    <h6 class="modal-title fw-600" id="addPackageType">Add Service Type</h6>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
                         <i class="fas fa-times" style="color:black;"></i>
                     </button>
@@ -139,13 +146,28 @@
                             </div>
 
 
+
+                            <div class="col-md-12 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="is_refundable"
+                                        wire:model="is_refundable">
+                                    <label class="form-check-label" for="is_refundable">
+                                        Is Refundable
+                                    </label>
+                                </div>
+                                @error('is_refundable')
+                                    <span class="error text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
                         </div>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
-                        <button type="submit" class="btn btn-success" wire:loading.attr="disabled" wire:target="store">
+                        <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                            wire:target="store">
                             <span wire:loading wire:target="store">
                                 <i class="fas fa-spinner fa-spin me-2"></i> Saving...
                             </span>
@@ -159,12 +181,12 @@
         </div>
     </div>
 
-    <div wire:ignore.self class="modal fade" id="editST" tabindex="-1" role="dialog" aria-labelledby="editST"
+    <div wire:ignore.self class="modal fade" id="editPT" tabindex="-1" role="dialog" aria-labelledby="editPT"
         aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title fw-600" id="editST">Edit Service Type</h6>
+                    <h6 class="modal-title fw-600" id="editPT">Edit Service Type</h6>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
                         <i class="fas fa-times" style="color:black;"></i>
                     </button>
@@ -201,6 +223,20 @@
                             </div>
 
 
+                            <div class="col-md-12 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="is_refundable"
+                                        wire:model="is_refundable">
+                                    <label class="form-check-label" for="is_refundable">
+                                        Is Refundable
+                                    </label>
+                                </div>
+                                @error('is_refundable')
+                                    <span class="error text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+
                         </div>
                     </div>
 
@@ -227,8 +263,8 @@
 
 <script>
     Livewire.on('confirmDelete', id => {
-        if (confirm("Are you sure you want to delete this service Type? This action cannot be undone.")) {
-            Livewire.dispatch('deleteST', {
+        if (confirm("Are you sure you want to delete this package Type? This action cannot be undone.")) {
+            Livewire.dispatch('deletePT', {
                 id: id
             });
         }

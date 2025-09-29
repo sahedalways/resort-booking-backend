@@ -29,4 +29,12 @@ if (!function_exists('siteSetting')) {
       return '<i class="' . e($iconClass) . ' me-1"></i>';
     }
   }
+
+
+  if (!function_exists('getRefundableText')) {
+    function getRefundableText(?bool $isRefundable): string
+    {
+      return (bool) $isRefundable ? 'Refundable' : 'Non-Refundable';
+    }
+  }
 }
