@@ -92,6 +92,37 @@
 
 
 
+
+
+
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#contentManage"
+                        class="nav-link {{ Request::is('admin/content-manage*') ? 'active' : '' }}"
+                        aria-controls="contentManage" role="button" aria-expanded="false">
+                        <div
+                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-folder-open text-primary text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Content Management</span>
+                    </a>
+
+                    <div class="collapse {{ Request::is('admin/content-manage*') ? 'show' : '' }}" id="contentManage">
+                        <ul class="nav ms-4">
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/content-manage/features-images') ? 'active' : '' }}"
+                                    href="{{ route('admin.content-manage.features-images') }}">
+                                    <i class="fa-solid fa-images sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Features Images </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
+
+
+
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#settings"
                         class="nav-link {{ Request::is('admin/settings*') ? 'active' : '' }}" aria-controls="settings"

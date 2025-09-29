@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Backend\Dashboard;
+use App\Livewire\Backend\ManageContent\FeaturesImages;
 use App\Livewire\Backend\ManageEvent\EventHero;
 use App\Livewire\Backend\ManageEvent\EventServices;
 use App\Livewire\Backend\Settings\ContactInfoSettings;
@@ -34,6 +35,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
   Route::prefix('/event-manage')->name('event-manage.')->group(function () {
     Route::get('/hero', EventHero::class)->name('hero');
     Route::get('/services', EventServices::class)->name('services');
+  });
+
+
+  // for content manage group routes
+  Route::prefix('/content-manage')->name('content-manage.')->group(function () {
+    Route::get('/features-images', FeaturesImages::class)->name('features-images');
   });
 
 
