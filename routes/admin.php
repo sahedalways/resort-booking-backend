@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Backend\Coupons\ManageCoupons;
 use App\Livewire\Backend\Dashboard;
 use App\Livewire\Backend\ManageContent\FeaturesImages;
 use App\Livewire\Backend\ManageEvent\EventHero;
@@ -63,6 +64,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
     Route::get('/view-type', ViewType::class)->name('view-type');
     Route::get('/bed-type', BedType::class)->name('bed-type');
   });
+
+
+  // coupon management route
+  Route::get('coupons', ManageCoupons::class)->name('coupons');
 
 
 
