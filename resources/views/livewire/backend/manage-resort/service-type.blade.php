@@ -132,7 +132,9 @@
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Icon <span class="text-danger">*</span></label>
                                 <input type="text" required class="form-control"
-                                    placeholder="Enter Service Type Icon" wire:model="icon">
+                                    placeholder="Enter FontAwesome icon, e.g. fas fa-wifi" wire:model="icon">
+                                <small class="text-muted">Use any FontAwesome 5/6 class, e.g. <code>fas fa-wifi</code>,
+                                    <code>fas fa-bath</code></small>
                                 @error('icon')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
@@ -188,7 +190,9 @@
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Icon <span class="text-danger">*</span></label>
                                 <input type="text" required class="form-control"
-                                    placeholder="Enter Service Type Icon" wire:model="icon">
+                                    placeholder="Enter FontAwesome icon, e.g. fas fa-wifi" wire:model="icon">
+                                <small class="text-muted">Use any FontAwesome 5/6 class, e.g. <code>fas fa-wifi</code>,
+                                    <code>fas fa-bath</code></small>
 
 
                                 <p class="text-sm font-weight-bold mb-0">

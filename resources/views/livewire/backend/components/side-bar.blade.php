@@ -90,6 +90,37 @@
                 </li>
 
 
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#roomManage"
+                        class="nav-link {{ Request::is('admin/room-manage*') ? 'active' : '' }}"
+                        aria-controls="roomManage" role="button" aria-expanded="false">
+                        <div
+                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="fas fa-door-open text-danger text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Manage Room</span>
+                    </a>
+
+                    <div class="collapse {{ Request::is('admin/room-manage*') ? 'show' : '' }}" id="roomManage">
+                        <ul class="nav ms-4">
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/room-manage/bed-type') ? 'active' : '' }}"
+                                    href="{{ route('admin.room-manage.bed-type') }}">
+                                    <i class="fas fa-bed sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Bed Type </span>
+                                </a>
+
+                                <a class="nav-link {{ Request::is('admin/room-manage/view-type') ? 'active' : '' }}"
+                                    href="{{ route('admin.room-manage.view-type') }}">
+                                    <i class="fas fa-eye sidenav-mini-icon side-bar-inner"></i>
+                                    <span class="sidenav-normal side-bar-inner"> View Type </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
 
 
 
@@ -146,7 +177,8 @@
                         <span class="nav-link-text ms-1">Content Management</span>
                     </a>
 
-                    <div class="collapse {{ Request::is('admin/content-manage*') ? 'show' : '' }}" id="contentManage">
+                    <div class="collapse {{ Request::is('admin/content-manage*') ? 'show' : '' }}"
+                        id="contentManage">
                         <ul class="nav ms-4">
                             <li class="nav-item">
                                 <a class="nav-link {{ Request::is('admin/content-manage/features-images') ? 'active' : '' }}"
