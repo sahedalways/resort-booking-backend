@@ -21,6 +21,11 @@ class DatabaseSeeder extends Seeder
             SocialSettingSeeder::class,
             ContactInfoSettingSeeder::class,
             EventHeroSettingSeeder::class,
+            ResortPackageTypesSeeder::class,
+            RoomBedTypesSeeder::class,
+            RoomViewTypesSeeder::class,
+            ResortRoomFacilitiesSeeder::class,
+            ResortServiceTypesSeeder::class,
         ]);
     }
 }
