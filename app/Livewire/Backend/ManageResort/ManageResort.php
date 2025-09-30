@@ -390,7 +390,7 @@ class ManageResort extends BaseComponent
 
 
         $this->refresh();
-        $this->resetInputFields();
+
         $this->editMode = false;
 
 

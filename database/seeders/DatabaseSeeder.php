@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class,
             SiteSettingSeeder::class,
             EmailSettingSeeder::class,
-            PaymentSettingSeeder::class,
             SocialSettingSeeder::class,
             ContactInfoSettingSeeder::class,
             EventHeroSettingSeeder::class,
