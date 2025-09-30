@@ -21,6 +21,9 @@ return new class extends Migration
             $table->time('d_check_out')->nullable();
             $table->time('n_check_in')->nullable();
             $table->time('n_check_out')->nullable();
+            $table->foreignId('package_id')
+                ->constrained('resort_package_types')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

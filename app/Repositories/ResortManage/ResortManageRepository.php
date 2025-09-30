@@ -4,6 +4,7 @@ namespace App\Repositories\ResortManage;
 
 use App\Models\Resort;
 use App\Models\ResortImage;
+use App\Models\ResortPackageType;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Str;
@@ -38,6 +39,7 @@ class ResortManageRepository
       'd_check_out'     => $data['d_check_out'],
       'n_check_in'     => $data['n_check_in'],
       'n_check_out'     => $data['n_check_out'],
+      'package_id'     => $data['packageTypeId'],
 
     ]);
 
@@ -59,6 +61,7 @@ class ResortManageRepository
     $item->d_check_out = $data['d_check_out'] ?? null;
     $item->n_check_in = $data['n_check_in'] ?? null;
     $item->n_check_out = $data['n_check_out'] ?? null;
+    $item->package_id = $data['packageTypeId'] ?? null;
 
 
     $item->save();
@@ -115,5 +118,12 @@ class ResortManageRepository
         $image->url = getFileUrl($image->image);
         return $image;
       });
+  }
+
+
+
+  public function getPackageTypes()
+  {
+    return ResortPackageType::all();
   }
 }

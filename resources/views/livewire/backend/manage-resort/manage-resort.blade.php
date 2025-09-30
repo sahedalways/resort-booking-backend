@@ -130,13 +130,7 @@
                                             </a>
 
 
-                                            <!-- Manage Package Types -->
-                                            <a href="#" data-bs-toggle="modal"
-                                                data-bs-target="#managePackageTypes" style="color: #000;"
-                                                wire:click="managePackageTypes({{ $row->id }})"
-                                                class="badge badge-xs badge-success fw-600 text-xs">
-                                                Manage Package Types
-                                            </a>
+
 
                                             <!-- Manage Additional Facts -->
                                             <a href="#" data-bs-toggle="modal"
@@ -272,6 +266,23 @@
                             </div>
 
 
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Package Type <span class="text-danger">*</span></label>
+                                <select class="form-control" wire:model="packageTypeId" required>
+                                    <option value="">-- Select Package Type --</option>
+                                    @foreach ($packageTypes as $type)
+                                        <option value="{{ $type->id }}">
+                                            {!! fa_icon($type->icon) !!} {{ $type->type_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('packageTypeId')
+                                    <span class="error text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+
+
                             {{-- Day Check In --}}
                             <div class="col-md-6 mb-2">
                                 <label class="form-label">Day Check-In </label>
@@ -384,6 +395,25 @@
                                 @enderror
                             </div>
 
+
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Package Type <span class="text-danger">*</span></label>
+                                <select class="form-control" wire:model="packageTypeId" required>
+                                    <option value="">-- Select Package Type --</option>
+                                    @foreach ($packageTypes as $type)
+                                        <option value="{{ $type->id }}"
+                                            @if ($packageTypeId == $type->id) selected @endif>
+
+                                            {!! fa_icon($type->icon) !!} {{ $type->type_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('packageTypeId')
+                                    <span class="error text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+
                             {{-- Day Check In --}}
                             <div class="col-md-6 mb-2">
                                 <label class="form-label">Day Check-In </label>
@@ -441,8 +471,6 @@
             </div>
         </div>
     </div>
-
-
 
 
 
@@ -522,6 +550,10 @@
             </div>
         </div>
     </div>
+
+
+
+
 
 
 

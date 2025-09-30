@@ -13,7 +13,7 @@ use Livewire\WithFileUploads;
 
 class ManageResort extends BaseComponent
 {
-    public $items, $item, $itemId, $name, $distance, $location, $desc, $d_check_in, $d_check_out, $n_check_in, $n_check_out,   $search;
+    public $items, $item, $itemId, $name, $distance, $location, $packageTypeId, $desc, $d_check_in, $d_check_out, $n_check_in, $n_check_out,   $search;
 
 
     public $editMode = false;
@@ -28,6 +28,9 @@ class ManageResort extends BaseComponent
     public $images = [];
     public $removedImages = [];
     public $imageInputs = [0];
+
+    public $packageTypes = [];
+
 
 
     use WithFileUploads;
@@ -57,10 +60,9 @@ class ManageResort extends BaseComponent
             'd_check_out' => 'nullable',
             'n_check_in'  => 'nullable',
             'n_check_out' => 'nullable',
+            'packageTypeId' => 'required|exists:resort_package_types,id',
         ];
     }
-
-
 
 
 
@@ -69,7 +71,7 @@ class ManageResort extends BaseComponent
     {
 
         $this->items = new EloquentCollection();
-
+        $this->packageTypes =  $this->resortManageService->getPackageTypes();
 
         $this->loadResortData();
     }
@@ -94,6 +96,8 @@ class ManageResort extends BaseComponent
         $this->d_check_out = '';
         $this->n_check_in = '';
         $this->n_check_out = '';
+        $this->packageTypeId = null;
+
         $this->search     = '';
 
         $this->resetErrorBag();
@@ -114,6 +118,7 @@ class ManageResort extends BaseComponent
             'd_check_out' => $this->d_check_out,
             'n_check_in' => $this->n_check_in,
             'n_check_out' => $this->n_check_out,
+            'packageTypeId' => $this->packageTypeId,
 
         ]);
 
@@ -153,6 +158,7 @@ class ManageResort extends BaseComponent
         $this->d_check_out = $this->item->d_check_out;
         $this->n_check_in = $this->item->n_check_in;
         $this->n_check_out = $this->item->n_check_out;
+        $this->packageTypeId = $this->item->package_id;
     }
 
     public function update()
@@ -175,6 +181,7 @@ class ManageResort extends BaseComponent
             'd_check_out'       => $this->d_check_out,
             'n_check_in'       => $this->n_check_in,
             'n_check_out'       => $this->n_check_out,
+            'packageTypeId'       => $this->packageTypeId,
 
         ]);
 

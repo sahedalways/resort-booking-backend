@@ -62,4 +62,9 @@ class ResortManageService
   {
     return $this->repository->getResortImagesGallery($itemId);
   }
+
+  public function getPackageTypes()
+  {
+    return $this->repository->getPackageTypes();
+  }
 }

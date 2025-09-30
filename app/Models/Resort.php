@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Resort extends Model
 {
-    protected $fillable = ['name', 'distance', 'location', 'desc', 'd_check_in', 'd_check_out', 'n_check_in', 'n_check_out'];
+    protected $fillable = ['name', 'distance', 'location', 'desc', 'd_check_in', 'd_check_out', 'n_check_in', 'n_check_out', 'package_id'];
 
 
     public function images()
@@ -22,5 +22,10 @@ class Resort extends Model
     public function additionalFacts()
     {
         return $this->hasMany(ResortAdditionalFact::class);
+    }
+
+    public function packageType()
+    {
+        return $this->belongsTo(ResortPackageType::class, 'package_id');
     }
 }
