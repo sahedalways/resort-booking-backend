@@ -64,12 +64,21 @@
                             class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
                             <i class="ni ni-building text-danger text-sm opacity-10"></i>
                         </div>
-                        <span class="nav-link-text ms-1">Manage Resort</span>
+                        <span class="nav-link-text ms-1"> Resorts</span>
                     </a>
 
                     <div class="collapse {{ Request::is('admin/resort-manage*') ? 'show' : '' }}" id="resortManage">
                         <ul class="nav ms-4">
                             <li class="nav-item">
+
+                                <a class="nav-link {{ Request::is('admin/resort-manage') ? 'active' : '' }}"
+                                    href="{{ route('admin.resort-manage.index') }}">
+                                    <i class="ni ni-building text-danger text-sm opacity-10"></i>
+
+                                    <span class="sidenav-normal side-bar-inner"> Manage Resort </span>
+                                </a>
+
+
                                 <a class="nav-link {{ Request::is('admin/resort-manage/service-type') ? 'active' : '' }}"
                                     href="{{ route('admin.resort-manage.service-type') }}">
                                     <i class="fas fa-concierge-bell sidenav-mini-icon side-bar-inner"></i>
@@ -106,7 +115,7 @@
                             class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
                             <i class="fas fa-door-open text-danger text-sm opacity-10"></i>
                         </div>
-                        <span class="nav-link-text ms-1">Manage Room</span>
+                        <span class="nav-link-text ms-1">Rooms</span>
                     </a>
 
                     <div class="collapse {{ Request::is('admin/room-manage*') ? 'show' : '' }}" id="roomManage">

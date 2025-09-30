@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('resorts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('distance')->nullable();
-            $table->string('location')->nullable();
-            $table->text('desc')->nullable();
+            $table->string('distance');
+            $table->string('location');
+            $table->text('desc');
             $table->time('d_check_in')->nullable();
             $table->time('d_check_out')->nullable();
             $table->time('n_check_in')->nullable();

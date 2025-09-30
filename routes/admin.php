@@ -6,6 +6,7 @@ use App\Livewire\Backend\ManageContent\FeaturesImages;
 use App\Livewire\Backend\ManageEvent\EventHero;
 use App\Livewire\Backend\ManageEvent\EventServices;
 use App\Livewire\Backend\ManageResort\ManageFacilities;
+use App\Livewire\Backend\ManageResort\ManageResort;
 use App\Livewire\Backend\ManageResort\PackageType;
 use App\Livewire\Backend\ManageResort\ServiceType;
 use App\Livewire\Backend\ManageRoom\BedType;
@@ -52,6 +53,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
 
   // for resort manage group routes
   Route::prefix('/resort-manage')->name('resort-manage.')->group(function () {
+    Route::get('/', ManageResort::class)->name('index');
     Route::get('/service-type', ServiceType::class)->name('service-type');
     Route::get('/package-type', PackageType::class)->name('package-type');
     Route::get('/manage-facilities', ManageFacilities::class)->name('manage-facilities');

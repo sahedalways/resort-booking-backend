@@ -37,7 +37,7 @@ class ManageCoupons extends BaseComponent
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('coupons', 'code')->ignore($this->item->id ?? null),
+                Rule::unique('coupons', 'code')->ignore($this->item?->id ?? null),
             ],
             'discount_value' => 'required|numeric|min:0',
             'status' => 'required|in:active,inactive',
