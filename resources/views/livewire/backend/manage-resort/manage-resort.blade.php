@@ -42,14 +42,14 @@
                                         Location</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
                                         Distance</th>
-                                    <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
+                                    {{-- <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
                                         Day CheckIn</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
                                         Day CheckOut</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
                                         Night CheckIn</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
-                                        Night CheckOut</th>
+                                        Night CheckOut</th> --}}
 
                                     <th class="text-secondary opacity-7"> Action</th>
                                 </tr>
@@ -71,10 +71,10 @@
 
                                         <td>
                                             <p class="text-sm font-weight-bold mb-0">
-
-                                                {{ $row->desc }}
+                                                {{ shortText($row->desc) }}
                                             </p>
                                         </td>
+
 
                                         <td>
                                             <p class="text-sm font-weight-bold mb-0">
@@ -86,36 +86,87 @@
                                         <td>
                                             <p class="text-sm font-weight-bold mb-0">
 
-                                                {{ $row->distance }}
+                                                {{ $row->distance }} KM
                                             </p>
                                         </td>
 
-                                        <td>
+                                        {{-- <td>
                                             <p class="text-sm font-weight-bold mb-0">
-
-                                                {{ $row->d_check_in ?? 'N/A' }}
-                                            </p>
-                                        </td>
-                                        <td>
-                                            <p class="text-sm font-weight-bold mb-0">
-
-                                                {{ $row->d_check_out ?? 'N/A' }}
+                                                {{ $row->d_check_in ? \Carbon\Carbon::createFromFormat('H:i:s', $row->d_check_in)->format('h:i A') : 'N/A' }}
                                             </p>
                                         </td>
                                         <td>
                                             <p class="text-sm font-weight-bold mb-0">
-
-                                                {{ $row->n_check_in ?? 'N/A' }}
+                                                {{ $row->d_check_out ? \Carbon\Carbon::createFromFormat('H:i:s', $row->d_check_out)->format('h:i A') : 'N/A' }}
                                             </p>
                                         </td>
                                         <td>
                                             <p class="text-sm font-weight-bold mb-0">
-
-                                                {{ $row->n_check_out ?? 'N/A' }}
+                                                {{ $row->n_check_in ? \Carbon\Carbon::createFromFormat('H:i:s', $row->n_check_in)->format('h:i A') : 'N/A' }}
                                             </p>
                                         </td>
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">
+                                                {{ $row->n_check_out ? \Carbon\Carbon::createFromFormat('H:i:s', $row->n_check_out)->format('h:i A') : 'N/A' }}
+                                            </p>
+                                        </td> --}}
+
 
                                         <td>
+                                            <!-- Manage Images -->
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#manageImages"
+                                                wire:click="addResortImages({{ $row->id }})" style="color: #000;"
+                                                class="badge badge-xs badge-primary fw-600 text-xs">
+                                                Manage Images
+                                            </a>
+
+                                            <!-- Manage Services -->
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#manageServices"
+                                                wire:click="manageServices({{ $row->id }})"
+                                                class="badge badge-xs badge-info fw-600 text-xs" style="color: #000;"
+                                                onmouseover="this.style.color='#fff'"
+                                                onmouseout="this.style.color='#000'">
+                                                Manage Services
+                                            </a>
+
+
+                                            <!-- Manage Package Types -->
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#managePackageTypes" style="color: #000;"
+                                                wire:click="managePackageTypes({{ $row->id }})"
+                                                class="badge badge-xs badge-success fw-600 text-xs">
+                                                Manage Package Types
+                                            </a>
+
+                                            <!-- Manage Additional Facts -->
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#manageAdditionalFacts"
+                                                wire:click="manageAdditionalFacts({{ $row->id }})"
+                                                class="badge badge-xs badge-secondary fw-600 text-xs"
+                                                style="color: #000;" onmouseover="this.style.color='#fff'"
+                                                onmouseout="this.style.color='#000'">
+                                                Manage Additional Facts
+                                            </a>
+
+
+                                            <!-- Manage Facilities -->
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#manageFacilities"
+                                                wire:click="manageFacilities({{ $row->id }})" style="color: #000;"
+                                                class="badge badge-xs badge-dark fw-600 text-xs">
+                                                Manage Facilities
+                                            </a>
+
+                                            <!-- View Details -->
+                                            <a href="#" class="badge badge-xs fw-600 text-xs"
+                                                style="background-color: #5acaa3; color: #000; text-decoration: none; transition: 0.3s;"
+                                                onmouseover="this.style.backgroundColor='#3aa57a'; this.style.color='#fff';"
+                                                onmouseout="this.style.backgroundColor='#5acaa3'; this.style.color='#000';">
+                                                View Details
+                                            </a>
+
+
+
+
 
                                             <a data-bs-toggle="modal" data-bs-target="#editItem"
                                                 wire:click="edit({{ $row->id }})" type="button"
@@ -184,8 +235,8 @@
                             {{-- Name --}}
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter Name" wire:model="name"
-                                    required>
+                                <input type="text" class="form-control" placeholder="Enter Name"
+                                    wire:model="name" required>
                                 @error('name')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
@@ -194,8 +245,8 @@
                             {{-- Distance --}}
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Distance (KM) <span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" placeholder="Enter Distance"
-                                    wire:model="distance" required>
+                                <input type="number" step="0.01" class="form-control"
+                                    placeholder="Enter Distance" wire:model="distance" required>
                                 @error('distance')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
@@ -391,6 +442,86 @@
         </div>
     </div>
 
+
+
+
+
+    <div wire:ignore.self class="modal fade" id="manageImages" tabindex="-1" role="dialog"
+        aria-labelledby="manageImages" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-600">Manage Image Gallery</h6>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
+                        <i class="fas fa-times" style="color:black;"></i>
+                    </button>
+
+
+                </div>
+
+                <form wire:submit.prevent="saveImages">
+                    <div class="modal-body">
+                        <div class="row g-2 align-items-center">
+                            @foreach ($imageInputs as $index)
+                                <div class="col-md-12 mb-2 d-flex align-items-center"
+                                    wire:key="image-{{ $index }}">
+                                    <input type="file" wire:model="images.{{ $index }}"
+                                        class="form-control me-2" accept="image/*">
+
+                                    @if (isset($images[$index]))
+                                        @if (!is_string($images[$index]))
+                                            <img src="{{ $images[$index]->temporaryUrl() }}" class="img-thumbnail"
+                                                width="80">
+                                        @elseif (is_string($images[$index]))
+                                            <!-- Saved image -->
+                                            <img src="{{ asset(getFileUrl($images[$index])) }}" class="img-thumbnail"
+                                                width="80">
+                                        @endif
+                                    @endif
+
+
+
+                                    <button type="button" class="btn btn-sm btn-danger ms-2 p-1"
+                                        wire:click.prevent="removeImageInput({{ $index }})"
+                                        style="line-height: 1;">
+                                        <i class="fas fa-times" style="font-size: 0.75rem;"></i>
+                                    </button>
+
+
+                                    @error("images.$index")
+                                        <span class="error text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            @endforeach
+
+                            <div class="col-12 mt-2">
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    wire:click.prevent="addImageInput">
+                                    + Add Another Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                        <div class="">
+                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                                wire:target="saveImages">
+                                <span wire:loading wire:target="saveImages">
+                                    <i class="fas fa-spinner fa-spin me-2"></i> Saving...
+                                </span>
+                                <span wire:loading.remove wire:target="saveImages">
+                                    Save
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 

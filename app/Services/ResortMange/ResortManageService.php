@@ -49,4 +49,17 @@ class ResortManageService
   {
     return $this->repository->deleteResortData($id);
   }
+
+
+
+  public function saveResortImagesGallery(int $itemId, array $images, array $removedImages)
+  {
+    return $this->repository->saveResortImagesGallery($itemId, $images,  $removedImages);
+  }
+
+
+  public function getResortImagesGallery(int $itemId)
+  {
+    return $this->repository->getResortImagesGallery($itemId);
+  }
 }

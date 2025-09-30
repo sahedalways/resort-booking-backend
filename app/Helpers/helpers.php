@@ -37,4 +37,21 @@ if (!function_exists('siteSetting')) {
       return (bool) $isRefundable ? 'Refundable' : 'Non-Refundable';
     }
   }
+
+
+
+
+  if (!function_exists('shortText')) {
+    /**
+     * Limit text to a specific length
+     *
+     * @param string|null $text
+     * @param int $limit
+     * @return string
+     */
+    function shortText(?string $text, int $limit = 55): string
+    {
+      return \Illuminate\Support\Str::limit($text, $limit);
+    }
+  }
 }

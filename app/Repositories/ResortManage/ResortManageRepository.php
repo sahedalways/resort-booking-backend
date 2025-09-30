@@ -3,6 +3,10 @@
 namespace App\Repositories\ResortManage;
 
 use App\Models\Resort;
+use App\Models\ResortImage;
+use Illuminate\Http\UploadedFile;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Str;
 
 
 class ResortManageRepository
@@ -67,5 +71,49 @@ class ResortManageRepository
   {
     $data = $this->getResortSingleData($id);
     $data->delete();
+  }
+
+
+
+  public function saveResortImagesGallery(int $itemId, array $images, array $removedImages): void
+  {
+    foreach ($removedImages as $img) {
+      $old = ResortImage::where('image', $img)->first();
+      if ($old) {
+        if (file_exists(storage_path('app/public/' . $old->image))) {
+          unlink(storage_path('app/public/' . $old->image));
+        }
+        $old->delete();
+      }
+    }
+
+
+    foreach ($images as $image) {
+      if (!$image instanceof UploadedFile) continue;
+
+      $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
+
+      $img = Image::read($image->getRealPath());
+
+      $path = storage_path('app/public/image/resort/' . $filename);
+      $img->save($path);
+
+      ResortImage::create([
+        'resort_id' => $itemId,
+        'image'            => 'image/resort/' . $filename,
+      ]);
+    }
+  }
+
+
+
+  public function getResortImagesGallery(int $itemId)
+  {
+    return ResortImage::where('resort_id', $itemId)
+      ->get()
+      ->map(function ($image) {
+        $image->url = getFileUrl($image->image);
+        return $image;
+      });
   }
 }

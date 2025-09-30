@@ -9,6 +9,7 @@ use App\Services\ResortMange\ResortManageService;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Pagination\Cursor;
+use Livewire\WithFileUploads;
 
 class ManageResort extends BaseComponent
 {
@@ -24,12 +25,22 @@ class ManageResort extends BaseComponent
 
     protected $listeners = ['deleteItem'];
 
+    public $images = [];
+    public $removedImages = [];
+    public $imageInputs = [0];
+
+
+    use WithFileUploads;
+
 
 
     public function boot(ResortManageService $resortManageService)
     {
         $this->resortManageService = $resortManageService;
     }
+
+
+
     public function getRules()
     {
         return [
@@ -259,5 +270,62 @@ class ManageResort extends BaseComponent
         $this->reloadResortData();
 
         $this->toast('Resort has been deleted!', 'success');
+    }
+
+
+
+    public function addResortImages($id)
+    {
+        $this->resetInputFields();
+        $this->itemId = $id;
+
+        $savedImages = $this->resortManageService->getResortImagesGallery($id);
+
+        $this->images = $savedImages->pluck('image')->toArray();
+
+
+        $this->imageInputs = [];
+
+
+        foreach ($this->images as $key => $image) {
+            $this->imageInputs[] = $key;
+        }
+        $this->imageInputs[] = count($this->images);
+    }
+
+
+    public function addImageInput()
+    {
+        $this->imageInputs[] = count($this->imageInputs);
+    }
+
+    public function removeImageInput($index)
+    {
+
+        if (isset($this->images[$index]) && is_string($this->images[$index])) {
+            $this->removedImages[] = $this->images[$index];
+        }
+
+
+        unset($this->images[$index]);
+        $this->imageInputs = array_values(array_diff($this->imageInputs, [$index]));
+    }
+
+
+    public function saveImages()
+    {
+
+        $this->resortManageService->saveResortImagesGallery($this->itemId, $this->images, $this->removedImages);
+
+
+        $this->refresh();
+        $this->resetInputFields();
+        $this->editMode = false;
+
+
+        $this->dispatch('closemodal');
+
+
+        $this->toast('Images saved successfully!', 'success');
     }
 }
