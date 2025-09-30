@@ -67,4 +67,17 @@ class ResortManageService
   {
     return $this->repository->getPackageTypes();
   }
+
+
+
+  public function saveFactOptions(int $itemId, array $options)
+  {
+    return $this->repository->saveFactOptions($itemId, $options);
+  }
+
+
+  public function getFactOptions(int $itemId)
+  {
+    return $this->repository->getFactOptions($itemId);
+  }
 }

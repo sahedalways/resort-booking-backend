@@ -32,6 +32,12 @@ class ManageResort extends BaseComponent
     public $packageTypes = [];
 
 
+    public $factOptions = [];
+
+
+    public $factOptionInputs = [0];
+
+
 
     use WithFileUploads;
 
@@ -96,6 +102,9 @@ class ManageResort extends BaseComponent
         $this->d_check_out = '';
         $this->n_check_in = '';
         $this->n_check_out = '';
+        $this->images = [];
+        $this->factOptions = [];
+        $this->removedImages = [];
         $this->packageTypeId = null;
 
         $this->search     = '';
@@ -334,5 +343,60 @@ class ManageResort extends BaseComponent
 
 
         $this->toast('Images saved successfully!', 'success');
+    }
+
+
+
+
+
+    public function manageFactOptions($id)
+    {
+        $this->resetInputFields();
+        $this->itemId = $id;
+
+        $savedOptions = $this->resortManageService->getFactOptions($id);
+
+        $this->factOptions = $savedOptions->pluck('name')->toArray();
+
+
+        $this->factOptionInputs = [];
+
+
+        foreach ($this->factOptions as $key => $item) {
+            $this->factOptionInputs[] = $key;
+        }
+        $this->factOptionInputs[] = count($this->factOptions);
+    }
+
+
+
+
+    public function addFactOptionInput()
+    {
+        $this->factOptionInputs[] = count($this->factOptionInputs);
+    }
+
+    public function removeFactOptionInput($index)
+    {
+        unset($this->factOptions[$index]);
+        $this->factOptionInputs = array_values(array_diff($this->factOptionInputs, [$index]));
+    }
+
+
+    public function saveFactOptions()
+    {
+
+        $this->resortManageService->saveFactOptions($this->itemId, $this->factOptions);
+
+
+        $this->refresh();
+        $this->resetInputFields();
+        $this->editMode = false;
+
+
+        $this->dispatch('closemodal');
+
+
+        $this->toast('Additional facts saved successfully!', 'success');
     }
 }

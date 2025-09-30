@@ -3,6 +3,7 @@
 namespace App\Repositories\ResortManage;
 
 use App\Models\Resort;
+use App\Models\ResortAdditionalFact;
 use App\Models\ResortImage;
 use App\Models\ResortPackageType;
 use Illuminate\Http\UploadedFile;
@@ -125,5 +126,28 @@ class ResortManageRepository
   public function getPackageTypes()
   {
     return ResortPackageType::all();
+  }
+
+
+
+  public function saveFactOptions(int $itemId, array $options): void
+  {
+
+    ResortAdditionalFact::where('resort_id', $itemId)->delete();
+
+
+    foreach ($options as $item) {
+      ResortAdditionalFact::create([
+        'resort_id' => $itemId,
+        'name'            => $item,
+      ]);
+    }
+  }
+
+
+
+  public function getFactOptions(int $itemId)
+  {
+    return ResortAdditionalFact::where('resort_id', $itemId)->latest()->get();
   }
 }
