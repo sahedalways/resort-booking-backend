@@ -300,7 +300,7 @@
 
     <div wire:ignore.self class="modal fade" id="addServiceImages" tabindex="-1" role="dialog"
         aria-labelledby="addServiceImages" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title fw-600">Manage Image Gallery</h6>
@@ -316,29 +316,35 @@
                     <div class="modal-body">
                         <div class="row g-2 align-items-center">
                             @foreach ($imageInputs as $index)
-                                <div class="col-md-12 mb-2 d-flex align-items-center"
-                                    wire:key="image-{{ $index }}">
-                                    <input type="file" wire:model="images.{{ $index }}"
-                                        class="form-control me-2" accept="image/*">
+                                <div class="row mb-2" wire:key="image-{{ $index }}">
+                                    <div class="col-md-8">
+                                        <input type="file" wire:model="images.{{ $index }}"
+                                            class="form-control me-2" accept="image/*">
 
-                                    @if (isset($images[$index]))
-                                        @if (!is_string($images[$index]))
-                                            <img src="{{ $images[$index]->temporaryUrl() }}" class="img-thumbnail"
-                                                width="80">
-                                        @elseif (is_string($images[$index]))
-                                            <!-- Saved image -->
-                                            <img src="{{ asset(getFileUrl($images[$index])) }}" class="img-thumbnail"
-                                                width="80">
+
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        @if (isset($images[$index]))
+                                            @if (!is_string($images[$index]))
+                                                <img src="{{ $images[$index]->temporaryUrl() }}"
+                                                    class="img-thumbnail" width="80">
+                                            @elseif (is_string($images[$index]))
+                                                <!-- Saved image -->
+                                                <img src="{{ asset(getFileUrl($images[$index])) }}"
+                                                    class="img-thumbnail" width="80">
+                                            @endif
                                         @endif
-                                    @endif
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-danger w-100"
+                                            wire:click.prevent="removeImageInput({{ $index }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
 
 
-
-                                    <button type="button" class="btn btn-sm btn-danger ms-2 p-1"
-                                        wire:click.prevent="removeImageInput({{ $index }})"
-                                        style="line-height: 1;">
-                                        <i class="fas fa-times" style="font-size: 0.75rem;"></i>
-                                    </button>
 
 
                                     @error("images.$index")

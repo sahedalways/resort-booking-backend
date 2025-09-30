@@ -250,10 +250,8 @@
                     <div class="modal-body">
                         <div class="row g-2 align-items-center">
                             @foreach ($optionInputs as $index)
-                                <div class="col-md-12 mb-2 d-flex align-items-center"
-                                    wire:key="option-{{ $index }}">
-
-                                    <div class="flex-grow-1">
+                                <div class="row mb-2" wire:key="option-{{ $index }}">
+                                    <div class="col-md-10">
                                         <select class="form-control" wire:model="options.{{ $index }}"
                                             required>
                                             <option value="">-- Select Service Type --</option>
@@ -265,13 +263,20 @@
                                         @error("options.$index")
                                             <span class="error text-danger">{{ $message }}</span>
                                         @enderror
+
                                     </div>
 
-                                    <button type="button" class="btn btn-sm btn-danger ms-2 p-1"
-                                        wire:click.prevent="removeOptionInput({{ $index }})"
-                                        style="line-height: 1;">
-                                        <i class="fas fa-times" style="font-size: 0.75rem;"></i>
-                                    </button>
+
+
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-danger w-100"
+                                            wire:click.prevent="removeOptionInput({{ $index }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+
+
+
                                 </div>
                             @endforeach
 

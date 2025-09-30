@@ -4,8 +4,10 @@ namespace App\Repositories\ResortManage;
 
 use App\Models\Resort;
 use App\Models\ResortAdditionalFact;
+use App\Models\ResortFacilityOptionService;
 use App\Models\ResortImage;
 use App\Models\ResortPackageType;
+use App\Models\ResortRoomFacility;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Str;
@@ -149,5 +151,67 @@ class ResortManageRepository
   public function getFactOptions(int $itemId)
   {
     return ResortAdditionalFact::where('resort_id', $itemId)->latest()->get();
+  }
+
+
+
+  public function getResortFacilitiesData()
+  {
+    return ResortRoomFacility::with('options.service')->get();
+  }
+
+  public function saveResortsFacility($services, $selectedFacilityId, $resortId)
+  {
+    try {
+      foreach ($services as $service) {
+        ResortFacilityOptionService::create([
+          'resort_id'   => $resortId,
+          'facility_id' => $selectedFacilityId,
+          'type_name'   => $service['type_name'],
+          'icon'        => $service['icon'] ?? null,
+        ]);
+      }
+
+      return true;
+    } catch (\Exception $e) {
+      \Log::error('Error saving resort services: ' . $e->getMessage());
+      return false;
+    }
+  }
+
+
+
+  public function saveServiceName($resortId, $selectedFacilityId, $serviceName, $icon)
+  {
+    try {
+      ResortFacilityOptionService::create([
+        'resort_id' => $resortId,
+        'facility_id' => $selectedFacilityId,
+        'type_name' => $serviceName,
+        'icon' => $icon,
+      ]);
+
+      return true;
+    } catch (\Exception $e) {
+      \Log::error('Error saving service name: ' . $e->getMessage());
+      return false;
+    }
+  }
+
+
+  public function deleteServiceItem($resortId, $facilityId, $serviceName)
+  {
+    try {
+      ResortFacilityOptionService::where('resort_id', $resortId)
+        ->where('facility_id', $facilityId)
+        ->where('type_name', $serviceName)
+        ->delete();
+
+      return true;
+    } catch (\Exception $e) {
+
+      \Log::error('Error deleting service: ' . $e->getMessage());
+      return false;
+    }
   }
 }

@@ -121,12 +121,11 @@
                                             </a>
 
                                             <!-- Manage Services -->
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#manageServices"
-                                                wire:click="manageServices({{ $row->id }})"
+                                            <a href="{{ route('admin.resort-manage.facilities.manage', $row->id) }}"
                                                 class="badge badge-xs badge-info fw-600 text-xs" style="color: #000;"
                                                 onmouseover="this.style.color='#fff'"
                                                 onmouseout="this.style.color='#000'">
-                                                Manage Services
+                                                Manage Facilities
                                             </a>
 
 
@@ -140,14 +139,6 @@
                                                 style="color: #000;" onmouseover="this.style.color='#fff'"
                                                 onmouseout="this.style.color='#000'">
                                                 Manage Additional Facts
-                                            </a>
-
-
-                                            <!-- Manage Facilities -->
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#manageFacilities"
-                                                wire:click="manageFacilities({{ $row->id }})" style="color: #000;"
-                                                class="badge badge-xs badge-dark fw-600 text-xs">
-                                                Manage Facilities
                                             </a>
 
                                             <!-- View Details -->
@@ -491,29 +482,35 @@
                     <div class="modal-body">
                         <div class="row g-2 align-items-center">
                             @foreach ($imageInputs as $index)
-                                <div class="col-md-12 mb-2 d-flex align-items-center"
-                                    wire:key="image-{{ $index }}">
-                                    <input type="file" wire:model="images.{{ $index }}"
-                                        class="form-control me-2" accept="image/*">
+                                <div class="row mb-2" wire:key="image-{{ $index }}">
+                                    <div class="col-md-8">
+                                        <input type="file" wire:model="images.{{ $index }}"
+                                            class="form-control me-2" accept="image/*">
 
-                                    @if (isset($images[$index]))
-                                        @if (!is_string($images[$index]))
-                                            <img src="{{ $images[$index]->temporaryUrl() }}" class="img-thumbnail"
-                                                width="80">
-                                        @elseif (is_string($images[$index]))
-                                            <!-- Saved image -->
-                                            <img src="{{ asset(getFileUrl($images[$index])) }}" class="img-thumbnail"
-                                                width="80">
+
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        @if (isset($images[$index]))
+                                            @if (!is_string($images[$index]))
+                                                <img src="{{ $images[$index]->temporaryUrl() }}"
+                                                    class="img-thumbnail" width="80">
+                                            @elseif (is_string($images[$index]))
+                                                <!-- Saved image -->
+                                                <img src="{{ asset(getFileUrl($images[$index])) }}"
+                                                    class="img-thumbnail" width="80">
+                                            @endif
                                         @endif
-                                    @endif
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-danger w-100"
+                                            wire:click.prevent="removeImageInput({{ $index }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
 
 
-
-                                    <button type="button" class="btn btn-sm btn-danger ms-2 p-1"
-                                        wire:click.prevent="removeImageInput({{ $index }})"
-                                        style="line-height: 1;">
-                                        <i class="fas fa-times" style="font-size: 0.75rem;"></i>
-                                    </button>
 
 
                                     @error("images.$index")
@@ -570,24 +567,27 @@
                         <div class="row g-2 align-items-center">
 
                             @foreach ($factOptionInputs as $index)
-                                <div class="col-md-12 mb-2 d-flex align-items-center"
-                                    wire:key="factOption-{{ $index }}">
-
-                                    <div class="flex-grow-1">
+                                <div class="row mb-2" wire:key="factOption-{{ $index }}">
+                                    <div class="col-md-10">
                                         <input type="text" required class="form-control"
                                             placeholder="Enter add. fact Name"
                                             wire:model="factOptions.{{ $index }}">
                                         @error("factOptions.$index")
                                             <span class="error text-danger">{{ $message }}</span>
                                         @enderror
+
+
                                     </div>
 
 
-                                    <button type="button" class="btn btn-sm btn-danger ms-2 p-1"
-                                        wire:click.prevent="removeFactOptionInput({{ $index }})"
-                                        style="line-height: 1;">
-                                        <i class="fas fa-times" style="font-size: 0.75rem;"></i>
-                                    </button>
+
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-danger w-100"
+                                            wire:click.prevent="removeFactOptionInput({{ $index }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+
                                 </div>
                             @endforeach
 
@@ -619,8 +619,6 @@
             </div>
         </div>
     </div>
-
-
 
 
 </div>

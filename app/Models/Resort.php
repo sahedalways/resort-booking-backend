@@ -32,12 +32,6 @@ class Resort extends Model
 
     public function facilities()
     {
-        return $this->belongsToMany(
-            ResortRoomFacility::class,
-            'resort_facility_option_services',
-            'resort_id',
-            'facility_id'
-        )->withPivot('option_id', 'service_id')
-            ->withTimestamps();
+        return $this->hasMany(ResortFacilityOptionService::class, 'resort_id', 'id');
     }
 }

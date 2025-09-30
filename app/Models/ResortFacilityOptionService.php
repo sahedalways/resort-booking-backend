@@ -7,16 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class ResortFacilityOptionService extends Model
 {
     protected $fillable = [
-        'service_id',
-        'option_id',
-        'facility_id',
         'resort_id',
+        'facility_id',
+        'type_name',
+        'icon',
     ];
 
-
-
-    public function options()
+    // Resort relation
+    public function resort()
     {
-        return $this->hasMany(ResortRoomFacilityOption::class, 'facility_id');
+        return $this->belongsTo(Resort::class, 'resort_id');
+    }
+
+    // Facility relation
+    public function facility()
+    {
+        return $this->belongsTo(ResortRoomFacility::class, 'facility_id');
     }
 }

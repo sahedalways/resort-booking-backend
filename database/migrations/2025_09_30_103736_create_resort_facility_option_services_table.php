@@ -13,23 +13,11 @@ return new class extends Migration
     {
         Schema::create('resort_facility_option_services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('resort_id')
-                ->constrained('resorts')
-                ->onDelete('cascade');
+            $table->foreignId('resort_id')->constrained('resorts')->onDelete('cascade');
+            $table->foreignId('facility_id')->constrained('resort_room_facilities')->onDelete('cascade');
 
-            $table->foreignId('facility_id')
-                ->constrained('resort_room_facilities')
-                ->onDelete('cascade');
-
-
-            $table->foreignId('option_id')
-                ->constrained('resort_room_facility_options')
-                ->onDelete('cascade');
-
-
-            $table->foreignId('service_id')
-                ->constrained('resort_service_types')
-                ->onDelete('cascade');
+            $table->string('type_name');
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }

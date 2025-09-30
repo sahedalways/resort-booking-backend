@@ -80,4 +80,28 @@ class ResortManageService
   {
     return $this->repository->getFactOptions($itemId);
   }
+
+  public function getResortFacilitiesData()
+  {
+    return $this->repository->getResortFacilitiesData();
+  }
+
+
+  public function saveResortsFacility($services, int $selectedFacilityId, $resortId)
+  {
+    return $this->repository->saveResortsFacility($services, $selectedFacilityId, $resortId);
+  }
+
+
+
+  public function saveServiceName($resortId, int $selectedFacilityId, $serviceName, $icon)
+  {
+    return $this->repository->saveServiceName($resortId, $selectedFacilityId, $serviceName, $icon);
+  }
+
+
+  public function deleteServiceItem($resortId, $facilityId, $serviceName)
+  {
+    return $this->repository->deleteServiceItem($resortId, $facilityId, $serviceName);
+  }
 }
