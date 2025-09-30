@@ -60,4 +60,10 @@ class FacilitiesManageService
   {
     return $this->repository->getFacilityOptions($itemId);
   }
+
+
+  public function getAllServiceTypes()
+  {
+    return $this->repository->getAllServiceTypes();
+  }
 }

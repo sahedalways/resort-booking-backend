@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
             ResortPackageTypesSeeder::class,
             RoomBedTypesSeeder::class,
             RoomViewTypesSeeder::class,
-            ResortRoomFacilitiesSeeder::class,
             ResortServiceTypesSeeder::class,
+            ResortRoomFacilitiesSeeder::class,
         ]);
     }
 }

@@ -24,6 +24,7 @@ class ManageFacilities extends BaseComponent
 
     protected $listeners = ['deleteItem'];
 
+    public $serviceTypes = [];
     public $options = [];
     public $removedOptions = [];
 
@@ -48,6 +49,8 @@ class ManageFacilities extends BaseComponent
 
         $this->items = new EloquentCollection();
 
+        $this->serviceTypes =  $this->facilitiesManageService->getAllServiceTypes();
+
 
         $this->loadFacilitiesData();
     }
@@ -67,6 +70,7 @@ class ManageFacilities extends BaseComponent
         $this->name = '';
         $this->old_icon = '';
         $this->options = [];
+
         $this->removedOptions = [];
         $this->optionInputs = [0];
         $this->resetErrorBag();
@@ -236,7 +240,6 @@ class ManageFacilities extends BaseComponent
 
 
 
-
     public function manageFacilityOptions($id)
     {
         $this->resetInputFields();
@@ -244,16 +247,18 @@ class ManageFacilities extends BaseComponent
 
         $savedOptions = $this->facilitiesManageService->getFacilityOptions($id);
 
-        $this->options = $savedOptions->pluck('name')->toArray();
+
+        $this->options = $savedOptions->map(fn($option) => $option->service_id)->toArray();
 
 
         $this->optionInputs = [];
-
-
         foreach ($this->options as $key => $item) {
             $this->optionInputs[] = $key;
         }
+
+
         $this->optionInputs[] = count($this->options);
+        $this->options[count($this->options)] = null;
     }
 
 

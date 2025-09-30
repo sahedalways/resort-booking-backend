@@ -3,9 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\ResortRoomFacilityOption;
+use App\Models\ResortServiceType;
 use Illuminate\Database\Seeder;
 use App\Models\ResortRoomFacility;
-use App\Models\FacilityOption;
+
 
 class ResortRoomFacilitiesSeeder extends Seeder
 {
@@ -53,10 +54,16 @@ class ResortRoomFacilitiesSeeder extends Seeder
             ]);
 
             foreach ($data['options'] as $optionName) {
-                ResortRoomFacilityOption::create([
-                    'facility_id' => $facility->id,
-                    'name' => $optionName
-                ]);
+                $service = ResortServiceType::where('type_name', $optionName)->first();
+
+                if ($service) {
+                    ResortRoomFacilityOption::create([
+                        'facility_id' => $facility->id,
+                        'service_id' => $service->id
+                    ]);
+                } else {
+                    echo "Service not found: " . $optionName . "\n";
+                }
             }
         }
     }

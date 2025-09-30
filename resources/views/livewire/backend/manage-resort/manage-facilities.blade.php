@@ -249,19 +249,23 @@
                 <form wire:submit.prevent="saveOptions">
                     <div class="modal-body">
                         <div class="row g-2 align-items-center">
-
                             @foreach ($optionInputs as $index)
                                 <div class="col-md-12 mb-2 d-flex align-items-center"
                                     wire:key="option-{{ $index }}">
 
                                     <div class="flex-grow-1">
-                                        <input type="text" required class="form-control"
-                                            placeholder="Enter Option Name" wire:model="options.{{ $index }}">
+                                        <select class="form-control" wire:model="options.{{ $index }}"
+                                            required>
+                                            <option value="">-- Select Service Type --</option>
+                                            @foreach ($serviceTypes as $type)
+                                                <option value="{{ $type->id }}">{{ $type->type_name }}</option>
+                                            @endforeach
+                                        </select>
+
                                         @error("options.$index")
                                             <span class="error text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-
 
                                     <button type="button" class="btn btn-sm btn-danger ms-2 p-1"
                                         wire:click.prevent="removeOptionInput({{ $index }})"
@@ -278,6 +282,7 @@
                                 </button>
                             </div>
                         </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

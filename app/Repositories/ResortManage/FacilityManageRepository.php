@@ -4,6 +4,7 @@ namespace App\Repositories\ResortManage;
 
 use App\Models\ResortRoomFacility;
 use App\Models\ResortRoomFacilityOption;
+use App\Models\ResortServiceType;
 
 
 class FacilityManageRepository
@@ -64,10 +65,10 @@ class FacilityManageRepository
     ResortRoomFacilityOption::where('facility_id', $itemId)->delete();
 
 
-    foreach ($options as $item) {
+    foreach ($options as $serviceId) {
       ResortRoomFacilityOption::create([
         'facility_id' => $itemId,
-        'name'            => $item,
+        'service_id'  => $serviceId,
       ]);
     }
   }
@@ -76,6 +77,12 @@ class FacilityManageRepository
 
   public function getFacilityOptions(int $itemId)
   {
-    return ResortRoomFacilityOption::where('facility_id', $itemId)->latest()->get();
+    return ResortRoomFacilityOption::with('service')->where('facility_id', $itemId)->latest()->get();
+  }
+
+
+  public function getAllServiceTypes()
+  {
+    return ResortServiceType::all();
   }
 }
