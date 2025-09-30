@@ -27,6 +27,19 @@
 }
 
 
+span.icon-position {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    z-index: 11;
+    transform: translateY(-50%);
+}
+
+
+.extra-padding{
+    padding-right: 40px;
+}
+
 
 
 .input-sm {

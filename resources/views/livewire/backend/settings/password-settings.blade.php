@@ -13,12 +13,16 @@
                         <!-- Old Password -->
                         <div class="col-md-4 position-relative">
                             <label class="form-label">Old Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" wire:model.defer="old_password"
-                                id="old_password">
-                            <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
-                                onclick="togglePassword('old_password', this)">
-                                <i class="fas fa-eye"></i>
-                            </span>
+
+                            <div class="position-relative">
+                                <input type="password" class="form-control extra-padding"
+                                    wire:model.defer="old_password" id="old_password">
+                                <span class="icon-position" style="cursor:pointer;"
+                                    onclick="togglePassword('old_password', this)">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+
                             @error('old_password')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -27,12 +31,16 @@
                         <!-- New Password -->
                         <div class="col-md-4 position-relative">
                             <label class="form-label">New Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" wire:model.defer="new_password"
-                                id="new_password">
-                            <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
-                                onclick="togglePassword('new_password', this)">
-                                <i class="fas fa-eye"></i>
-                            </span>
+
+                            <div class="position-relative">
+                                <input type="password" class="form-control extra-padding"
+                                    wire:model.defer="new_password" id="new_password">
+                                <span class="icon-position" style="cursor:pointer;"
+                                    onclick="togglePassword('new_password', this)">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+
                             @error('new_password')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -41,12 +49,16 @@
                         <!-- Confirm New Password -->
                         <div class="col-md-4 position-relative">
                             <label class="form-label">Confirm New Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" wire:model.defer="confirm_new_password"
-                                id="confirm_new_password">
-                            <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
-                                onclick="togglePassword('confirm_new_password', this)">
-                                <i class="fas fa-eye"></i>
-                            </span>
+                            <div class="position-relative">
+
+
+                                <input type="password" class="form-control extra-padding"
+                                    wire:model.defer="confirm_new_password" id="confirm_new_password">
+                                <span class="icon-position" style="cursor:pointer;"
+                                    onclick="togglePassword('confirm_new_password', this)">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
                             @error('confirm_new_password')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

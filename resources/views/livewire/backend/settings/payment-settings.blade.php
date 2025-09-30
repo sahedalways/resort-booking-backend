@@ -52,11 +52,14 @@
                         <!-- Password -->
                         <div class="col-md-4 position-relative">
                             <label class="form-label">Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" wire:model.defer="password" id="password">
-                            <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
-                                onclick="togglePassword('password', this)">
-                                <i class="fas fa-eye"></i>
-                            </span>
+                            <div class="position-relative">
+                                <input type="password" class="form-control extra-padding" wire:model.defer="password"
+                                    id="password">
+                                <span class="icon-position" style="cursor:pointer;"
+                                    onclick="togglePassword('password', this)">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
                             @error('password')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
