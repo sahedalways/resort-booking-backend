@@ -28,4 +28,16 @@ class Resort extends Model
     {
         return $this->belongsTo(ResortPackageType::class, 'package_id');
     }
+
+
+    public function facilities()
+    {
+        return $this->belongsToMany(
+            ResortRoomFacility::class,
+            'resort_facility_option_services',
+            'resort_id',
+            'facility_id'
+        )->withPivot('option_id', 'service_id')
+            ->withTimestamps();
+    }
 }

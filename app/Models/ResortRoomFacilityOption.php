@@ -10,12 +10,12 @@ class ResortRoomFacilityOption extends Model
 
     public function facility()
     {
-        return $this->belongsTo(ResortRoomFacility::class, 'facility_id');
+        return $this->belongsTo(ResortRoomFacility::class, 'facility_id', 'id');
     }
 
 
     public function service()
     {
-        return $this->belongsTo(ResortServiceType::class, 'service_id');
+        return $this->belongsTo(ResortServiceType::class, 'service_id', 'id');
     }
 }

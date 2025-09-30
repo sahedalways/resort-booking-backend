@@ -10,6 +10,6 @@ class ResortRoomFacility extends Model
 
     public function options()
     {
-        return $this->hasMany(ResortRoomFacility::class, 'facility_id');
+        return $this->hasMany(ResortRoomFacilityOption::class, 'facility_id', 'id');
     }
 }
