@@ -337,7 +337,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title fw-600" id="editItem">Edit Facility</h6>
+                    <h6 class="modal-title fw-600" id="editItem">Edit Resort Info</h6>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
                         <i class="fas fa-times" style="color:black;"></i>
                     </button>
