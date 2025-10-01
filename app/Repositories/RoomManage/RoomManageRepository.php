@@ -3,9 +3,11 @@
 namespace App\Repositories\RoomManage;
 
 use App\Models\Resort;
+use App\Models\ResortServiceType;
 use App\Models\Room;
 use App\Models\RoomBedType;
 use App\Models\RoomImage;
+use App\Models\RoomServiceInfo;
 use App\Models\RoomViewType;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Laravel\Facades\Image;
@@ -102,6 +104,11 @@ class RoomManageRepository
   }
 
 
+  public function getServicesTypes()
+  {
+    return ResortServiceType::select('id', 'type_name', 'icon')->get();
+  }
+
 
   public function saveRoomImagesGallery(int $itemId, array $images, array $removedImages): void
   {
@@ -143,5 +150,30 @@ class RoomManageRepository
         $image->url = getFileUrl($image->image);
         return $image;
       });
+  }
+
+
+
+  public function saveRoomServices(int $itemId, array $options): void
+  {
+
+    RoomServiceInfo::where('room_id', $itemId)->delete();
+
+
+    foreach ($options as $item) {
+      RoomServiceInfo::create([
+        'room_id' => $itemId,
+        'service_id'            => $item,
+      ]);
+    }
+  }
+
+
+  public function getRoomServices(int $itemId)
+  {
+    return RoomServiceInfo::with('service')
+      ->where('room_id', $itemId)
+      ->latest()
+      ->get();
   }
 }

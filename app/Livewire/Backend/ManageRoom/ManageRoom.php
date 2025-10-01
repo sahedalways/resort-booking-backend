@@ -18,6 +18,7 @@ class ManageRoom extends BaseComponent
     public $resorts = [];
     public $bedTypes = [];
     public $viewTypes = [];
+    public $serviceTypes = [];
     public $item;
 
     public $resort_id;
@@ -42,6 +43,11 @@ class ManageRoom extends BaseComponent
     public $images = [];
     public $removedImages = [];
     public $imageInputs = [0];
+
+    public $roomServices = [];
+
+
+    public $roomServicesInputs = [0];
 
 
     protected $listeners = ['deleteRoom'];
@@ -77,6 +83,7 @@ class ManageRoom extends BaseComponent
         $this->resorts = $this->manageRoom->getResorts();
         $this->bedTypes = $this->manageRoom->getBedTypes();
         $this->viewTypes = $this->manageRoom->getViewTypes();
+        $this->serviceTypes = $this->manageRoom->getServicesTypes();
 
         $this->items = new EloquentCollection();
 
@@ -97,6 +104,7 @@ class ManageRoom extends BaseComponent
         // Clear all input fields
         $this->name = null;
         $this->bed_type_id = null;
+        $this->itemId = null;
         $this->view_type_id = null;
         $this->area = null;
         $this->price = null;
@@ -107,6 +115,7 @@ class ManageRoom extends BaseComponent
         $this->is_active = true;
         $this->images = [];
         $this->removedImages = [];
+        $this->roomServices = [];
 
         // Clear validation errors
         $this->resetErrorBag();
@@ -377,5 +386,66 @@ class ManageRoom extends BaseComponent
 
 
         $this->toast('Images saved successfully!', 'success');
+    }
+
+
+
+    public function manageRoomServices($id)
+    {
+        $this->resetInputFields();
+        $this->itemId = $id;
+
+        $savedData = $this->manageRoom->getRoomServices($id);
+
+
+        $this->roomServices = $savedData->mapWithKeys(function ($item, $key) {
+            return [$key => $item->service_id];
+        })->toArray();
+
+
+        $this->roomServicesInputs = array_keys($this->roomServices);
+
+
+        $this->roomServicesInputs[] = count($this->roomServices);
+    }
+
+
+
+
+    public function addRoomServiceInput()
+    {
+        $this->roomServicesInputs[] = count($this->roomServicesInputs);
+    }
+
+    public function removeRoomServiceInput($index)
+    {
+        unset($this->roomServices[$index]);
+        $this->roomServicesInputs = array_values(array_diff($this->roomServicesInputs, [$index]));
+    }
+
+
+    public function saveRoomService()
+    {
+
+        $this->validate([
+            'roomServices' => 'required|array',
+            'roomServices.*' => 'required|distinct',
+        ], [
+            'roomServices.*.distinct' => 'Duplicate services are not allowed.',
+            'roomServices.*.required' => 'Please select a service.',
+        ]);
+
+        $this->manageRoom->saveRoomServices($this->itemId, $this->roomServices);
+
+
+        $this->refresh();
+
+        $this->editMode = false;
+
+
+        $this->dispatch('closemodal');
+
+
+        $this->toast('Room services saved successfully!', 'success');
     }
 }

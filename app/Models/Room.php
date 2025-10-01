@@ -39,4 +39,9 @@ class Room extends Model
     {
         return $this->belongsTo(RoomViewType::class, 'view_type_id');
     }
+
+    public function services()
+    {
+        return $this->hasMany(RoomServiceInfo::class);
+    }
 }

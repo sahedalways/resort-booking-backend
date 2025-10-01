@@ -96,6 +96,16 @@
                                                 Manage Images
                                             </a>
 
+                                            <!-- Manage room services -->
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#manageRoomServices"
+                                                wire:click="manageRoomServices({{ $row->id }})"
+                                                class="badge badge-xs badge-secondary fw-600 text-xs"
+                                                style="color: #000;" onmouseover="this.style.color='#fff'"
+                                                onmouseout="this.style.color='#000'">
+                                                Manage Room Services
+                                            </a>
+
                                             <!-- View Details -->
                                             <a href="{{ route('admin.resort-manage.resorts.show', $row->id) }}"
                                                 class="badge badge-xs fw-600 text-xs"
@@ -174,8 +184,8 @@
                             {{-- Name --}}
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter Name" wire:model="name"
-                                    required>
+                                <input type="text" class="form-control" placeholder="Enter Name"
+                                    wire:model="name" required>
                                 @error('name')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
@@ -579,6 +589,79 @@
 
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div wire:ignore.self class="modal fade" id="manageRoomServices" tabindex="-1" role="dialog"
+        aria-labelledby="manageRoomServices" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-600"> Manage Room Services</h6>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
+                        <i class="fas fa-times" style="color:black;"></i>
+                    </button>
+                </div>
+
+                <form wire:submit.prevent="saveRoomService">
+                    <div class="modal-body">
+                        <div class="row g-2 align-items-center">
+
+                            @foreach ($roomServicesInputs as $index)
+                                <div class="row mb-2" wire:key="roomService-{{ $index }}">
+                                    <div class="col-md-10">
+                                        <select class="form-control" required
+                                            wire:model="roomServices.{{ $index }}">
+                                            <option value="">-- Select Service --</option>
+                                            @foreach ($serviceTypes as $type)
+                                                <option value="{{ $type->id }}">{{ $type->type_name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error("roomServices.$index")
+                                            <span class="error text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-danger w-100"
+                                            wire:click.prevent="removeRoomServiceInput({{ $index }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
+
+
+
+                            <div class="col-12 mt-2">
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    wire:click.prevent="addRoomServiceInput">
+                                    + Add Another Service
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                        <div class="">
+                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                                wire:target="saveRoomService">
+                                <span wire:loading wire:target="saveRoomService">
+                                    <i class="fas fa-spinner fa-spin me-2"></i> Saving...
+                                </span>
+                                <span wire:loading.remove wire:target="saveRoomService">
+                                    Save
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
