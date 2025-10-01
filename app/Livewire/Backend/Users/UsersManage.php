@@ -118,7 +118,7 @@ class UsersManage extends BaseComponent
         $this->first_name = $this->user->f_name;
         $this->last_name = $this->user->l_name;
         $this->phone_no = $this->user->phone_no;
-        $this->is_active = (bool) $this->item->is_active;
+        $this->is_active = (bool) $this->user->is_active;
     }
 
 
