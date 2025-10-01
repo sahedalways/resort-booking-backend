@@ -4,9 +4,7 @@ namespace App\Livewire\Backend\ManageRoom;
 
 use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\Room;
-use App\Models\RoomBedType;
-
-
+use Livewire\WithFileUploads;
 use App\Services\RoomManage\RoomManageService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Pagination\Cursor;
@@ -16,6 +14,7 @@ class ManageRoom extends BaseComponent
 {
     public $search;
     public $items;
+    public $itemId;
     public $resorts = [];
     public $bedTypes = [];
     public $viewTypes = [];
@@ -40,9 +39,14 @@ class ManageRoom extends BaseComponent
     public $hasMorePages;
     protected $manageRoom;
 
+    public $images = [];
+    public $removedImages = [];
+    public $imageInputs = [0];
+
 
     protected $listeners = ['deleteRoom'];
 
+    use WithFileUploads;
 
     public function boot(RoomManageService $manageRoom)
     {
@@ -101,6 +105,8 @@ class ManageRoom extends BaseComponent
         $this->price_per = null;
         $this->package_name = null;
         $this->is_active = true;
+        $this->images = [];
+        $this->removedImages = [];
 
         // Clear validation errors
         $this->resetErrorBag();
@@ -314,5 +320,62 @@ class ManageRoom extends BaseComponent
         $this->refresh();
 
         $this->toast('Status updated successfully!', 'success');
+    }
+
+
+
+    public function addRoomImages($id)
+    {
+        $this->resetInputFields();
+        $this->itemId = $id;
+
+        $savedImages = $this->manageRoom->getRoomImagesGallery($id);
+
+        $this->images = $savedImages->pluck('image')->toArray();
+
+
+        $this->imageInputs = [];
+
+
+        foreach ($this->images as $key => $image) {
+            $this->imageInputs[] = $key;
+        }
+        $this->imageInputs[] = count($this->images);
+    }
+
+
+    public function addImageInput()
+    {
+        $this->imageInputs[] = count($this->imageInputs);
+    }
+
+    public function removeImageInput($index)
+    {
+
+        if (isset($this->images[$index]) && is_string($this->images[$index])) {
+            $this->removedImages[] = $this->images[$index];
+        }
+
+
+        unset($this->images[$index]);
+        $this->imageInputs = array_values(array_diff($this->imageInputs, [$index]));
+    }
+
+
+    public function saveImages()
+    {
+
+        $this->manageRoom->saveRoomImagesGallery($this->itemId, $this->images, $this->removedImages);
+
+
+        $this->refresh();
+        $this->resetInputFields();
+        $this->editMode = false;
+
+
+        $this->dispatch('closemodal');
+
+
+        $this->toast('Images saved successfully!', 'success');
     }
 }

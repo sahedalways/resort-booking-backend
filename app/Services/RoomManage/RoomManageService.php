@@ -66,4 +66,16 @@ class RoomManageService
   {
     return $this->repository->getViewTypes();
   }
+
+
+  public function saveRoomImagesGallery(int $itemId, array $images, array $removedImages)
+  {
+    return $this->repository->saveRoomImagesGallery($itemId, $images,  $removedImages);
+  }
+
+
+  public function getRoomImagesGallery(int $itemId)
+  {
+    return $this->repository->getRoomImagesGallery($itemId);
+  }
 }

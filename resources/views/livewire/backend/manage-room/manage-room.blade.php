@@ -76,7 +76,7 @@
                                         </td>
 
                                         <td>
-                                            <p class="text-sm text-muted mb-0">${{ $row->price ?? '-' }}</p>
+                                            <p class="text-sm text-muted mb-0">৳ {{ $row->price ?? '-' }}</p>
                                         </td>
 
 
@@ -89,7 +89,12 @@
 
 
                                         <td>
-
+                                            <!-- Manage Images -->
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#manageImages"
+                                                wire:click="addRoomImages({{ $row->id }})" style="color: #000;"
+                                                class="badge badge-xs badge-primary fw-600 text-xs">
+                                                Manage Images
+                                            </a>
 
                                             <!-- View Details -->
                                             <a href="{{ route('admin.resort-manage.resorts.show', $row->id) }}"
@@ -487,6 +492,91 @@
                                 Save
                             </span>
                         </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div wire:ignore.self class="modal fade" id="manageImages" tabindex="-1" role="dialog"
+        aria-labelledby="manageImages" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-600">Manage Image Gallery</h6>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
+                        <i class="fas fa-times" style="color:black;"></i>
+                    </button>
+
+
+                </div>
+
+                <form wire:submit.prevent="saveImages">
+                    <div class="modal-body">
+                        <div class="row g-2 align-items-center">
+                            @foreach ($imageInputs as $index)
+                                <div class="row mb-2" wire:key="image-{{ $index }}">
+                                    <div class="col-md-8">
+                                        <input type="file" wire:model="images.{{ $index }}"
+                                            class="form-control me-2" accept="image/*">
+
+
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        @if (isset($images[$index]))
+                                            @if (!is_string($images[$index]))
+                                                <img src="{{ $images[$index]->temporaryUrl() }}"
+                                                    class="img-thumbnail" width="80">
+                                            @elseif (is_string($images[$index]))
+                                                <!-- Saved image -->
+                                                <img src="{{ asset(getFileUrl($images[$index])) }}"
+                                                    class="img-thumbnail" width="80">
+                                            @endif
+                                        @endif
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-danger w-100"
+                                            wire:click.prevent="removeImageInput({{ $index }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+
+
+
+
+                                    @error("images.$index")
+                                        <span class="error text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            @endforeach
+
+                            <div class="col-12 mt-2">
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    wire:click.prevent="addImageInput">
+                                    + Add Another Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                        <div class="">
+                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                                wire:target="saveImages">
+                                <span wire:loading wire:target="saveImages">
+                                    <i class="fas fa-spinner fa-spin me-2"></i> Saving...
+                                </span>
+                                <span wire:loading.remove wire:target="saveImages">
+                                    Save
+                                </span>
+                            </button>
+                        </div>
+
                     </div>
                 </form>
             </div>

@@ -5,7 +5,11 @@ namespace App\Repositories\RoomManage;
 use App\Models\Resort;
 use App\Models\Room;
 use App\Models\RoomBedType;
+use App\Models\RoomImage;
 use App\Models\RoomViewType;
+use Illuminate\Http\UploadedFile;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Str;
 
 
 
@@ -95,5 +99,49 @@ class RoomManageRepository
   public function getViewTypes()
   {
     return RoomViewType::select('id', 'type_name')->get();
+  }
+
+
+
+  public function saveRoomImagesGallery(int $itemId, array $images, array $removedImages): void
+  {
+    foreach ($removedImages as $img) {
+      $old = RoomImage::where('image', $img)->first();
+      if ($old) {
+        if (file_exists(storage_path('app/public/' . $old->image))) {
+          unlink(storage_path('app/public/' . $old->image));
+        }
+        $old->delete();
+      }
+    }
+
+
+    foreach ($images as $image) {
+      if (!$image instanceof UploadedFile) continue;
+
+      $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
+
+      $img = Image::read($image->getRealPath());
+
+      $path = storage_path('app/public/image/room/' . $filename);
+      $img->save($path);
+
+      RoomImage::create([
+        'room_id' => $itemId,
+        'image'            => 'image/room/' . $filename,
+      ]);
+    }
+  }
+
+
+
+  public function getRoomImagesGallery(int $itemId)
+  {
+    return RoomImage::where('room_id', $itemId)
+      ->get()
+      ->map(function ($image) {
+        $image->url = getFileUrl($image->image);
+        return $image;
+      });
   }
 }
