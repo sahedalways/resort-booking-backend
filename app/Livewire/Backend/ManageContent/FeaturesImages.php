@@ -5,7 +5,7 @@ namespace App\Livewire\Backend\ManageContent;
 use App\Livewire\Backend\Components\BaseComponent;
 use App\Services\ContentManageService;
 use Livewire\WithFileUploads;
-use App\Models\FeatureImage;
+
 
 class FeaturesImages extends BaseComponent
 {

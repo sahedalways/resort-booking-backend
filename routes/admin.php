@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ResortController;
 use App\Livewire\Backend\Coupons\ManageCoupons;
 use App\Livewire\Backend\Dashboard;
 use App\Livewire\Backend\ManageContent\FeaturesImages;
@@ -60,6 +61,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
     Route::get('/manage-facilities', ManageFacilities::class)->name('manage-facilities');
     Route::get('/{resort}/facilities', ManageResortFacilities::class)
       ->name('facilities.manage');
+    Route::get('/resorts/{id}', [ResortController::class, 'show'])->name('resorts.show');
   });
 
 
