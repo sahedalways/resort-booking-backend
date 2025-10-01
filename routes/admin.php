@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ResortController;
+use App\Http\Controllers\Admin\RoomController;
 use App\Livewire\Backend\Coupons\ManageCoupons;
 use App\Livewire\Backend\Dashboard;
 use App\Livewire\Backend\ManageContent\FeaturesImages;
@@ -72,6 +73,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
     Route::get('/', ManageRoom::class)->name('index');
     Route::get('/view-type', ViewType::class)->name('view-type');
     Route::get('/bed-type', BedType::class)->name('bed-type');
+    Route::get('/room/{id}', [RoomController::class, 'show'])->name('room.show');
   });
 
 

@@ -57,7 +57,7 @@ if (!function_exists('siteSetting')) {
 
 
   if (!function_exists('activeBadge')) {
-    function activeBadge($isActive, $id)
+    function activeBadge($isActive, $id = 0)
     {
       $statusText  = $isActive ? 'Active' : 'Inactive';
       $statusClass = $isActive ? 'bg-success' : 'bg-danger';

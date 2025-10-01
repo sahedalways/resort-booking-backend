@@ -104,7 +104,7 @@
                                             </a>
 
                                             <!-- View Details -->
-                                            <a href="{{ route('admin.resort-manage.resorts.show', $row->id) }}"
+                                            <a href="{{ route('admin.room-manage.room.show', $row->id) }}"
                                                 class="badge badge-xs fw-600 text-xs"
                                                 style="background-color: #5acaa3; color: #000; text-decoration: none; transition: 0.3s;"
                                                 onmouseover="this.style.backgroundColor='#3aa57a'; this.style.color='#fff';"

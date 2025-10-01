@@ -29,6 +29,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('child_cap')->default(0);
             $table->decimal('price_per', 10, 2)->nullable();
             $table->string('package_name')->nullable();
+            $table->string('desc')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
