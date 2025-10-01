@@ -21,7 +21,7 @@
                 <p class="text-muted mb-4">{{ $resort->desc }}</p>
 
                 <!-- Resort Info Grid -->
-                <div class="row g-3 mb-4">
+                <div class="row g-3 mb-5">
                     <div class="col-md-6">
                         <div class="bg-light p-3 rounded shadow-sm h-100">
                             <p class="mb-1 fw-semibold">📍 Location</p>
@@ -58,7 +58,7 @@
                 </div>
 
                 <!-- Facilities -->
-                <div class="mb-4">
+                <div class="mb-5">
                     <h5 class="fw-bold mb-3">🏋️ Facilities & Services</h5>
 
                     @php
@@ -102,10 +102,8 @@
                 </div>
 
 
-
-
                 <!-- Additional Facts -->
-                <div class="mb-4">
+                <div class="mb-5">
                     <h5 class="fw-bold mb-2">📌 Additional Facts</h5>
 
                     @if ($resort->additionalFacts->count())
@@ -123,7 +121,7 @@
 
 
                 <!-- Gallery -->
-                <div class="mb-4">
+                <div class="mb-5">
                     <h5 class="fw-bold mb-2">🖼 Gallery</h5>
 
                     @if ($resort->images->count())
@@ -178,6 +176,122 @@
 
 
 
+                <!-- Rooms Section -->
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-3">🛏 Rooms in this Resort</h5>
+
+                    @if ($resort->rooms->count())
+                        <div class="row g-3">
+                            @foreach ($resort->rooms as $room)
+                                <div class="col-md-6">
+                                    <div class="card shadow-sm border-0 h-100">
+                                        <div class="card-body">
+
+                                            <!-- Room Title + Active Status -->
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6 class="fw-bold mb-0">{{ $room->name ?? 'Room' }}</h6>
+                                                {!! activeBadge($room->is_active, $room->id) !!}
+                                            </div>
+
+                                            <!-- Room Info -->
+                                            <p class="text-muted small mb-4">
+                                                {{ $room->desc ?? 'No description available' }}</p>
+
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-6">
+                                                    <span class="fw-semibold">👨 Adults:</span> {{ $room->adult_cap }}
+                                                </div>
+                                                <div class="col-6">
+                                                    <span class="fw-semibold">👶 Children:</span>
+                                                    {{ $room->child_cap }}
+                                                </div>
+                                                <div class="col-6">
+                                                    <span class="fw-semibold">📐 Area:</span>
+                                                    {{ $room->area ?? 'N/A' }}
+                                                </div>
+                                                <div class="col-6">
+                                                    <span class="fw-semibold">🎁 Package:</span>
+                                                    {{ $room->package_name ?? 'N/A' }}
+                                                </div>
+                                                <div class="col-6">
+                                                    <span class="fw-semibold">💰 Price:</span> {{ $room->price }} /
+                                                    {{ $room->price_per }}
+                                                </div>
+                                                <div class="col-6">
+                                                    <span class="fw-semibold">🛏 Bed:</span>
+                                                    {{ $room->bedType->type_name ?? 'N/A' }}
+                                                </div>
+                                                <div class="col-6">
+                                                    <span class="fw-semibold">🌅 View:</span>
+                                                    {{ $room->viewType->type_name ?? 'N/A' }}
+                                                </div>
+                                            </div>
+
+                                            <!-- Room Services -->
+                                            <div class="mb-4">
+                                                <span class="fw-semibold">🔧 Services:</span>
+                                                @if ($room->services->count())
+                                                    <div class="d-flex flex-wrap gap-1 mt-1">
+                                                        @foreach ($room->services as $srv)
+                                                            <span class="badge bg-info text-white">
+                                                                {{ $srv->service->type_name ?? 'N/A' }}
+                                                            </span>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                    <span class="text-muted">No services</span>
+                                                @endif
+                                            </div>
+
+                                            <!-- Rate Details -->
+                                            <div class="mb-4">
+                                                <span class="fw-semibold">📑 Rate Details:</span>
+                                                @if ($room->rateDetails->count())
+                                                    <ul class="mt-1 ps-3">
+                                                        @foreach ($room->rateDetails as $rate)
+                                                            <li>
+                                                                {{ $rate->title }}
+                                                                @if ($rate->is_active)
+                                                                    <span
+                                                                        class="badge bg-success p-2 px-3 rounded-pill d-inline-flex align-items-center">
+                                                                        <i class="fas fa-check-circle"></i>
+                                                                    </span>
+                                                                @else
+                                                                    <span
+                                                                        class="badge bg-danger p-2 px-3 rounded-pill d-inline-flex align-items-center">
+                                                                        <i class="fas fa-times-circle"></i>
+                                                                    </span>
+                                                                @endif
+
+
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                @else
+                                                    <span class="text-muted">No rate details</span>
+                                                @endif
+                                            </div>
+
+                                            <!-- Room Images -->
+                                            @if ($room->images->count())
+                                                <div class="d-flex gap-2 flex-wrap mt-5">
+                                                    @foreach ($room->images as $img)
+                                                        <img src="{{ asset(getFileUrl($img->image)) }}"
+                                                            class="rounded shadow-sm"
+                                                            style="width: 70px; height: 50px; object-fit: cover;">
+                                                    @endforeach
+                                                </div>
+                                            @endif
+
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-muted">No rooms added for this resort.</p>
+                    @endif
+                </div>
 
 
             </div>
