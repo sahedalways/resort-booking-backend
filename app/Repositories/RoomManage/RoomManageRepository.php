@@ -7,6 +7,7 @@ use App\Models\ResortServiceType;
 use App\Models\Room;
 use App\Models\RoomBedType;
 use App\Models\RoomImage;
+use App\Models\RoomRateDetail;
 use App\Models\RoomServiceInfo;
 use App\Models\RoomViewType;
 use Illuminate\Http\UploadedFile;
@@ -48,6 +49,7 @@ class RoomManageRepository
       'child_cap'   => $data['child_cap'] ?? $item->child_cap,
       'price_per'   => $data['price_per'] ?? $item->price_per,
       'package_name' => $data['package_name'] ?? $item->package_name,
+      'desc' => $data['desc'] ?? $item->desc,
       'is_active' => $data['is_active'] ?? $item->is_active,
     ]);
 
@@ -63,6 +65,7 @@ class RoomManageRepository
 
     $item->resort_id    = $data['resort_id'] ?? null;
     $item->name         = $data['name'] ?? null;
+    $item->desc         = $data['desc'] ?? null;
     $item->bed_type_id  = $data['bed_type_id'] ?? null;
     $item->view_type_id = $data['view_type_id'] ?? null;
     $item->area         = $data['area'] ?? null;
@@ -169,10 +172,37 @@ class RoomManageRepository
   }
 
 
+
+  public function saveRoomRateDetails(int $itemId, array $options): void
+  {
+
+    RoomRateDetail::where('room_id', $itemId)->delete();
+
+
+    foreach ($options as $item) {
+      RoomRateDetail::create([
+        'room_id' => $itemId,
+        'title'            => $item['title'],
+        'is_active'            => $item['is_active'],
+      ]);
+    }
+  }
+
+
+
   public function getRoomServices(int $itemId)
   {
     return RoomServiceInfo::with('service')
       ->where('room_id', $itemId)
+      ->latest()
+      ->get();
+  }
+
+
+
+  public function getRoomRateDetails(int $itemId)
+  {
+    return RoomRateDetail::where('room_id', $itemId)
       ->latest()
       ->get();
   }

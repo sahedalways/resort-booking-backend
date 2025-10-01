@@ -17,6 +17,7 @@ class Room extends Model
         'child_cap',
         'price_per',
         'package_name',
+        'desc',
         'is_active',
     ];
 
@@ -43,5 +44,10 @@ class Room extends Model
     public function services()
     {
         return $this->hasMany(RoomServiceInfo::class);
+    }
+
+    public function rateDetails()
+    {
+        return $this->hasMany(RoomRateDetail::class, 'room_id');
     }
 }

@@ -96,4 +96,17 @@ class RoomManageService
   {
     return $this->repository->getRoomServices($itemId);
   }
+
+
+  public function getRoomRateDetails(int $itemId)
+  {
+    return $this->repository->getRoomRateDetails($itemId);
+  }
+
+
+
+  public function saveRoomRateDetails(int $itemId, array $options)
+  {
+    return $this->repository->saveRoomRateDetails($itemId, $options);
+  }
 }

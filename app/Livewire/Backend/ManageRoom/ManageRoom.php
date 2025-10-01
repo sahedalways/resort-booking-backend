@@ -23,6 +23,7 @@ class ManageRoom extends BaseComponent
 
     public $resort_id;
     public $name;
+    public $desc;
     public $bed_type_id;
     public $area;
     public $view_type_id;
@@ -49,6 +50,9 @@ class ManageRoom extends BaseComponent
 
     public $roomServicesInputs = [0];
 
+    public $rateDetails = [];
+    public $rateDetailsInputs = [0];
+
 
     protected $listeners = ['deleteRoom'];
 
@@ -64,6 +68,7 @@ class ManageRoom extends BaseComponent
     {
         return [
             'name' => 'required|string|max:255',
+            'desc' => 'required|string|max:255',
             'bed_type_id' => 'required|exists:room_bed_types,id',
             'view_type_id' => 'required|exists:room_view_types,id',
             'area' => 'required|numeric|min:0',
@@ -108,6 +113,7 @@ class ManageRoom extends BaseComponent
         $this->view_type_id = null;
         $this->area = null;
         $this->price = null;
+        $this->desc = null;
         $this->adult_cap = 1;
         $this->child_cap = 0;
         $this->price_per = null;
@@ -116,6 +122,7 @@ class ManageRoom extends BaseComponent
         $this->images = [];
         $this->removedImages = [];
         $this->roomServices = [];
+        $this->rateDetails = [];
 
         // Clear validation errors
         $this->resetErrorBag();
@@ -140,6 +147,7 @@ class ManageRoom extends BaseComponent
             'price_per' => $this->price_per,
             'package_name' => $this->package_name,
             'is_active' => $this->is_active,
+            'desc' => $this->desc,
         ]);
 
 
@@ -181,6 +189,7 @@ class ManageRoom extends BaseComponent
         $this->child_cap = $this->item->child_cap;
         $this->price_per = $this->item->price_per;
         $this->package_name = $this->item->package_name;
+        $this->desc = $this->item->desc;
         $this->is_active = (bool) $this->item->is_active;
     }
 
@@ -205,6 +214,7 @@ class ManageRoom extends BaseComponent
             'child_cap'   => $this->child_cap,
             'price_per'   => $this->price_per,
             'package_name' => $this->package_name,
+            'desc' => $this->desc,
             'is_active' => $this->is_active,
         ]);
 
@@ -302,7 +312,7 @@ class ManageRoom extends BaseComponent
 
     public function deleteRoom($id)
     {
-        $this->manageRoom->deletRoom($id);
+        $this->manageRoom->deleteRoom($id);
 
         $this->reloadRoomsData();
 
@@ -447,5 +457,70 @@ class ManageRoom extends BaseComponent
 
 
         $this->toast('Room services saved successfully!', 'success');
+    }
+
+
+
+    public function manageRoomRateDetails($id)
+    {
+        $this->resetInputFields();
+        $this->itemId = $id;
+
+        $savedData = $this->manageRoom->getRoomRateDetails($id);
+
+
+        $this->rateDetails = $savedData->mapWithKeys(function ($item, $key) {
+            return [
+                $key => [
+                    'title' => $item->title,
+                    'is_active' => $item->is_active,
+                ]
+            ];
+        })->toArray();
+
+
+        $this->rateDetailsInputs = array_keys($this->rateDetails);
+
+
+        $this->rateDetailsInputs[] = count($this->rateDetails);
+        $this->rateDetails[count($this->rateDetails)] = ['title' => '', 'is_active' => 1];
+    }
+
+
+
+
+    public function addRateDetailsInput()
+    {
+        $this->rateDetailsInputs[] = count($this->rateDetailsInputs);
+    }
+
+    public function removeRateDetailsInput($index)
+    {
+        unset($this->rateDetails[$index]);
+        $this->rateDetailsInputs = array_values(array_diff($this->rateDetailsInputs, [$index]));
+    }
+
+
+    public function saveRateDetails()
+    {
+
+        $this->validate([
+            'rateDetails.*.title' => 'required|string|max:255',
+            'rateDetails.*.is_active' => 'nullable|boolean',
+        ]);
+
+
+        $this->manageRoom->saveRoomRateDetails($this->itemId, $this->rateDetails);
+
+
+        $this->refresh();
+
+        $this->editMode = false;
+
+
+        $this->dispatch('closemodal');
+
+
+        $this->toast('Room rate details saved successfully!', 'success');
     }
 }

@@ -36,9 +36,7 @@
                                     <th class="text-uppercase text-secondary text-xs opacity-7">#</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">Name</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">Resort</th>
-                                    <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">Bed Type</th>
-                                    <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">View Type</th>
-                                    <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">Area (sq.m)</th>
+
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">Price</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">Status</th>
                                     <th class="text-secondary opacity-7">Action</th>
@@ -61,19 +59,7 @@
                                             <p class="text-sm text-muted mb-0">{{ $row->resort->name ?? 'N/A' }}</p>
                                         </td>
 
-                                        <td>
-                                            <p class="text-sm text-muted mb-0">{{ $row->bedType->type_name ?? 'N/A' }}
-                                            </p>
-                                        </td>
 
-                                        <td>
-                                            <p class="text-sm text-muted mb-0">{{ $row->viewType->type_name ?? 'N/A' }}
-                                            </p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-sm text-muted mb-0">{{ $row->area ?? '-' }} sqm</p>
-                                        </td>
 
                                         <td>
                                             <p class="text-sm text-muted mb-0">৳ {{ $row->price ?? '-' }}</p>
@@ -104,6 +90,17 @@
                                                 style="color: #000;" onmouseover="this.style.color='#fff'"
                                                 onmouseout="this.style.color='#000'">
                                                 Manage Room Services
+                                            </a>
+
+
+                                            <!-- Manage room rate details -->
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#manageRoomRateDetails"
+                                                wire:click="manageRoomRateDetails({{ $row->id }})"
+                                                class="badge badge-xs badge-secondary fw-600 text-xs"
+                                                style="color: #000;" onmouseover="this.style.color='#fff'"
+                                                onmouseout="this.style.color='#000'">
+                                                Manage Rate Details
                                             </a>
 
                                             <!-- View Details -->
@@ -187,6 +184,17 @@
                                 <input type="text" class="form-control" placeholder="Enter Name"
                                     wire:model="name" required>
                                 @error('name')
+                                    <span class="error text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+
+
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Description <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" wire:model="desc"
+                                    placeholder="Enter Description">
+                                @error('desc')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -359,6 +367,16 @@
                                 <input type="text" class="form-control" placeholder="Enter Name"
                                     wire:model="name" required>
                                 @error('name')
+                                    <span class="error text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Description <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" wire:model="desc"
+                                    placeholder="Enter Description">
+                                @error('desc')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -662,6 +680,84 @@
                     </div>
                 </form>
 
+            </div>
+        </div>
+    </div>
+
+
+
+    <div wire:ignore.self class="modal fade" id="manageRoomRateDetails" tabindex="-1" role="dialog"
+        aria-labelledby="manageRoomRateDetails" aria-hidden="true" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-600"> Manage Rate Details</h6>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
+                        <i class="fas fa-times" style="color:black;"></i>
+                    </button>
+                </div>
+
+                <form wire:submit.prevent="saveRateDetails">
+                    <div class="modal-body">
+                        <div class="row g-2 align-items-center">
+
+
+                            @foreach ($rateDetailsInputs as $index)
+                                <div class="row mb-2" wire:key="rateDetail-{{ $index }}">
+                                    <div class="col-md-6">
+                                        <input type="text" required class="form-control" placeholder="Enter title"
+                                            wire:model="rateDetails.{{ $index }}.title">
+                                        @error("rateDetails.$index.title")
+                                            <span class="error text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <select class="form-control"
+                                            wire:model="rateDetails.{{ $index }}.is_active">
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                        @error("rateDetails.$index.is_active")
+                                            <span class="error text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-danger w-100"
+                                            wire:click.prevent="removeRateDetailsInput({{ $index }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            <div class="col-12 mt-2">
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    wire:click.prevent="addRateDetailsInput">
+                                    + Add Another
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                        <div class="">
+                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                                wire:target="saveRateDetails">
+                                <span wire:loading wire:target="saveRateDetails">
+                                    <i class="fas fa-spinner fa-spin me-2"></i> Saving...
+                                </span>
+                                <span wire:loading.remove wire:target="saveRateDetails">
+                                    Save
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
             </div>
         </div>
     </div>
