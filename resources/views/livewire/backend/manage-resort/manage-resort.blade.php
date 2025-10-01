@@ -42,6 +42,8 @@
                                         Location</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
                                         Distance</th>
+                                    <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
+                                        Status</th>
                                     {{-- <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
                                         Day CheckIn</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
@@ -87,6 +89,12 @@
                                             <p class="text-sm font-weight-bold mb-0">
 
                                                 {{ $row->distance }} KM
+                                            </p>
+                                        </td>
+
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">
+                                                {!! activeBadge($row->is_active, $row->id) !!}
                                             </p>
                                         </td>
 
@@ -310,6 +318,14 @@
                                 @enderror
                             </div>
 
+                            <div class="col-md-12 mb-1">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="edit_is_active"
+                                        wire:model="is_active">
+                                    <label class="form-check-label" for="edit_is_active">Is Active ?</label>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -442,6 +458,13 @@
                             </div>
 
 
+                            <div class="col-md-12 mb-1">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="edit_is_active"
+                                        wire:model="is_active">
+                                    <label class="form-check-label" for="edit_is_active">Is Active ?</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

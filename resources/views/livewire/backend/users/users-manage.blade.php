@@ -67,12 +67,11 @@
                                             <p class="text-sm px-3 mb-0">{{ $row->phone_no }}</p>
                                             <p class="text-sm px-3 mb-0">{{ $row->email }}</p>
                                         </td>
+
                                         <td>
-                                            @if ($row->is_active)
-                                                <span class="badge bg-success">Active</span>
-                                            @else
-                                                <span class="badge bg-danger">Inactive</span>
-                                            @endif
+                                            <p class="text-sm font-weight-bold mb-0">
+                                                {!! activeBadge($row->is_active, $row->id) !!}
+                                            </p>
                                         </td>
 
                                         <td>

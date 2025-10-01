@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignId('package_id')
                 ->constrained('resort_package_types')
                 ->onDelete('cascade');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

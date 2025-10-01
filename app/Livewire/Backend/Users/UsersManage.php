@@ -118,7 +118,7 @@ class UsersManage extends BaseComponent
         $this->first_name = $this->user->f_name;
         $this->last_name = $this->user->l_name;
         $this->phone_no = $this->user->phone_no;
-        $this->is_active = $this->user->is_active;
+        $this->is_active = (bool) $this->item->is_active;
     }
 
 
@@ -250,5 +250,24 @@ class UsersManage extends BaseComponent
         $this->reloadUsers();
 
         $this->toast('User has been deleted!', 'success');
+    }
+
+
+    public function toggleActive($id)
+    {
+        $item = $this->userService->getUser($id);
+
+        if (!$item) {
+            $this->toast('User not found!', 'error');
+            return;
+        }
+
+        $item->is_active = $item->is_active ? 0 : 1;
+        $item->save();
+
+        $this->users =  $this->userService->getAllUsers();
+        $this->refresh();
+
+        $this->toast('Status updated successfully!', 'success');
     }
 }

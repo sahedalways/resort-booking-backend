@@ -43,6 +43,7 @@ class ResortManageRepository
       'n_check_in'     => $data['n_check_in'],
       'n_check_out'     => $data['n_check_out'],
       'package_id'     => $data['packageTypeId'],
+      'is_active'     => $data['is_active'],
 
     ]);
 
@@ -65,6 +66,7 @@ class ResortManageRepository
     $item->n_check_in = $data['n_check_in'] ?? null;
     $item->n_check_out = $data['n_check_out'] ?? null;
     $item->package_id = $data['packageTypeId'] ?? null;
+    $item->is_active = $data['is_active'] ?? null;
 
 
     $item->save();

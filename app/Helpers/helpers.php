@@ -54,4 +54,18 @@ if (!function_exists('siteSetting')) {
       return \Illuminate\Support\Str::limit($text, $limit);
     }
   }
+
+
+  if (!function_exists('activeBadge')) {
+    function activeBadge($isActive, $id)
+    {
+      $statusText  = $isActive ? 'Active' : 'Inactive';
+      $statusClass = $isActive ? 'bg-success' : 'bg-danger';
+
+      return '<span class="badge ' . $statusClass . '" 
+                     style="cursor:pointer;" 
+                     title="Change Status" 
+                     wire:click="toggleActive(' . $id . ')">' . $statusText . '</span>';
+    }
+  }
 }

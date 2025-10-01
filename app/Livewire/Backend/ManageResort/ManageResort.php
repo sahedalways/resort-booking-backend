@@ -13,7 +13,7 @@ use Livewire\WithFileUploads;
 
 class ManageResort extends BaseComponent
 {
-    public $items, $item, $itemId, $name, $distance, $location, $packageTypeId, $desc, $d_check_in, $d_check_out, $n_check_in, $n_check_out,   $search;
+    public $items, $item, $itemId, $name, $distance, $location, $packageTypeId, $desc, $d_check_in, $d_check_out, $n_check_in, $n_check_out, $is_active = true, $search;
 
 
     public $editMode = false;
@@ -67,6 +67,7 @@ class ManageResort extends BaseComponent
             'n_check_in'  => 'nullable',
             'n_check_out' => 'nullable',
             'packageTypeId' => 'required|exists:resort_package_types,id',
+            'is_active'  => 'boolean',
         ];
     }
 
@@ -106,6 +107,7 @@ class ManageResort extends BaseComponent
         $this->factOptions = [];
         $this->removedImages = [];
         $this->packageTypeId = null;
+        $this->is_active = true;
 
         $this->search     = '';
 
@@ -128,6 +130,7 @@ class ManageResort extends BaseComponent
             'n_check_in' => $this->n_check_in,
             'n_check_out' => $this->n_check_out,
             'packageTypeId' => $this->packageTypeId,
+            'is_active' => $this->is_active,
 
         ]);
 
@@ -168,6 +171,7 @@ class ManageResort extends BaseComponent
         $this->n_check_in = $this->item->n_check_in;
         $this->n_check_out = $this->item->n_check_out;
         $this->packageTypeId = $this->item->package_id;
+        $this->is_active = (bool) $this->item->is_active;
     }
 
     public function update()
@@ -191,6 +195,7 @@ class ManageResort extends BaseComponent
             'n_check_in'       => $this->n_check_in,
             'n_check_out'       => $this->n_check_out,
             'packageTypeId'       => $this->packageTypeId,
+            'is_active'       => $this->is_active,
 
         ]);
 
@@ -398,5 +403,24 @@ class ManageResort extends BaseComponent
 
 
         $this->toast('Additional facts saved successfully!', 'success');
+    }
+
+
+    public function toggleActive($id)
+    {
+        $item = $this->resortManageService->getResortSingleData($id);
+
+        if (!$item) {
+            $this->toast('Resort not found!', 'error');
+            return;
+        }
+
+        $item->is_active = $item->is_active ? 0 : 1;
+        $item->save();
+
+        $this->items =  $this->resortManageService->getAllResortData();
+        $this->refresh();
+
+        $this->toast('Status updated successfully!', 'success');
     }
 }

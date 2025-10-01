@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Resort extends Model
 {
-    protected $fillable = ['name', 'distance', 'location', 'desc', 'd_check_in', 'd_check_out', 'n_check_in', 'n_check_out', 'package_id'];
+    protected $fillable = ['name', 'distance', 'location', 'desc', 'd_check_in', 'd_check_out', 'n_check_in', 'n_check_out', 'package_id', 'is_active'];
 
 
     public function images()
