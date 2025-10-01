@@ -44,7 +44,8 @@
                                     $i = 1;
                                 @endphp
 
-                                @foreach ($bt_infos as $row)
+
+                                @forelse($infos as $index => $row)
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>
@@ -68,32 +69,21 @@
                                             </a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="4">No bed type items found!</td>
+                                    </tr>
+                                @endforelse
+
+
                             </tbody>
                         </table>
-                        @if ($hasMorePages)
-                            <div x-data="{
-                                init() {
-                                    let observer = new IntersectionObserver((entries) => {
-                                        entries.forEach(entry => {
-                                            if (entry.isIntersecting) {
-                                                @this.call('loadRoomBTData')
-                                                console.log('loading...')
-                                            }
-                                        })
-                                    }, {
-                                        root: null
-                                    });
-                                    observer.observe(this.$el);
-                                }
-                            }"
-                                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
-                                <div class="text-center pb-2 d-flex justify-content-center align-items-center">
-                                    Loading...
-                                    <div class="spinner-grow d-inline-flex mx-2 text-primary" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
+                        @if ($hasMore)
+                            <div class="load-more-wrapper text-center mt-5">
+                                <button wire:click="loadMore"
+                                    class="btn btn-sm btn-outline-primary rounded-pill px-4 py-2 shadow-sm">
+                                    Load More
+                                </button>
                             </div>
                         @endif
                     </div>

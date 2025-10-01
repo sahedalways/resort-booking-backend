@@ -4,11 +4,7 @@ namespace App\Livewire\Backend\ManageRoom;
 
 use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\RoomViewType;
-
-use App\Services\RoomManage\BedTypeManageService;
 use App\Services\RoomManage\ViewTypeManageService;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Pagination\Cursor;
 
 
 class ViewType extends BaseComponent
@@ -17,9 +13,10 @@ class ViewType extends BaseComponent
 
 
     public $editMode = false;
-    public $nextCursor;
-    protected $currentCursor;
-    public $hasMorePages;
+    public $perPage = 10;
+    public $loaded;
+    public $lastId = null;
+    public $hasMore = true;
 
     protected $roomVT;
 
@@ -37,21 +34,21 @@ class ViewType extends BaseComponent
     ];
 
 
-
     public function mount()
     {
 
-        $this->vt_infos = new EloquentCollection();
-
-
-        $this->loadRoomVTData();
+        $this->loaded = collect();
+        $this->loadMore();
     }
 
 
     public function render()
     {
-        return view('livewire.backend.manage-room.view-type');
+        return view('livewire.backend.manage-room.view-type', [
+            'infos' => $this->loaded
+        ]);
     }
+
 
 
     /* reset input file */
@@ -78,15 +75,11 @@ class ViewType extends BaseComponent
         $this->dispatch('closemodal');
 
         $this->toast('View Type saved Successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
 
-    /* process while update */
-    public function updated()
-    {
-        $this->reloadRoomVTData();
-    }
 
 
 
@@ -118,13 +111,13 @@ class ViewType extends BaseComponent
         ]);
 
 
-        $this->refresh();
         $this->resetInputFields();
         $this->editMode = false;
 
 
         $this->dispatch('closemodal');
         $this->toast('View Type has been updated successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -132,83 +125,63 @@ class ViewType extends BaseComponent
     /* process while update */
     public function searchVT()
     {
-        if ($this->search != '') {
-
-            $this->vt_infos = RoomViewType::where('type_name', 'like', '%' . $this->search)
-                ->latest()
-                ->get();
-        } elseif ($this->search == '') {
-            $this->vt_infos = new EloquentCollection();
-        }
-
-        $this->reloadRoomVTData();
+        $this->resetLoaded();
     }
 
 
 
-    /* refresh the page */
-    public function refresh()
-    {
 
-        if ($this->search == '') {
-            $this->vt_infos = $this->vt_infos->fresh();
-        }
-    }
-    public function loadRoomVTData()
+    // Load more function
+    public function loadMore()
     {
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $vtList = $this->filterdata();
-        $this->vt_infos->push(...$vtList->items());
-        if ($this->hasMorePages = $vtList->hasMorePages()) {
-            $this->nextCursor = $vtList->nextCursor()->encode();
-        }
-        $this->currentCursor = $vtList->cursor();
-    }
+        if (!$this->hasMore) return;
 
-
-    public function filterdata()
-    {
         $query = RoomViewType::query();
-
         if ($this->search && $this->search != '') {
-            $searchTerm = '%' . $this->search . '%';
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('type_name', 'like', $searchTerm);
-            });
+            $query->where('type_name', 'like', '%' . $this->search . '%');
         }
 
-        $data = $query->latest()
-            ->cursorPaginate(10, ['*'], 'cursor', $this->nextCursor ? Cursor::fromEncoded($this->nextCursor) : null);
+        if ($this->lastId) {
+            $query->where('id', '<', $this->lastId);
+        }
 
-        return $data;
+        $items = $query->orderBy('id', 'desc')
+            ->limit($this->perPage)
+            ->get();
+
+
+
+        if ($items->count() < $this->perPage) {
+            $this->hasMore = false;
+        }
+
+
+
+        if ($items->count()) {
+            $this->lastId = $items->last()->id;
+            $this->loaded = $this->loaded->merge($items);
+        }
     }
 
-
-    public function reloadRoomVTData()
+    // Reset loaded collection
+    private function resetLoaded()
     {
-        $this->vt_infos = new EloquentCollection();
-        $this->nextCursor = null;
-        $this->hasMorePages = null;
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $data = $this->filterdata();
-        $this->vt_infos->push(...$data->items());
-        if ($this->hasMorePages = $data->hasMorePages()) {
-            $this->nextCursor = $data->nextCursor()->encode();
-        }
-        $this->currentCursor = $data->cursor();
+        $this->loaded = collect();
+        $this->lastId = null;
+        $this->hasMore = true;
+        $this->loadMore();
     }
+
+
 
 
     public function deleteVT($id)
     {
         $this->roomVT->deleteRoomVT($id);
 
-        $this->reloadRoomVTData();
+
 
         $this->toast('View Type has been deleted!', 'success');
+        $this->resetLoaded();
     }
 }

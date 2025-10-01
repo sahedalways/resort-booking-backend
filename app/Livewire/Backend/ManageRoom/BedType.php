@@ -6,8 +6,6 @@ use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\RoomBedType;
 
 use App\Services\RoomManage\BedTypeManageService;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Pagination\Cursor;
 
 
 class BedType extends BaseComponent
@@ -16,9 +14,10 @@ class BedType extends BaseComponent
 
 
     public $editMode = false;
-    public $nextCursor;
-    protected $currentCursor;
-    public $hasMorePages;
+    public $perPage = 10;
+    public $loaded;
+    public $lastId = null;
+    public $hasMore = true;
 
     protected $roomBT;
 
@@ -36,21 +35,22 @@ class BedType extends BaseComponent
     ];
 
 
-
     public function mount()
     {
 
-        $this->bt_infos = new EloquentCollection();
-
-
-        $this->loadRoomBTData();
+        $this->loaded = collect();
+        $this->loadMore();
     }
 
 
     public function render()
     {
-        return view('livewire.backend.manage-room.bed-type');
+        return view('livewire.backend.manage-room.bed-type', [
+            'infos' => $this->loaded
+        ]);
     }
+
+
 
 
     /* reset input file */
@@ -77,14 +77,7 @@ class BedType extends BaseComponent
         $this->dispatch('closemodal');
 
         $this->toast('Bed Type saved Successfully!', 'success');
-    }
-
-
-
-    /* process while update */
-    public function updated()
-    {
-        $this->reloadRoomBTData();
+        $this->resetLoaded();
     }
 
 
@@ -117,13 +110,14 @@ class BedType extends BaseComponent
         ]);
 
 
-        $this->refresh();
+
         $this->resetInputFields();
         $this->editMode = false;
 
 
         $this->dispatch('closemodal');
         $this->toast('Bed Type has been updated successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -131,83 +125,62 @@ class BedType extends BaseComponent
     /* process while update */
     public function searchBT()
     {
-        if ($this->search != '') {
-
-            $this->bt_infos = RoomBedType::where('type_name', 'like', '%' . $this->search)
-                ->latest()
-                ->get();
-        } elseif ($this->search == '') {
-            $this->bt_infos = new EloquentCollection();
-        }
-
-        $this->reloadRoomBTData();
+        $this->resetLoaded();
     }
 
 
 
-    /* refresh the page */
-    public function refresh()
-    {
 
-        if ($this->search == '') {
-            $this->bt_infos = $this->bt_infos->fresh();
-        }
-    }
-    public function loadRoomBTData()
+    // Load more function
+    public function loadMore()
     {
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $ptList = $this->filterdata();
-        $this->bt_infos->push(...$ptList->items());
-        if ($this->hasMorePages = $ptList->hasMorePages()) {
-            $this->nextCursor = $ptList->nextCursor()->encode();
-        }
-        $this->currentCursor = $ptList->cursor();
-    }
+        if (!$this->hasMore) return;
 
-
-    public function filterdata()
-    {
         $query = RoomBedType::query();
-
         if ($this->search && $this->search != '') {
-            $searchTerm = '%' . $this->search . '%';
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('type_name', 'like', $searchTerm);
-            });
+            $query->where('type_name', 'like', '%' . $this->search . '%');
         }
 
-        $data = $query->latest()
-            ->cursorPaginate(10, ['*'], 'cursor', $this->nextCursor ? Cursor::fromEncoded($this->nextCursor) : null);
+        if ($this->lastId) {
+            $query->where('id', '<', $this->lastId);
+        }
 
-        return $data;
+        $items = $query->orderBy('id', 'desc')
+            ->limit($this->perPage)
+            ->get();
+
+
+
+        if ($items->count() < $this->perPage) {
+            $this->hasMore = false;
+        }
+
+
+
+        if ($items->count()) {
+            $this->lastId = $items->last()->id;
+            $this->loaded = $this->loaded->merge($items);
+        }
     }
 
-
-    public function reloadRoomBTData()
+    // Reset loaded collection
+    private function resetLoaded()
     {
-        $this->bt_infos = new EloquentCollection();
-        $this->nextCursor = null;
-        $this->hasMorePages = null;
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $data = $this->filterdata();
-        $this->bt_infos->push(...$data->items());
-        if ($this->hasMorePages = $data->hasMorePages()) {
-            $this->nextCursor = $data->nextCursor()->encode();
-        }
-        $this->currentCursor = $data->cursor();
+        $this->loaded = collect();
+        $this->lastId = null;
+        $this->hasMore = true;
+        $this->loadMore();
     }
+
 
 
     public function deleteBT($id)
     {
         $this->roomBT->deleteRoomBT($id);
 
-        $this->reloadRoomBTData();
+
 
         $this->toast('Bed Type has been deleted!', 'success');
+        $this->resetLoaded();
     }
 }

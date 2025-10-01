@@ -16,9 +16,11 @@ class ManageFacilities extends BaseComponent
 
 
     public $editMode = false;
-    public $nextCursor;
-    protected $currentCursor;
-    public $hasMorePages;
+
+    public $perPage = 10;
+    public $loaded;
+    public $lastId = null;
+    public $hasMore = true;
 
     protected $facilitiesManageService;
 
@@ -44,22 +46,22 @@ class ManageFacilities extends BaseComponent
 
 
 
+
     public function mount()
     {
-
-        $this->items = new EloquentCollection();
-
         $this->serviceTypes =  $this->facilitiesManageService->getAllServiceTypes();
-
-
-        $this->loadFacilitiesData();
+        $this->loaded = collect();
+        $this->loadMore();
     }
 
 
     public function render()
     {
-        return view('livewire.backend.manage-resort.manage-facilities');
+        return view('livewire.backend.manage-resort.manage-facilities', [
+            'infos' => $this->loaded
+        ]);
     }
+
 
 
     /* reset input file */
@@ -92,15 +94,10 @@ class ManageFacilities extends BaseComponent
         $this->dispatch('closemodal');
 
         $this->toast('Facility item saved Successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
-
-    /* process while update */
-    public function updated()
-    {
-        $this->reloadFacilitiesData();
-    }
 
 
 
@@ -144,13 +141,14 @@ class ManageFacilities extends BaseComponent
         ]);
 
 
-        $this->refresh();
+
         $this->resetInputFields();
         $this->editMode = false;
 
 
         $this->dispatch('closemodal');
         $this->toast('Facility item has been updated successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -158,83 +156,63 @@ class ManageFacilities extends BaseComponent
     /* process while update */
     public function searchFacility()
     {
-        if ($this->search != '') {
-            $this->items = ResortRoomFacility::where('name', 'like', '%' . $this->search)
-                ->latest()
-                ->get();
-        } elseif ($this->search == '') {
-            $this->items = new EloquentCollection();
-        }
-
-        $this->reloadFacilitiesData();
+        $this->resetLoaded();
     }
 
 
 
-    /* refresh the page */
-    public function refresh()
-    {
 
-        if ($this->search == '') {
-            $this->items = $this->items->fresh();
-        }
-    }
-    public function loadFacilitiesData()
+    // Load more function
+    public function loadMore()
     {
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $list = $this->filterdata();
-        $this->items->push(...$list->items());
-        if ($this->hasMorePages = $list->hasMorePages()) {
-            $this->nextCursor = $list->nextCursor()->encode();
-        }
-        $this->currentCursor = $list->cursor();
-    }
+        if (!$this->hasMore) return;
 
-
-    public function filterdata()
-    {
         $query = ResortRoomFacility::query();
-
         if ($this->search && $this->search != '') {
-            $searchTerm = '%' . $this->search . '%';
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('name', 'like', $searchTerm);
-            });
+            $query->where('name', 'like', '%' . $this->search . '%');
         }
 
-        $data = $query->latest()
-            ->cursorPaginate(10, ['*'], 'cursor', $this->nextCursor ? Cursor::fromEncoded($this->nextCursor) : null);
+        if ($this->lastId) {
+            $query->where('id', '<', $this->lastId);
+        }
 
-        return $data;
+        $items = $query->orderBy('id', 'desc')
+            ->limit($this->perPage)
+            ->get();
+
+
+
+        if ($items->count() < $this->perPage) {
+            $this->hasMore = false;
+        }
+
+
+
+        if ($items->count()) {
+            $this->lastId = $items->last()->id;
+            $this->loaded = $this->loaded->merge($items);
+        }
     }
 
-
-    public function reloadFacilitiesData()
+    // Reset loaded collection
+    private function resetLoaded()
     {
-        $this->items = new EloquentCollection();
-        $this->nextCursor = null;
-        $this->hasMorePages = null;
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $data = $this->filterdata();
-        $this->items->push(...$data->items());
-        if ($this->hasMorePages = $data->hasMorePages()) {
-            $this->nextCursor = $data->nextCursor()->encode();
-        }
-        $this->currentCursor = $data->cursor();
+        $this->loaded = collect();
+        $this->lastId = null;
+        $this->hasMore = true;
+        $this->loadMore();
     }
+
 
 
     public function deleteItem($id)
     {
         $this->facilitiesManageService->deleteFacilityData($id);
 
-        $this->reloadFacilitiesData();
+
 
         $this->toast('Facility item has been deleted!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -288,7 +266,7 @@ class ManageFacilities extends BaseComponent
         $this->facilitiesManageService->saveFacilityOptions($this->itemId, $this->options, $this->removedOptions);
 
 
-        $this->refresh();
+
         $this->resetInputFields();
         $this->editMode = false;
 
@@ -297,5 +275,6 @@ class ManageFacilities extends BaseComponent
 
 
         $this->toast('Options saved successfully!', 'success');
+        $this->resetLoaded();
     }
 }

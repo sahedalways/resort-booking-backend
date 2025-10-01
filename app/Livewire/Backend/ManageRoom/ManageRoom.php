@@ -6,8 +6,6 @@ use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\Room;
 use Livewire\WithFileUploads;
 use App\Services\RoomManage\RoomManageService;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Pagination\Cursor;
 
 
 class ManageRoom extends BaseComponent
@@ -35,10 +33,10 @@ class ManageRoom extends BaseComponent
     public $is_active = true;
 
     public $editMode = false;
-    public $nextCursor;
-    protected $currentCursor;
-
-    public $hasMorePages;
+    public $perPage = 1;
+    public $loaded;
+    public $lastId = null;
+    public $hasMore = true;
     protected $manageRoom;
 
     public $images = [];
@@ -89,18 +87,18 @@ class ManageRoom extends BaseComponent
         $this->bedTypes = $this->manageRoom->getBedTypes();
         $this->viewTypes = $this->manageRoom->getViewTypes();
         $this->serviceTypes = $this->manageRoom->getServicesTypes();
-
-        $this->items = new EloquentCollection();
-
-
-        $this->loadRoomsData();
+        $this->loaded = collect();
+        $this->loadMore();
     }
 
 
     public function render()
     {
-        return view('livewire.backend.manage-room.manage-room');
+        return view('livewire.backend.manage-room.manage-room', [
+            'infos' => $this->loaded
+        ]);
     }
+
 
 
     /* reset input file */
@@ -157,15 +155,9 @@ class ManageRoom extends BaseComponent
         $this->dispatch('closemodal');
 
         $this->toast('Room info saved Successfully!', 'success');
+        $this->resetLoaded();
     }
 
-
-
-    /* process while update */
-    public function updated()
-    {
-        $this->reloadRoomsData();
-    }
 
 
 
@@ -218,14 +210,13 @@ class ManageRoom extends BaseComponent
             'is_active' => $this->is_active,
         ]);
 
-
-        $this->refresh();
         $this->resetInputFields();
         $this->editMode = false;
 
 
         $this->dispatch('closemodal');
         $this->toast('Room info has been updated successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -233,90 +224,64 @@ class ManageRoom extends BaseComponent
     /* process while update */
     public function searchRoom()
     {
-        if ($this->search != '') {
-
-            $this->items = Room::with(['resort', 'images', 'bedType', 'viewType'])
-                ->where('name', 'like', '%' . $this->search . '%')
-                ->latest()
-                ->get();
-        } elseif ($this->search == '') {
-            $this->items = new EloquentCollection();
-        }
-
-        $this->reloadRoomsData();
+        $this->resetLoaded();
     }
 
 
 
-    /* refresh the page */
-    public function refresh()
-    {
 
-        if ($this->search == '') {
-            $this->items = $this->items->fresh();
-        }
-    }
-    public function loadRoomsData()
+    // Load more function
+    public function loadMore()
     {
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $list = $this->filterdata();
-        $this->items->push(...$list->items());
-        if ($this->hasMorePages = $list->hasMorePages()) {
-            $this->nextCursor = $list->nextCursor()->encode();
-        }
-        $this->currentCursor = $list->cursor();
-    }
+        if (!$this->hasMore) return;
 
-
-    public function filterdata()
-    {
         $query = Room::with(['resort', 'images', 'bedType', 'viewType']);
 
         if ($this->search && $this->search != '') {
-            $searchTerm = '%' . $this->search . '%';
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('name', 'like', $searchTerm);
-            });
+            $query->where('name', 'like', '%' . $this->search . '%');
         }
 
-        $data = $query->latest()
-            ->cursorPaginate(
-                10,
-                ['*'],
-                'cursor',
-                $this->nextCursor ? Cursor::fromEncoded($this->nextCursor) : null
-            );
+        if ($this->lastId) {
+            $query->where('id', '<', $this->lastId);
+        }
 
-        return $data;
+        $items = $query->orderBy('id', 'desc')
+            ->limit($this->perPage)
+            ->get();
+
+
+
+        if ($items->count() < $this->perPage) {
+            $this->hasMore = false;
+        }
+
+
+
+        if ($items->count()) {
+            $this->lastId = $items->last()->id;
+            $this->loaded = $this->loaded->merge($items);
+        }
     }
 
-
-    public function reloadRoomsData()
+    // Reset loaded collection
+    private function resetLoaded()
     {
-        $this->items = new EloquentCollection();
-        $this->nextCursor = null;
-        $this->hasMorePages = null;
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $data = $this->filterdata();
-        $this->items->push(...$data->items());
-        if ($this->hasMorePages = $data->hasMorePages()) {
-            $this->nextCursor = $data->nextCursor()->encode();
-        }
-        $this->currentCursor = $data->cursor();
+        $this->loaded = collect();
+        $this->lastId = null;
+        $this->hasMore = true;
+        $this->loadMore();
     }
+
+
 
 
     public function deleteRoom($id)
     {
         $this->manageRoom->deleteRoom($id);
 
-        $this->reloadRoomsData();
 
         $this->toast('Room info has been deleted!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -336,9 +301,10 @@ class ManageRoom extends BaseComponent
 
         $this->items =  $this->manageRoom->getAllRoomsData();
 
-        $this->refresh();
+
 
         $this->toast('Status updated successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -387,7 +353,6 @@ class ManageRoom extends BaseComponent
         $this->manageRoom->saveRoomImagesGallery($this->itemId, $this->images, $this->removedImages);
 
 
-        $this->refresh();
         $this->resetInputFields();
         $this->editMode = false;
 
@@ -396,6 +361,7 @@ class ManageRoom extends BaseComponent
 
 
         $this->toast('Images saved successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -448,8 +414,6 @@ class ManageRoom extends BaseComponent
         $this->manageRoom->saveRoomServices($this->itemId, $this->roomServices);
 
 
-        $this->refresh();
-
         $this->editMode = false;
 
 
@@ -457,6 +421,7 @@ class ManageRoom extends BaseComponent
 
 
         $this->toast('Room services saved successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -513,7 +478,6 @@ class ManageRoom extends BaseComponent
         $this->manageRoom->saveRoomRateDetails($this->itemId, $this->rateDetails);
 
 
-        $this->refresh();
 
         $this->editMode = false;
 
@@ -522,5 +486,6 @@ class ManageRoom extends BaseComponent
 
 
         $this->toast('Room rate details saved successfully!', 'success');
+        $this->resetLoaded();
     }
 }

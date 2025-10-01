@@ -44,11 +44,13 @@
                             </thead>
                             <tbody>
 
-
+                                @php
+                                    $i = 1;
+                                @endphp
 
                                 @forelse($infos as $index => $row)
                                     <tr>
-                                        <td>{{ $loop->iteration + ($infos->firstItem() - 1) }}</td>
+                                        <td>{{ $i++ }}</td>
                                         <td>
                                             <p class="text-sm font-weight-bold mb-0">
                                                 {!! fa_icon($row->icon) !!}
@@ -83,9 +85,14 @@
 
                             </tbody>
                         </table>
-                        <div class="mt-3">
-                            {{ $infos->links('pagination::bootstrap-5') }}
-                        </div>
+                        @if ($hasMore)
+                            <div class="load-more-wrapper text-center mt-5">
+                                <button wire:click="loadMore"
+                                    class="btn btn-sm btn-outline-primary rounded-pill px-4 py-2 shadow-sm">
+                                    Load More
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -151,7 +158,8 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
-                        <button type="submit" class="btn btn-success" wire:loading.attr="disabled" wire:target="store">
+                        <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
+                            wire:target="store">
                             <span wire:loading wire:target="store">
                                 <i class="fas fa-spinner fa-spin me-2"></i> Saving...
                             </span>

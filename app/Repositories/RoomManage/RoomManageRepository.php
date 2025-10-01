@@ -85,9 +85,15 @@ class RoomManageRepository
 
   public function deleteRoom(int $id)
   {
-    $data = $this->getRoomSingleData($id);
-    $data->delete();
+    $room = $this->getRoomSingleData($id);
+
+    $room->images()->delete();
+    $room->services()->delete();
+    $room->rateDetails()->delete();
+
+    $room->delete();
   }
+
 
 
   public function getResorts()

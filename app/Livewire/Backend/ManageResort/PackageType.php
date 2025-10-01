@@ -5,14 +5,17 @@ namespace App\Livewire\Backend\ManageResort;
 use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\ResortPackageType;
 use App\Services\ResortMange\PackageTypeManageService;
-use Livewire\WithPagination;
+
 
 
 class PackageType extends BaseComponent
 {
     public $pt_infos, $pt_item, $pt_id, $type_name, $icon, $old_icon, $is_refundable = true,  $search;
 
-    use WithPagination;
+    public $perPage = 10;
+    public $loaded;
+    public $lastId = null;
+    public $hasMore = true;
     public $editMode = false;
 
     protected $resortPT;
@@ -34,14 +37,23 @@ class PackageType extends BaseComponent
 
 
 
+
+    public function mount()
+    {
+
+        $this->loaded = collect();
+        $this->loadMore();
+    }
+
+
     public function render()
     {
-        $infos = $this->filterData();
-
         return view('livewire.backend.manage-resort.package-type', [
-            'infos' => $infos
+            'infos' => $this->loaded
         ]);
     }
+
+
 
 
     /* reset input file */
@@ -73,11 +85,9 @@ class PackageType extends BaseComponent
         $this->dispatch('closemodal');
 
         $this->toast('Package Type saved Successfully!', 'success');
+        $this->resetLoaded();
     }
 
-
-
-    /* process while update */
 
 
 
@@ -115,13 +125,14 @@ class PackageType extends BaseComponent
         ]);
 
 
-        $this->refresh();
+
         $this->resetInputFields();
         $this->editMode = false;
 
 
         $this->dispatch('closemodal');
         $this->toast('Package Type has been updated successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -129,33 +140,51 @@ class PackageType extends BaseComponent
     /* process while update */
     public function searchPT()
     {
-        $this->resetPage();
+        $this->resetLoaded();
     }
 
 
 
-    /* refresh the page */
-    public function refresh()
+
+    // Load more function
+    public function loadMore()
     {
+        if (!$this->hasMore) return;
 
-        if ($this->search == '') {
-            $this->pt_infos = $this->pt_infos->fresh();
-        }
-    }
-
-
-
-    public function filterData()
-    {
         $query = ResortPackageType::query();
-
         if ($this->search && $this->search != '') {
-            $searchTerm = '%' . $this->search . '%';
-            $query->where('type_name', 'like', $searchTerm);
+            $query->where('type_name', 'like', '%' . $this->search . '%');
+        }
+
+        if ($this->lastId) {
+            $query->where('id', '<', $this->lastId);
+        }
+
+        $items = $query->orderBy('id', 'desc')
+            ->limit($this->perPage)
+            ->get();
+
+
+
+        if ($items->count() < $this->perPage) {
+            $this->hasMore = false;
         }
 
 
-        return $query->latest()->paginate(10);
+
+        if ($items->count()) {
+            $this->lastId = $items->last()->id;
+            $this->loaded = $this->loaded->merge($items);
+        }
+    }
+
+    // Reset loaded collection
+    private function resetLoaded()
+    {
+        $this->loaded = collect();
+        $this->lastId = null;
+        $this->hasMore = true;
+        $this->loadMore();
     }
 
 
@@ -167,5 +196,6 @@ class PackageType extends BaseComponent
         $this->resortPT->deleteResortPT($id);
 
         $this->toast('Package Type has been deleted!', 'success');
+        $this->resetLoaded();
     }
 }
