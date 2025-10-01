@@ -7,19 +7,15 @@ use App\Models\Resort;
 
 use App\Services\ResortMange\ResortManageService;
 use Illuminate\Validation\Rule;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Pagination\Cursor;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class ManageResort extends BaseComponent
 {
     public $items, $item, $itemId, $name, $distance, $location, $packageTypeId, $desc, $d_check_in, $d_check_out, $n_check_in, $n_check_out, $is_active = true, $search;
-
+    use WithPagination;
 
     public $editMode = false;
-    public $nextCursor;
-    protected $currentCursor;
-    public $hasMorePages;
 
     protected $resortManageService;
 
@@ -76,17 +72,17 @@ class ManageResort extends BaseComponent
 
     public function mount()
     {
-
-        $this->items = new EloquentCollection();
         $this->packageTypes =  $this->resortManageService->getPackageTypes();
-
-        $this->loadResortData();
     }
 
 
     public function render()
     {
-        return view('livewire.backend.manage-resort.manage-resort');
+        $infos = $this->filterData();
+
+        return view('livewire.backend.manage-resort.manage-resort', [
+            'infos' => $infos
+        ]);
     }
 
 
@@ -144,11 +140,6 @@ class ManageResort extends BaseComponent
 
 
 
-    /* process while update */
-    public function updated()
-    {
-        $this->reloadResortData();
-    }
 
 
 
@@ -200,7 +191,6 @@ class ManageResort extends BaseComponent
         ]);
 
 
-        $this->refresh();
         $this->resetInputFields();
         $this->editMode = false;
 
@@ -214,42 +204,15 @@ class ManageResort extends BaseComponent
     /* process while update */
     public function searchResort()
     {
-        if ($this->search != '') {
-            $this->items = Resort::where('name', 'like', '%' . $this->search)
-                ->latest()
-                ->get();
-        } elseif ($this->search == '') {
-            $this->items = new EloquentCollection();
-        }
-
-        $this->reloadResortData();
+        $this->resetPage();
     }
 
 
 
-    /* refresh the page */
-    public function refresh()
-    {
-
-        if ($this->search == '') {
-            $this->items = $this->items->fresh();
-        }
-    }
-    public function loadResortData()
-    {
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $list = $this->filterdata();
-        $this->items->push(...$list->items());
-        if ($this->hasMorePages = $list->hasMorePages()) {
-            $this->nextCursor = $list->nextCursor()->encode();
-        }
-        $this->currentCursor = $list->cursor();
-    }
 
 
-    public function filterdata()
+
+    public function filterData()
     {
         $query = Resort::query();
 
@@ -260,35 +223,17 @@ class ManageResort extends BaseComponent
             });
         }
 
-        $data = $query->latest()
-            ->cursorPaginate(10, ['*'], 'cursor', $this->nextCursor ? Cursor::fromEncoded($this->nextCursor) : null);
-
-        return $data;
+        return $query->latest()->paginate(10);
     }
 
 
-    public function reloadResortData()
-    {
-        $this->items = new EloquentCollection();
-        $this->nextCursor = null;
-        $this->hasMorePages = null;
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $data = $this->filterdata();
-        $this->items->push(...$data->items());
-        if ($this->hasMorePages = $data->hasMorePages()) {
-            $this->nextCursor = $data->nextCursor()->encode();
-        }
-        $this->currentCursor = $data->cursor();
-    }
 
 
     public function deleteItem($id)
     {
         $this->resortManageService->deleteResortData($id);
 
-        $this->reloadResortData();
+
 
         $this->toast('Resort has been deleted!', 'success');
     }
@@ -339,7 +284,7 @@ class ManageResort extends BaseComponent
         $this->resortManageService->saveResortImagesGallery($this->itemId, $this->images, $this->removedImages);
 
 
-        $this->refresh();
+
         $this->resetInputFields();
         $this->editMode = false;
 
@@ -394,7 +339,7 @@ class ManageResort extends BaseComponent
         $this->resortManageService->saveFactOptions($this->itemId, $this->factOptions);
 
 
-        $this->refresh();
+
 
         $this->editMode = false;
 
@@ -419,7 +364,7 @@ class ManageResort extends BaseComponent
         $item->save();
 
         $this->items =  $this->resortManageService->getAllResortData();
-        $this->refresh();
+
 
         $this->toast('Status updated successfully!', 'success');
     }

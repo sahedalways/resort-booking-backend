@@ -44,14 +44,7 @@
                                         Distance</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
                                         Status</th>
-                                    {{-- <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
-                                        Day CheckIn</th>
-                                    <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
-                                        Day CheckOut</th>
-                                    <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
-                                        Night CheckIn</th>
-                                    <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">
-                                        Night CheckOut</th> --}}
+
 
                                     <th class="text-secondary opacity-7"> Action</th>
                                 </tr>
@@ -61,7 +54,7 @@
                                     $i = 1;
                                 @endphp
 
-                                @foreach ($items as $row)
+                                @forelse($infos as $index => $row)
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>
@@ -98,26 +91,7 @@
                                             </p>
                                         </td>
 
-                                        {{-- <td>
-                                            <p class="text-sm font-weight-bold mb-0">
-                                                {{ $row->d_check_in ? \Carbon\Carbon::createFromFormat('H:i:s', $row->d_check_in)->format('h:i A') : 'N/A' }}
-                                            </p>
-                                        </td>
-                                        <td>
-                                            <p class="text-sm font-weight-bold mb-0">
-                                                {{ $row->d_check_out ? \Carbon\Carbon::createFromFormat('H:i:s', $row->d_check_out)->format('h:i A') : 'N/A' }}
-                                            </p>
-                                        </td>
-                                        <td>
-                                            <p class="text-sm font-weight-bold mb-0">
-                                                {{ $row->n_check_in ? \Carbon\Carbon::createFromFormat('H:i:s', $row->n_check_in)->format('h:i A') : 'N/A' }}
-                                            </p>
-                                        </td>
-                                        <td>
-                                            <p class="text-sm font-weight-bold mb-0">
-                                                {{ $row->n_check_out ? \Carbon\Carbon::createFromFormat('H:i:s', $row->n_check_out)->format('h:i A') : 'N/A' }}
-                                            </p>
-                                        </td> --}}
+
 
 
                                         <td>
@@ -174,34 +148,22 @@
                                             </a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="4">No resorts found</td>
+                                    </tr>
+                                @endforelse
+
+
+
+
+
+
                             </tbody>
                         </table>
-                        @if ($hasMorePages)
-                            <div x-data="{
-                                init() {
-                                    let observer = new IntersectionObserver((entries) => {
-                                        entries.forEach(entry => {
-                                            if (entry.isIntersecting) {
-                                                @this.call('loadResortData')
-                                                console.log('loading...')
-                                            }
-                                        })
-                                    }, {
-                                        root: null
-                                    });
-                                    observer.observe(this.$el);
-                                }
-                            }"
-                                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
-                                <div class="text-center pb-2 d-flex justify-content-center align-items-center">
-                                    Loading...
-                                    <div class="spinner-grow d-inline-flex mx-2 text-primary" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+                        <div class="mt-3">
+                            {{ $infos->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -227,8 +189,8 @@
                             {{-- Name --}}
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter Name"
-                                    wire:model="name" required>
+                                <input type="text" class="form-control" placeholder="Enter Name" wire:model="name"
+                                    required>
                                 @error('name')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror

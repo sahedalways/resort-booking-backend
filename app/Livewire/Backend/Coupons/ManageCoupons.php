@@ -6,8 +6,6 @@ use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\Coupon;
 use App\Services\CouponManage\CouponManageService;
 use Illuminate\Validation\Rule;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Pagination\Cursor;
 use Livewire\WithPagination;
 
 
