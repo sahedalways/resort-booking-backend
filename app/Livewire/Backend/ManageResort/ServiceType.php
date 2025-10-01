@@ -5,55 +5,44 @@ namespace App\Livewire\Backend\ManageResort;
 use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\ResortServiceType;
 use App\Services\ResortMange\ServiceTypeManageService;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Pagination\Cursor;
 
 
 class ServiceType extends BaseComponent
 {
-    public $st_infos, $stItem, $st_id, $type_name, $icon, $old_icon, $search;
-
-
+    public $stItem, $st_id, $type_name, $icon, $old_icon, $search;
+    public $perPage = 10;
+    public $loaded;
+    public $lastId = null;
+    public $hasMore = true;
     public $editMode = false;
-    public $nextCursor;
-    protected $currentCursor;
-    public $hasMorePages;
 
     protected $resortST;
-
     protected $listeners = ['deleteST'];
 
+    public function mount()
+    {
+        $this->loaded = collect(); // collection start
+        $this->loadMore();
+    }
 
     public function boot(ServiceTypeManageService $resortST)
     {
         $this->resortST = $resortST;
     }
 
-
     protected $rules = [
         'type_name' => 'required|string|max:255',
         'icon' => 'required|string|max:255',
     ];
 
-
-
-    public function mount()
-    {
-
-        $this->st_infos = new EloquentCollection();
-
-
-        $this->loadResortStData();
-    }
-
-
     public function render()
     {
-        return view('livewire.backend.manage-resort.service-type');
+        return view('livewire.backend.manage-resort.service-type', [
+            'infos' => $this->loaded
+        ]);
     }
 
-
-    /* reset input file */
+    // Reset input fields
     public function resetInputFields()
     {
         $this->stItem = '';
@@ -63,35 +52,24 @@ class ServiceType extends BaseComponent
         $this->resetErrorBag();
     }
 
-
-    /* store event service data */
+    // Store
     public function store()
     {
         $this->validate();
 
         $this->resortST->saveResortST([
             'type_name' => $this->type_name,
-            'icon'  => $this->icon,
+            'icon' => $this->icon,
         ]);
-
-        $this->st_infos =  $this->resortST->getAllResortSTData();
 
         $this->resetInputFields();
         $this->dispatch('closemodal');
-
         $this->toast('Service Type saved Successfully!', 'success');
+
+        $this->resetLoaded();
     }
 
-
-
-    /* process while update */
-    public function updated()
-    {
-        $this->reloadResortStData();
-    }
-
-
-
+    // Edit
     public function edit($id)
     {
         $this->editMode = true;
@@ -107,10 +85,10 @@ class ServiceType extends BaseComponent
         $this->old_icon = $this->stItem->icon;
     }
 
+    // Update
     public function update()
     {
         $this->validate();
-
 
         if (!$this->stItem) {
             $this->toast('Service type not found!', 'error');
@@ -118,102 +96,67 @@ class ServiceType extends BaseComponent
         }
 
         $this->resortST->updateResortSTSingleData($this->stItem, [
-            'type_name'       => $this->type_name,
+            'type_name' => $this->type_name,
             'icon' => $this->icon,
         ]);
 
-
-
-        $this->refresh();
         $this->resetInputFields();
         $this->editMode = false;
-
-
         $this->dispatch('closemodal');
         $this->toast('Service type has been updated successfully!', 'success');
+
+        $this->resetLoaded();
     }
 
-
-
-    /* process while update */
+    // Search
     public function searchST()
     {
-        if ($this->search != '') {
-            $this->st_infos = ResortServiceType::where('type_name', 'like', '%' . $this->search)
-                ->latest()
-                ->get();
-        } elseif ($this->search == '') {
-            $this->st_infos = new EloquentCollection();
-        }
-
-        $this->reloadResortStData();
+        $this->resetLoaded();
     }
 
-
-
-    /* refresh the page */
-    public function refresh()
+    // Load more function
+    public function loadMore()
     {
+        if (!$this->hasMore) return;
 
-        if ($this->search == '') {
-            $this->st_infos = $this->st_infos->fresh();
-        }
-    }
-    public function loadResortStData()
-    {
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $stList = $this->filterdata();
-        $this->st_infos->push(...$stList->items());
-        if ($this->hasMorePages = $stList->hasMorePages()) {
-            $this->nextCursor = $stList->nextCursor()->encode();
-        }
-        $this->currentCursor = $stList->cursor();
-    }
-
-
-    public function filterdata()
-    {
         $query = ResortServiceType::query();
-
         if ($this->search && $this->search != '') {
-            $searchTerm = '%' . $this->search . '%';
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('type_name', 'like', $searchTerm);
-            });
+            $query->where('type_name', 'like', '%' . $this->search . '%');
         }
 
-        $data = $query->latest()
-            ->cursorPaginate(10, ['*'], 'cursor', $this->nextCursor ? Cursor::fromEncoded($this->nextCursor) : null);
+        if ($this->lastId) {
+            $query->where('id', '<', $this->lastId);
+        }
 
-        return $data;
+        $items = $query->orderBy('id', 'desc')
+            ->limit($this->perPage)
+            ->get();
+
+        if ($items->count() < $this->perPage) {
+            $this->hasMore = false;
+        }
+
+        if ($items->count()) {
+            $this->lastId = $items->last()->id;
+            $this->loaded = $this->loaded->merge($items);
+        }
     }
 
-
-    public function reloadResortStData()
+    // Reset loaded collection
+    private function resetLoaded()
     {
-        $this->st_infos = new EloquentCollection();
-        $this->nextCursor = null;
-        $this->hasMorePages = null;
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $data = $this->filterdata();
-        $this->st_infos->push(...$data->items());
-        if ($this->hasMorePages = $data->hasMorePages()) {
-            $this->nextCursor = $data->nextCursor()->encode();
-        }
-        $this->currentCursor = $data->cursor();
+        $this->loaded = collect();
+        $this->lastId = null;
+        $this->hasMore = true;
+        $this->loadMore();
     }
 
-
+    // Delete
     public function deleteST($id)
     {
         $this->resortST->deleteResortST($id);
-
-        $this->reloadResortStData();
-
         $this->toast('Service type has been deleted!', 'success');
+
+        $this->resetLoaded();
     }
 }

@@ -8,12 +8,17 @@ use App\Models\Resort;
 use App\Services\ResortMange\ResortManageService;
 use Illuminate\Validation\Rule;
 use Livewire\WithFileUploads;
-use Livewire\WithPagination;
+
 
 class ManageResort extends BaseComponent
 {
     public $items, $item, $itemId, $name, $distance, $location, $packageTypeId, $desc, $d_check_in, $d_check_out, $n_check_in, $n_check_out, $is_active = true, $search;
-    use WithPagination;
+
+    public $perPage = 10;
+    public $loaded;
+    public $lastId = null;
+    public $hasMore = true;
+
 
     public $editMode = false;
 
@@ -69,21 +74,23 @@ class ManageResort extends BaseComponent
 
 
 
-
     public function mount()
     {
         $this->packageTypes =  $this->resortManageService->getPackageTypes();
+        $this->loaded = collect();
+        $this->loadMore();
     }
 
 
     public function render()
     {
-        $infos = $this->filterData();
-
         return view('livewire.backend.manage-resort.manage-resort', [
-            'infos' => $infos
+            'infos' => $this->loaded
         ]);
     }
+
+
+
 
 
     /* reset input file */
@@ -136,6 +143,7 @@ class ManageResort extends BaseComponent
         $this->dispatch('closemodal');
 
         $this->toast('Resort saved Successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -197,6 +205,7 @@ class ManageResort extends BaseComponent
 
         $this->dispatch('closemodal');
         $this->toast('Resort has been updated successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -204,26 +213,51 @@ class ManageResort extends BaseComponent
     /* process while update */
     public function searchResort()
     {
-        $this->resetPage();
+        $this->resetLoaded();
     }
 
 
 
 
-
-
-    public function filterData()
+    // Load more function
+    public function loadMore()
     {
-        $query = Resort::query();
+        if (!$this->hasMore) return;
 
+        $query = Resort::query();
         if ($this->search && $this->search != '') {
-            $searchTerm = '%' . $this->search . '%';
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('name', 'like', $searchTerm);
-            });
+            $query->where('name', 'like', '%' . $this->search . '%');
         }
 
-        return $query->latest()->paginate(10);
+        if ($this->lastId) {
+            $query->where('id', '<', $this->lastId);
+        }
+
+        $items = $query->orderBy('id', 'desc')
+            ->limit($this->perPage)
+            ->get();
+
+
+
+        if ($items->count() < $this->perPage) {
+            $this->hasMore = false;
+        }
+
+
+
+        if ($items->count()) {
+            $this->lastId = $items->last()->id;
+            $this->loaded = $this->loaded->merge($items);
+        }
+    }
+
+    // Reset loaded collection
+    private function resetLoaded()
+    {
+        $this->loaded = collect();
+        $this->lastId = null;
+        $this->hasMore = true;
+        $this->loadMore();
     }
 
 
@@ -236,6 +270,7 @@ class ManageResort extends BaseComponent
 
 
         $this->toast('Resort has been deleted!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -293,6 +328,7 @@ class ManageResort extends BaseComponent
 
 
         $this->toast('Images saved successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -348,6 +384,7 @@ class ManageResort extends BaseComponent
 
 
         $this->toast('Additional facts saved successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -367,5 +404,6 @@ class ManageResort extends BaseComponent
 
 
         $this->toast('Status updated successfully!', 'success');
+        $this->resetLoaded();
     }
 }

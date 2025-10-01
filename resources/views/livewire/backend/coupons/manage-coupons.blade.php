@@ -102,9 +102,14 @@
 
                             </tbody>
                         </table>
-                        <div class="mt-3">
-                            {{ $infos->links('pagination::bootstrap-5') }}
-                        </div>
+                        @if ($hasMore)
+                            <div class="load-more-wrapper text-center mt-5">
+                                <button wire:click="loadMore"
+                                    class="btn btn-sm btn-outline-primary rounded-pill px-4 py-2 shadow-sm">
+                                    Load More
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

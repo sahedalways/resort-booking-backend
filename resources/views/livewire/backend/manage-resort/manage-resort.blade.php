@@ -161,9 +161,14 @@
 
                             </tbody>
                         </table>
-                        <div class="mt-3">
-                            {{ $infos->links('pagination::bootstrap-5') }}
-                        </div>
+                        @if ($hasMore)
+                            <div class="load-more-wrapper text-center mt-5">
+                                <button wire:click="loadMore"
+                                    class="btn btn-sm btn-outline-primary rounded-pill px-4 py-2 shadow-sm">
+                                    Load More
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -189,8 +194,8 @@
                             {{-- Name --}}
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter Name" wire:model="name"
-                                    required>
+                                <input type="text" class="form-control" placeholder="Enter Name"
+                                    wire:model="name" required>
                                 @error('name')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror

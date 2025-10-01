@@ -40,6 +40,18 @@ span.icon-position {
     padding-right: 40px;
 }
 
+.load-more-wrapper {
+    display: flex;
+    justify-content: center; 
+    align-items: center;    
+margin-top: 1rem;
+}
+
+.load-more-wrapper button:hover {
+    transform: scale(1.05);
+    transition: all 0.2s ease-in-out;
+}
+
 
 
 .input-sm {

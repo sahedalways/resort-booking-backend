@@ -5,16 +5,17 @@ namespace App\Livewire\Backend\Users;
 use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\User;
 use App\Services\UserService;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Pagination\Cursor;
 use Illuminate\Validation\Rule;
-use Livewire\WithPagination;
+
 
 class UsersManage extends BaseComponent
 {
     public $users, $user,  $user_id, $first_name, $last_name, $email, $phone_no, $password, $password_confirmation, $is_active = true, $search;
 
-    use WithPagination;
+    public $perPage = 1;
+    public $loaded;
+    public $lastId = null;
+    public $hasMore = true;
     public $editMode = false;
 
 
@@ -41,16 +42,21 @@ class UsersManage extends BaseComponent
 
 
 
+    public function mount()
+    {
+        $this->loaded = collect();
+        $this->loadMore();
+    }
 
 
     public function render()
     {
-        $infos = $this->filterData();
-
         return view('livewire.backend.users.users-manage', [
-            'infos' => $infos
+            'infos' => $this->loaded
         ]);
     }
+
+
 
 
 
@@ -88,6 +94,7 @@ class UsersManage extends BaseComponent
         $this->dispatch('closemodal');
 
         $this->toast('User registered Successfully!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -154,26 +161,28 @@ class UsersManage extends BaseComponent
 
         $this->dispatch('closemodal');
         $this->toast('User has been updated!', 'success');
+        $this->resetLoaded();
     }
 
 
     /* process while update */
     public function searchUsers()
     {
-        $this->resetPage();
+        $this->resetLoaded();
     }
 
 
 
-
-
-
-    public function filterData()
+    // Load more function
+    public function loadMore()
     {
+        if (!$this->hasMore) return;
+
         $query = User::where('user_type', 'user');
 
         if ($this->search && $this->search != '') {
             $searchTerm = '%' . $this->search . '%';
+
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('f_name', 'like', $searchTerm)
                     ->orWhere('l_name', 'like', $searchTerm)
@@ -182,9 +191,36 @@ class UsersManage extends BaseComponent
             });
         }
 
-        return $query->latest()->paginate(10);
+        if ($this->lastId) {
+            $query->where('id', '<', $this->lastId);
+        }
+
+        $items = $query->orderBy('id', 'desc')
+            ->limit($this->perPage)
+            ->get();
+
+        if ($items->count() == 0) {
+            $this->hasMore = false;
+            return;
+        }
+
+        if ($items->count() < $this->perPage) {
+            $this->hasMore = false;
+        }
+
+        $this->lastId = $items->last()->id;
+        $this->loaded = $this->loaded->merge($items);
     }
 
+
+    // Reset loaded collection
+    private function resetLoaded()
+    {
+        $this->loaded = collect();
+        $this->lastId = null;
+        $this->hasMore = true;
+        $this->loadMore();
+    }
 
 
 
@@ -194,6 +230,7 @@ class UsersManage extends BaseComponent
 
 
         $this->toast('User has been deleted!', 'success');
+        $this->resetLoaded();
     }
 
 
@@ -213,5 +250,6 @@ class UsersManage extends BaseComponent
 
 
         $this->toast('Status updated successfully!', 'success');
+        $this->resetLoaded();
     }
 }

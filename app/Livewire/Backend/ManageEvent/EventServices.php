@@ -5,9 +5,8 @@ namespace App\Livewire\Backend\ManageEvent;
 use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\EventService as ModelsEventService;
 use App\Services\EventService;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Pagination\Cursor;
 use Livewire\WithFileUploads;
+
 
 class EventServices extends BaseComponent
 {
@@ -18,11 +17,13 @@ class EventServices extends BaseComponent
 
 
     use WithFileUploads;
+    public $perPage = 1;
+    public $loaded;
+    public $lastId = null;
+    public $hasMore = true;
 
     public $editMode = false;
-    public $nextCursor;
-    protected $currentCursor;
-    public $hasMorePages;
+
 
     protected $eventService;
 
@@ -45,18 +46,20 @@ class EventServices extends BaseComponent
 
     public function mount()
     {
-
-        $this->eventServices = new EloquentCollection();
-
-
-        $this->loadEventServices();
+        $this->loaded = collect();
+        $this->loadMore();
     }
+
 
 
     public function render()
     {
-        return view('livewire.backend.manage-event.event-services');
+        return view('livewire.backend.manage-event.event-services', [
+            'infos' => $this->loaded
+        ]);
     }
+
+
 
 
     /* reset input file */
@@ -91,15 +94,11 @@ class EventServices extends BaseComponent
         $this->dispatch('closemodal');
 
         $this->toast('Event service saved Successfully!', 'success');
+
+        $this->resetLoaded();
     }
 
 
-
-    /* process while update */
-    public function updated()
-    {
-        $this->reloadEventServices();
-    }
 
 
 
@@ -141,13 +140,15 @@ class EventServices extends BaseComponent
         ]);
 
 
-        $this->refresh();
+
         $this->resetInputFields();
         $this->editMode = false;
 
 
         $this->dispatch('closemodal');
         $this->toast('Event service has been updated successfully!', 'success');
+
+        $this->resetLoaded();
     }
 
 
@@ -155,83 +156,68 @@ class EventServices extends BaseComponent
     /* process while update */
     public function searchService()
     {
-        if ($this->search != '') {
-            $this->eventServices = ModelsEventService::where('title', 'like', '%' . $this->search)
-                ->latest()
-                ->get();
-        } elseif ($this->search == '') {
-            $this->eventServices = new EloquentCollection();
-        }
 
-        $this->reloadEventServices();
+        $this->resetLoaded();
     }
 
 
 
-    /* refresh the page */
-    public function refresh()
-    {
-        /* if search query or order filter is empty */
-        if ($this->search == '') {
-            $this->eventServices = $this->eventServices->fresh();
-        }
-    }
-    public function loadEventServices()
-    {
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $eventServiceslist = $this->filterdata();
-        $this->eventServices->push(...$eventServiceslist->items());
-        if ($this->hasMorePages = $eventServiceslist->hasMorePages()) {
-            $this->nextCursor = $eventServiceslist->nextCursor()->encode();
-        }
-        $this->currentCursor = $eventServiceslist->cursor();
-    }
 
-
-    public function filterdata()
+    // Load more function
+    public function loadMore()
     {
+        if (!$this->hasMore) return;
+
         $query = ModelsEventService::query();
-
         if ($this->search && $this->search != '') {
-            $searchTerm = '%' . $this->search . '%';
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('title', 'like', $searchTerm);
-            });
+            $query->where('title', 'like', '%' . $this->search . '%');
         }
 
-        $data = $query->latest()
-            ->cursorPaginate(10, ['*'], 'cursor', $this->nextCursor ? Cursor::fromEncoded($this->nextCursor) : null);
+        if ($this->lastId) {
+            $query->where('id', '<', $this->lastId);
+        }
 
-        return $data;
+        $items = $query->orderBy('id', 'desc')
+            ->limit($this->perPage)
+            ->get();
+
+
+
+        if ($items->count() < $this->perPage) {
+            $this->hasMore = false;
+        }
+
+
+
+        if ($items->count()) {
+            $this->lastId = $items->last()->id;
+            $this->loaded = $this->loaded->merge($items);
+        }
     }
 
-
-    public function reloadEventServices()
+    // Reset loaded collection
+    private function resetLoaded()
     {
-        $this->eventServices = new EloquentCollection();
-        $this->nextCursor = null;
-        $this->hasMorePages = null;
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $eventServices = $this->filterdata();
-        $this->eventServices->push(...$eventServices->items());
-        if ($this->hasMorePages = $eventServices->hasMorePages()) {
-            $this->nextCursor = $eventServices->nextCursor()->encode();
-        }
-        $this->currentCursor = $eventServices->cursor();
+        $this->loaded = collect();
+        $this->lastId = null;
+        $this->hasMore = true;
+        $this->loadMore();
     }
+
+
+
+
 
 
     public function deleteService($id)
     {
         $this->eventService->deleteEventService($id);
 
-        $this->reloadEventServices();
+
 
         $this->toast('Service has been deleted!', 'success');
+
+        $this->resetLoaded();
     }
 
 
@@ -279,7 +265,6 @@ class EventServices extends BaseComponent
         $this->eventService->saveServiceImagesGallery($this->service_id, $this->images, $this->removedImages);
 
 
-        $this->refresh();
         $this->resetInputFields();
         $this->editMode = false;
 
@@ -288,5 +273,7 @@ class EventServices extends BaseComponent
 
 
         $this->toast('Images saved successfully!', 'success');
+
+        $this->resetLoaded();
     }
 }

@@ -109,6 +109,16 @@
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
     </script>
+
+    <script>
+        window.addEventListener('reload-page', event => {
+
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        });
+    </script>
+
     @stack('js')
 
 
