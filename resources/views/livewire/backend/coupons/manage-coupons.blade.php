@@ -49,7 +49,7 @@
                                     $i = 1;
                                 @endphp
 
-                                @foreach ($items as $row)
+                                @forelse($infos as $index => $row)
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>
@@ -92,34 +92,19 @@
                                             </a>
                                         </td>
                                     </tr>
-                                @endforeach
+
+                                @empty
+                                    <tr>
+                                        <td colspan="4">No coupons found</td>
+                                    </tr>
+                                @endforelse
+
+
                             </tbody>
                         </table>
-                        @if ($hasMorePages)
-                            <div x-data="{
-                                init() {
-                                    let observer = new IntersectionObserver((entries) => {
-                                        entries.forEach(entry => {
-                                            if (entry.isIntersecting) {
-                                                @this.call('loadCouponManageData')
-                                                console.log('loading...')
-                                            }
-                                        })
-                                    }, {
-                                        root: null
-                                    });
-                                    observer.observe(this.$el);
-                                }
-                            }"
-                                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
-                                <div class="text-center pb-2 d-flex justify-content-center align-items-center">
-                                    Loading...
-                                    <div class="spinner-grow d-inline-flex mx-2 text-primary" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+                        <div class="mt-3">
+                            {{ $infos->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>

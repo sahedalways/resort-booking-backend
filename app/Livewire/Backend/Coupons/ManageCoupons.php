@@ -8,17 +8,16 @@ use App\Services\CouponManage\CouponManageService;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Pagination\Cursor;
+use Livewire\WithPagination;
 
 
 class ManageCoupons extends BaseComponent
 {
     public $items, $item, $id, $code, $discount_value, $status = 'active', $search;
-
+    use WithPagination;
 
     public $editMode = false;
-    public $nextCursor;
-    protected $currentCursor;
-    public $hasMorePages;
+
 
     protected $couponManage;
 
@@ -44,19 +43,15 @@ class ManageCoupons extends BaseComponent
         ];
     }
 
-    public function mount()
-    {
-
-        $this->items = new EloquentCollection();
-
-
-        $this->loadCouponManageData();
-    }
 
 
     public function render()
     {
-        return view('livewire.backend.coupons.manage-coupons');
+        $infos = $this->filterData();
+
+        return view('livewire.backend.coupons.manage-coupons', [
+            'infos' => $infos
+        ]);
     }
 
 
@@ -92,12 +87,6 @@ class ManageCoupons extends BaseComponent
 
 
 
-    /* process while update */
-    public function updated()
-    {
-        $this->reloadCouponManageData();
-    }
-
 
 
     public function edit($id)
@@ -132,8 +121,6 @@ class ManageCoupons extends BaseComponent
         ]);
 
 
-
-        $this->refresh();
         $this->resetInputFields();
         $this->editMode = false;
 
@@ -147,42 +134,11 @@ class ManageCoupons extends BaseComponent
     /* process while update */
     public function searchCoupon()
     {
-        if ($this->search != '') {
-            $this->items = Coupon::where('code', 'like', '%' . $this->search)
-                ->latest()
-                ->get();
-        } elseif ($this->search == '') {
-            $this->items = new EloquentCollection();
-        }
-
-        $this->reloadCouponManageData();
+        $this->resetPage();
     }
 
 
-
-    /* refresh the page */
-    public function refresh()
-    {
-
-        if ($this->search == '') {
-            $this->items = $this->items->fresh();
-        }
-    }
-    public function loadCouponManageData()
-    {
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $list = $this->filterdata();
-        $this->items->push(...$list->items());
-        if ($this->hasMorePages = $list->hasMorePages()) {
-            $this->nextCursor = $list->nextCursor()->encode();
-        }
-        $this->currentCursor = $list->cursor();
-    }
-
-
-    public function filterdata()
+    public function filterData()
     {
         $query = Coupon::query();
 
@@ -193,35 +149,16 @@ class ManageCoupons extends BaseComponent
             });
         }
 
-        $data = $query->latest()
-            ->cursorPaginate(10, ['*'], 'cursor', $this->nextCursor ? Cursor::fromEncoded($this->nextCursor) : null);
-
-        return $data;
+        return $query->latest()->paginate(10);
     }
 
 
-    public function reloadCouponManageData()
-    {
-        $this->items = new EloquentCollection();
-        $this->nextCursor = null;
-        $this->hasMorePages = null;
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $data = $this->filterdata();
-        $this->items->push(...$data->items());
-        if ($this->hasMorePages = $data->hasMorePages()) {
-            $this->nextCursor = $data->nextCursor()->encode();
-        }
-        $this->currentCursor = $data->cursor();
-    }
 
 
     public function deleteItem($id)
     {
         $this->couponManage->deleteCouponManage($id);
 
-        $this->reloadCouponManageData();
 
         $this->toast('Coupon has been deleted!', 'success');
     }
