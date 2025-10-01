@@ -16,7 +16,8 @@ class Room extends Model
         'adult_cap',
         'child_cap',
         'price_per',
-        'package_name'
+        'package_name',
+        'is_active',
     ];
 
     public function resort()

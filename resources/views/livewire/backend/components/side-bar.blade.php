@@ -121,6 +121,13 @@
                     <div class="collapse {{ Request::is('admin/room-manage*') ? 'show' : '' }}" id="roomManage">
                         <ul class="nav ms-4">
                             <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/room-manage') ? 'active' : '' }}"
+                                    href="{{ route('admin.room-manage.index') }}">
+                                    <i class="fas fa-door-open text-danger text-sm opacity-10"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Manage Rooms </span>
+                                </a>
+
+
                                 <a class="nav-link {{ Request::is('admin/room-manage/bed-type') ? 'active' : '' }}"
                                     href="{{ route('admin.room-manage.bed-type') }}">
                                     <i class="fas fa-bed sidenav-mini-icon side-bar-inner"></i>

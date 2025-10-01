@@ -15,14 +15,21 @@ return new class extends Migration
             $table->id();
             $table->foreignId('resort_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->foreignId('bed_type_id')->nullable()->constrained('room_bed_types');
+            $table->foreignId('bed_type_id')
+                ->nullable()
+                ->constrained('room_bed_types')
+                ->onDelete('set null');
             $table->decimal('area', 8, 2)->nullable();
-            $table->foreignId('view_type_id')->nullable()->constrained('room_view_types');
+            $table->foreignId('view_type_id')
+                ->nullable()
+                ->constrained('room_view_types')
+                ->onDelete('set null');
             $table->decimal('price', 10, 2);
             $table->unsignedTinyInteger('adult_cap')->default(1);
             $table->unsignedTinyInteger('child_cap')->default(0);
             $table->decimal('price_per', 10, 2)->nullable();
             $table->string('package_name')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
