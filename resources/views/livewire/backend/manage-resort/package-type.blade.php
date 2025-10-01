@@ -43,13 +43,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $i = 1;
-                                @endphp
 
-                                @foreach ($pt_infos as $row)
+
+
+                                @forelse($infos as $index => $row)
                                     <tr>
-                                        <td>{{ $i++ }}</td>
+                                        <td>{{ $loop->iteration + ($infos->firstItem() - 1) }}</td>
                                         <td>
                                             <p class="text-sm font-weight-bold mb-0">
                                                 {!! fa_icon($row->icon) !!}
@@ -75,34 +74,18 @@
                                             </a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="4">No package types found</td>
+                                    </tr>
+                                @endforelse
+
+
                             </tbody>
                         </table>
-                        @if ($hasMorePages)
-                            <div x-data="{
-                                init() {
-                                    let observer = new IntersectionObserver((entries) => {
-                                        entries.forEach(entry => {
-                                            if (entry.isIntersecting) {
-                                                @this.call('loadResortPtData')
-                                                console.log('loading...')
-                                            }
-                                        })
-                                    }, {
-                                        root: null
-                                    });
-                                    observer.observe(this.$el);
-                                }
-                            }"
-                                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
-                                <div class="text-center pb-2 d-flex justify-content-center align-items-center">
-                                    Loading...
-                                    <div class="spinner-grow d-inline-flex mx-2 text-primary" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+                        <div class="mt-3">
+                            {{ $infos->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -168,8 +151,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
-                        <button type="submit" class="btn btn-success" wire:loading.attr="disabled"
-                            wire:target="store">
+                        <button type="submit" class="btn btn-success" wire:loading.attr="disabled" wire:target="store">
                             <span wire:loading wire:target="store">
                                 <i class="fas fa-spinner fa-spin me-2"></i> Saving...
                             </span>

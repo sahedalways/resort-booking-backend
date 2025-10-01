@@ -8,15 +8,15 @@ use App\Services\UserService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Pagination\Cursor;
 use Illuminate\Validation\Rule;
+use Livewire\WithPagination;
 
 class UsersManage extends BaseComponent
 {
     public $users, $user,  $user_id, $first_name, $last_name, $email, $phone_no, $password, $password_confirmation, $is_active = true, $search;
 
+    use WithPagination;
     public $editMode = false;
-    public $nextCursor;
-    protected $currentCursor;
-    public $hasMorePages;
+
 
     protected $userService;
 
@@ -41,19 +41,15 @@ class UsersManage extends BaseComponent
 
 
 
-    public function mount()
-    {
-
-        $this->users = new EloquentCollection();
-
-
-        $this->loadUsers();
-    }
 
 
     public function render()
     {
-        return view('livewire.backend.users.users-manage');
+        $infos = $this->filterData();
+
+        return view('livewire.backend.users.users-manage', [
+            'infos' => $infos
+        ]);
     }
 
 
@@ -74,6 +70,7 @@ class UsersManage extends BaseComponent
     /* store User data */
     public function store()
     {
+
         $this->validate();
 
         $this->userService->register([
@@ -95,11 +92,7 @@ class UsersManage extends BaseComponent
 
 
 
-    /* process while update */
-    public function updated($name, $value)
-    {
-        $this->reloadUsers();
-    }
+
 
 
 
@@ -155,7 +148,7 @@ class UsersManage extends BaseComponent
             'is_active'  => $this->is_active,
         ]);
 
-        $this->refresh();
+
         $this->resetInputFields();
         $this->editMode = false;
 
@@ -167,45 +160,15 @@ class UsersManage extends BaseComponent
     /* process while update */
     public function searchUsers()
     {
-        if ($this->search != '') {
-            $this->users = User::where('f_name', 'like', '%' . $this->search)
-                ->where('l_name', 'like', '%' . $this->search . '%')
-                ->where('email', 'like', '%' . $this->search . '%')
-                ->where('phone_no', 'like', '%' . $this->search . '%')
-                ->latest()
-                ->get();
-        } elseif ($this->search == '') {
-            $this->users = new EloquentCollection();
-        }
-
-        $this->reloadUsers();
+        $this->resetPage();
     }
 
 
 
-    /* refresh the page */
-    public function refresh()
-    {
-        /* if search query or order filter is empty */
-        if ($this->search == '') {
-            $this->users = $this->users->fresh();
-        }
-    }
-    public function loadUsers()
-    {
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $userlist = $this->filterdata();
-        $this->users->push(...$userlist->items());
-        if ($this->hasMorePages = $userlist->hasMorePages()) {
-            $this->nextCursor = $userlist->nextCursor()->encode();
-        }
-        $this->currentCursor = $userlist->cursor();
-    }
 
 
-    public function filterdata()
+
+    public function filterData()
     {
         $query = User::where('user_type', 'user');
 
@@ -219,35 +182,16 @@ class UsersManage extends BaseComponent
             });
         }
 
-        $users = $query->latest()
-            ->cursorPaginate(10, ['*'], 'cursor', $this->nextCursor ? Cursor::fromEncoded($this->nextCursor) : null);
-
-        return $users;
+        return $query->latest()->paginate(10);
     }
 
 
-    public function reloadUsers()
-    {
-        $this->users = new EloquentCollection();
-        $this->nextCursor = null;
-        $this->hasMorePages = null;
-        if ($this->hasMorePages !== null && !$this->hasMorePages) {
-            return;
-        }
-        $users = $this->filterdata();
-        $this->users->push(...$users->items());
-        if ($this->hasMorePages = $users->hasMorePages()) {
-            $this->nextCursor = $users->nextCursor()->encode();
-        }
-        $this->currentCursor = $users->cursor();
-    }
 
 
     public function deleteUser($id)
     {
         $this->userService->deleteUser($id);
 
-        $this->reloadUsers();
 
         $this->toast('User has been deleted!', 'success');
     }
@@ -266,7 +210,7 @@ class UsersManage extends BaseComponent
         $item->save();
 
         $this->users =  $this->userService->getAllUsers();
-        $this->refresh();
+
 
         $this->toast('Status updated successfully!', 'success');
     }
