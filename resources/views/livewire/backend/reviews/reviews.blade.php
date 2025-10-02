@@ -26,7 +26,7 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th>#</th>
-                                    <th>User</th>
+                                    <th>User </th>
                                     <th>Resort</th>
                                     <th>Comment</th>
                                     <th>Star</th>
@@ -40,7 +40,12 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>
-                                            {{ optional($row->user)->f_name }} {{ optional($row->user)->l_name }}
+                                            @if ($row->user)
+                                                {{ $row->user->f_name }} {{ $row->user->l_name }} <br>
+                                                <small class="text-muted">{{ $row->user->email }}</small>
+                                            @else
+                                                <span class="text-danger">No User</span>
+                                            @endif
                                         </td>
                                         <td>{{ optional($row->resort)->name }}</td>
 

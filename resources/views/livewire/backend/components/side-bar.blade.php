@@ -147,6 +147,66 @@
 
 
 
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#bookingManage"
+                        class="nav-link {{ Request::is('admin/booking-info*') ? 'active' : '' }}"
+                        aria-controls="bookingManage" role="button" aria-expanded="false">
+                        <div
+                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-folder-open text-primary text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Booking Info</span>
+                    </a>
+
+                    <div class="collapse {{ Request::is('admin/booking-info*') ? 'show' : '' }}" id="bookingManage">
+                        <ul class="nav ms-4">
+
+                            {{-- Pending --}}
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/booking-info/pending') ? 'active' : '' }}"
+                                    href="{{ route('admin.booking-info.pending') }}">
+                                    <i
+                                        class="fa-solid fa-hourglass-half sidenav-mini-icon side-bar-inner text-warning"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Pending Bookings </span>
+                                </a>
+                            </li>
+
+                            {{-- Confirmed --}}
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/booking-info/confirm') ? 'active' : '' }}"
+                                    href="{{ route('admin.booking-info.confirm') }}">
+                                    <i
+                                        class="fa-solid fa-circle-check sidenav-mini-icon side-bar-inner text-success"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Confirmed Bookings </span>
+                                </a>
+                            </li>
+
+                            {{-- Cancelled --}}
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/booking-info/cancelled') ? 'active' : '' }}"
+                                    href="{{ route('admin.booking-info.cancelled') }}">
+                                    <i class="fa-solid fa-ban sidenav-mini-icon side-bar-inner text-danger"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Cancelled Bookings </span>
+                                </a>
+                            </li>
+
+                            {{-- Completed --}}
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/booking-info/completed') ? 'active' : '' }}"
+                                    href="{{ route('admin.booking-info.completed') }}">
+                                    <i
+                                        class="fa-solid fa-clipboard-check sidenav-mini-icon side-bar-inner text-primary"></i>
+                                    <span class="sidenav-normal side-bar-inner"> Completed Bookings </span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+
+
+
 
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#eventManage"
@@ -183,6 +243,17 @@
                         </ul>
                     </div>
                 </li>
+
+
+
+
+
+
+
+
+
+
+
 
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('admin/coupons*') ? 'active' : '' }}"

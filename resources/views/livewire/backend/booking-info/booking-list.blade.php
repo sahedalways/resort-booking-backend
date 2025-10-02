@@ -1,0 +1,115 @@
+<div>
+    <div class="row align-items-center justify-content-between mb-4">
+        <div class="col">
+            <h5 class="fw-500 text-white">
+                Booking Info - {{ ucfirst($status) }}
+            </h5>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header p-4">
+                    <div class="row">
+                        <div class="col-md-12" wire:ignore>
+                            <input type="text" class="form-control" placeholder="Search booking info..."
+                                wire:model="search" />
+                            <button type="button" wire:click="searchBooking" class="btn btn-primary mt-2">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>User</th>
+                                    <th>Resort</th>
+                                    <th>Room</th>
+                                    <th>Amount</th>
+                                    <th>CheckIn Date</th>
+                                    <th>Checkout Date</th>
+                                    <th>Booking Created</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($infos as $index => $row)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>
+                                            {{ optional($row->user)->f_name }} {{ optional($row->user)->l_name }}<br>
+                                            <small class="text-muted">{{ optional($row->user)->email }}</small>
+                                        </td>
+                                        <td>{{ optional($row->resort)->name }}</td>
+                                        <td>{{ optional($row->room)->name }}</td>
+                                        <td>{{ $row->amount }} {{ $row->currency ?? 'BDT' }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($row->start_date)->format('d M, Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($row->end_date)->format('d M, Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d M, Y h:i A') }}</td>
+                                        <td>
+                                            <span
+                                                class="badge 
+                        @if ($row->status == 'pending') bg-warning
+                        @elseif($row->status == 'confirmed') bg-success
+                        @elseif($row->status == 'cancelled') bg-danger
+                        @elseif($row->status == 'completed') bg-primary
+                        @else bg-secondary @endif
+                        text-white px-2 py-1">
+                                                {{ ucfirst($row->status) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="#"
+                                                wire:click.prevent="$emit('deleteItem', {{ $row->id }})"
+                                                class="btn btn-danger btn-sm">Delete</a>
+                                        </td>
+
+
+                                        @if ($row->status === 'pending')
+                                            <a href="#" wire:click.prevent="confirmBooking({{ $row->id }})"
+                                                class="btn btn-success btn-sm ms-1">Confirm</a>
+                                        @endif
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="12" class="text-center">No bookings found!</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+
+                        @if ($hasMore)
+                            <div class="text-center mt-4">
+                                <button wire:click="loadMore"
+                                    class="btn btn-sm btn-outline-primary rounded-pill px-4 py-2">
+                                    Load More
+                                </button>
+                            </div>
+                        @endif
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Livewire.on('confirmDelete', id => {
+        if (confirm("Are you sure you want to delete this booking info? This action cannot be undone.")) {
+            Livewire.dispatch('deleteItem', {
+                id: id
+            });
+        }
+    });
+</script>

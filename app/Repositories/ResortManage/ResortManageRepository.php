@@ -103,7 +103,13 @@ class ResortManageRepository
 
       $img = Image::read($image->getRealPath());
 
-      $path = storage_path('app/public/image/resort/' . $filename);
+      $directory = storage_path('app/public/image/resort');
+
+      if (!file_exists($directory)) {
+        mkdir($directory, 0755, true);
+      }
+
+      $path = $directory . '/' . $filename;
       $img->save($path);
 
       ResortImage::create([
