@@ -47,7 +47,7 @@ class Payments extends BaseComponent
 
 
     /* process while update */
-    public function searchBT()
+    public function searchPayment()
     {
         $this->resetLoaded();
     }
@@ -68,7 +68,8 @@ class Payments extends BaseComponent
             $query->where(function ($q) use ($search) {
 
                 $q->whereHas('user', function ($q2) use ($search) {
-                    $q2->where('f_name', 'like', '%' . $search . '%')
+                    $q2->where('f_name', 'like', '%' . $search . '%');
+                    $q2->where('email', 'like', '%' . $search . '%')
                         ->orWhere('l_name', 'like', '%' . $search . '%');
                 });
 

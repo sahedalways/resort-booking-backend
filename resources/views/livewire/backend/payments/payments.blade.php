@@ -97,13 +97,3 @@
         }
     });
 </script>
-
-<script>
-    Livewire.on('confirmDelete', id => {
-        if (confirm("Are you sure you want to delete this payment? This action cannot be undone.")) {
-            Livewire.dispatch('deletePaymentItem', {
-                id: id
-            });
-        }
-    });
-</script>
