@@ -139,7 +139,13 @@ class RoomManageRepository
 
       $img = Image::read($image->getRealPath());
 
-      $path = storage_path('app/public/image/room/' . $filename);
+      $directory = storage_path('app/public/image/room');
+
+      if (!file_exists($directory)) {
+        mkdir($directory, 0755, true);
+      }
+
+      $path = $directory . '/' . $filename;
       $img->save($path);
 
       RoomImage::create([
