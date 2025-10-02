@@ -227,6 +227,33 @@
 
 
 
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('admin/reviews*') ? 'active' : '' }}"
+                        href="{{ route('admin.reviews.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+
+                            <i class="fa-solid fa-star text-warning text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Rating & Reviews</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('admin/payments*') ? 'active' : '' }}"
+                        href="{{ route('admin.payments.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+
+                            <i class="fa-solid fa-credit-card text-success text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Payments</span>
+                    </a>
+                </li>
+
+
+
+
 
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#settings"
@@ -302,6 +329,9 @@
                     </div>
 
                 </li>
+
+
+
 
 
 

@@ -132,7 +132,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4">No rooms found!</td>
+                                        <td colspan="12" class="text-center">No rooms found!</td>
                                     </tr>
                                 @endforelse
 

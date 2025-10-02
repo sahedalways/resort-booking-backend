@@ -78,7 +78,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4">No package types found</td>
+                                        <td colspan="12" class="text-center">No package types found</td>
                                     </tr>
                                 @endforelse
 

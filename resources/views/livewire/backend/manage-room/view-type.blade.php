@@ -72,7 +72,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4">No view type items found!</td>
+                                        <td colspan="12" class="text-center">No view type items found!</td>
                                     </tr>
                                 @endforelse
 

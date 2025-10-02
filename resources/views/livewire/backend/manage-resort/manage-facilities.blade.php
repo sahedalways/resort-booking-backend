@@ -75,7 +75,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4">No facilities found!</td>
+                                        <td colspan="12" class="text-center">No facilities found!</td>
                                     </tr>
                                 @endforelse
                             </tbody>

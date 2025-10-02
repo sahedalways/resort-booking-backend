@@ -95,7 +95,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4">No event services found!</td>
+                                        <td colspan="12" class="text-center">No event services found!</td>
                                     </tr>
                                 @endforelse
 

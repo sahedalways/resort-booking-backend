@@ -95,7 +95,7 @@
 
                                 @empty
                                     <tr>
-                                        <td colspan="4">No coupons found</td>
+                                        <td colspan="12" class="text-center">No coupons found!</td>
                                     </tr>
                                 @endforelse
 

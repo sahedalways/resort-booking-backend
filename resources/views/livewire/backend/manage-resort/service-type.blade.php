@@ -71,7 +71,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4">No service types found!</td>
+                                        <td colspan="12" class="text-center">No service types found!</td>
                                     </tr>
                                 @endforelse
 

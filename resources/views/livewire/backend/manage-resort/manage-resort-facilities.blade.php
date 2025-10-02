@@ -107,7 +107,7 @@
 
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center text-muted">No Facilities Found</td>
+                                            <td colspan="12" class="text-center text-muted">No Facilities Found!</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

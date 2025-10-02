@@ -71,7 +71,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4">No bed type items found!</td>
+                                        <td colspan="12" class="text-center">No bed type items found!</td>
                                     </tr>
                                 @endforelse
 

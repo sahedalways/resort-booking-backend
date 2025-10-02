@@ -15,6 +15,8 @@ use App\Livewire\Backend\ManageResort\ServiceType;
 use App\Livewire\Backend\ManageRoom\BedType;
 use App\Livewire\Backend\ManageRoom\ManageRoom;
 use App\Livewire\Backend\ManageRoom\ViewType;
+use App\Livewire\Backend\Payments\Payments;
+use App\Livewire\Backend\Reviews\Reviews;
 use App\Livewire\Backend\Settings\ContactInfoSettings;
 use App\Livewire\Backend\Settings\MailSettings;
 use App\Livewire\Backend\Settings\PasswordSettings;
@@ -74,6 +76,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
     Route::get('/view-type', ViewType::class)->name('view-type');
     Route::get('/bed-type', BedType::class)->name('bed-type');
     Route::get('/room/{id}', [RoomController::class, 'show'])->name('room.show');
+  });
+
+
+  // for payment route below
+  Route::prefix('/payments')->name('payments.')->group(function () {
+    Route::get('/', Payments::class)->name('index');
+  });
+
+
+  // for payment route below
+  Route::prefix('/reviews')->name('reviews.')->group(function () {
+    Route::get('/', Reviews::class)->name('index');
   });
 
 

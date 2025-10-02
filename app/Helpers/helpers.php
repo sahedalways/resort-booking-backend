@@ -68,4 +68,23 @@ if (!function_exists('siteSetting')) {
                      wire:click="toggleActive(' . $id . ')">' . $statusText . '</span>';
     }
   }
+
+
+  if (!function_exists('paymentStatusBadge')) {
+    function paymentStatusBadge(string $status): string
+    {
+      switch ($status) {
+        case 'completed':
+          return '<span class="badge bg-success text-white px-2 py-1">Completed</span>';
+        case 'pending':
+          return '<span class="badge bg-warning text-dark px-2 py-1">Pending</span>';
+        case 'failed':
+          return '<span class="badge bg-danger text-white px-2 py-1">Failed</span>';
+        case 'refunded':
+          return '<span class="badge bg-info text-white px-2 py-1">Refunded</span>';
+        default:
+          return '<span class="badge bg-secondary text-white px-2 py-1">Unknown</span>';
+      }
+    }
+  }
 }

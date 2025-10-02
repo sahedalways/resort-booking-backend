@@ -150,7 +150,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4">No resorts found!</td>
+                                        <td colspan="12" class="text-center">No resorts found!</td>
                                     </tr>
                                 @endforelse
 
