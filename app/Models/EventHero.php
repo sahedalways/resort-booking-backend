@@ -16,12 +16,11 @@ class EventHero extends Model
 
     protected $appends = ['hero_url'];
 
-
     // Accessor for hero image URL
     public function getHeroUrlAttribute()
     {
         return $this->hero_image
-            ? Storage::url("image/event/event-hero.{$this->hero_image}")
+            ? getFileUrlForFrontend("image/event/event-hero.{$this->hero_image}")
             : asset('assets/img/default-image.jpg');
     }
 }

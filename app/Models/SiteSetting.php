@@ -17,29 +17,29 @@ class SiteSetting extends Model
         'copyright_text',
     ];
 
+    protected $appends = ['hero_image_url', 'favicon_url', 'logo_url'];
 
-
-    // Accessor for Logo URL
+    // Accessor for logo_url
     public function getLogoUrlAttribute()
     {
         return $this->logo
-            ? Storage::url("image/settings/logo.{$this->logo}")
+            ? getFileUrlForFrontend('image/settings/logo.' . $this->logo)
             : asset('assets/img/default-image.jpg');
     }
 
-    // Accessor for Favicon URL
+    // Accessor for favicon_url
     public function getFaviconUrlAttribute()
     {
         return $this->favicon
-            ? Storage::url("image/settings/favicon.{$this->favicon}")
-            : asset('assets/img/default-image.jpg');
+            ? getFileUrlForFrontend('image/settings/favicon.' . $this->favicon)
+            : asset('assets/img/default-favicon.ico');
     }
 
-    // Accessor for Hero Image URL
+    // Accessor for hero_image_url
     public function getHeroImageUrlAttribute()
     {
         return $this->hero_image
-            ? Storage::url("image/settings/hero.{$this->hero_image}")
-            : asset('assets/img/default-image.jpg');
+            ? getFileUrlForFrontend('image/settings/hero.' . $this->hero_image)
+            : asset('assets/img/default-hero.jpg');
     }
 }
