@@ -32,7 +32,7 @@ class Resort extends Model
 
     public function facilities()
     {
-        return $this->hasMany(ResortFacilityOptionService::class, 'resort_id', 'id');
+        return $this->hasMany(ResortFacilityOptionService::class, 'resort_id', 'id')->select('id', 'type_name', 'icon', 'facility_id', 'resort_id');
     }
 
     public function lowestRoomPrice()

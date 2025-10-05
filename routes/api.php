@@ -35,6 +35,7 @@ Route::middleware(['cors'])->group(function () {
     // get resort data api
     Route::controller(ResortController::class)->group(function () {
         Route::get('resort-data', 'getResortData');
+        Route::get('single-resort-data/{id}', 'getSingleResortData');
     });
 });
 

@@ -22,6 +22,6 @@ class ResortFacilityOptionService extends Model
     // Facility relation
     public function facility()
     {
-        return $this->belongsTo(ResortRoomFacility::class, 'facility_id');
+        return $this->belongsTo(ResortRoomFacility::class, 'facility_id')->select('id', 'name', 'icon');
     }
 }
