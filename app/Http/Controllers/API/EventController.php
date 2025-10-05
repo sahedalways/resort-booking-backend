@@ -19,7 +19,7 @@ class EventController extends BaseController
 
 
             $eventServices = EventService::with(['images'])
-                ->select('id', 'title', 'thumbnail', 'description')
+                ->select('id', 'title', 'description')
                 ->latest()
                 ->get();
 
