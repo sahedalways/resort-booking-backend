@@ -14,6 +14,8 @@ class EventHero extends Model
         'phone_number',
     ];
 
+    protected $appends = ['hero_url'];
+
 
     // Accessor for hero image URL
     public function getHeroUrlAttribute()

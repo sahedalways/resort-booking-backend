@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\ResortController;
 use Illuminate\Http\Request;
@@ -32,10 +33,17 @@ Route::middleware(['cors'])->group(function () {
     });
 
 
-    // get resort data api
+    // resort data apis
     Route::controller(ResortController::class)->group(function () {
         Route::get('resort-data', 'getResortData');
         Route::get('single-resort-data/{id}', 'getSingleResortData');
+    });
+
+
+
+    // get event data apis
+    Route::controller(EventController::class)->group(function () {
+        Route::get('event-data', 'getEventData');
     });
 });
 
