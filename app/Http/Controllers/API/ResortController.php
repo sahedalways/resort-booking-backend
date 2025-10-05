@@ -15,56 +15,20 @@ class ResortController extends BaseController
         try {
             $perPage = 5;
 
-            $resorts = Resort::select('id', 'name', 'location', 'distance', 'package_id')
-                ->with([
-                    'images:id,resort_id,image',
-                    'packageType',
-                    'facilities',
-                    'facilities.facility',
-                ])
+            $resorts = Resort::with([
+                'images:id,resort_id,image',
+                'packageType',
+                'facilities',
+                'facilities.facility',
+                'additionalFacts',
+            ])
                 ->where('is_active', true)
                 ->latest()
                 ->paginate($perPage);
 
-
-            $resorts->getCollection()->transform(function ($resort) {
-                // Images
-                $resort->images->transform(fn($image) => getFileUrlForFrontend($image->image));
+            $resorts->getCollection()->transform(fn($resort) => $resort->transformForApi());
 
 
-                $grouped = $resort->facilities->groupBy('facility_id');
-
-                $resort->facilities = $grouped->map(function ($services, $facilityId) {
-                    $parent = $services->first()->facility;
-
-                    return [
-                        'name' => $parent->name ?? 'No Facility',
-                        'icon' => $parent->icon ?? null,
-                        'services' => $services->map(function ($service) {
-                            return [
-                                'type_name' => $service->type_name,
-                                'icon' => $service->icon,
-                            ];
-                        })->values(),
-                    ];
-                })->values();
-
-
-
-                // Package type
-                $resort->package_type = $resort->packageType ? [
-                    'icon' => $resort->packageType->icon,
-                    'type_name' => $resort->packageType->type_name,
-                    'is_refundable' => (bool) $resort->packageType->is_refundable,
-                ] : null;
-
-                unset($resort->packageType);
-
-                // Lowest price
-                $resort->lowest_price = $resort->lowestRoomPrice();
-
-                return $resort;
-            });
 
             return response()->json([
                 'success' => true,
@@ -98,27 +62,14 @@ class ResortController extends BaseController
                 'packageType',
                 'facilities',
                 'facilities.facility',
+                'additionalFacts',
                 'rooms' => function ($query) {
                     $query->where('is_active', true)
-                        ->select(
-                            'id',
-                            'resort_id',
-                            'name',
-                            'price',
-                            'bed_type_id',
-                            'area',
-                            'view_type_id',
-                            'adult_cap',
-                            'child_cap',
-                            'package_name',
-                            'desc',
-                            'is_active'
-                        )
+                        ->select('id', 'resort_id', 'name', 'price', 'bed_type_id', 'area', 'view_type_id', 'adult_cap', 'child_cap', 'package_name', 'desc', 'is_active')
                         ->with([
                             'images:id,room_id,image',
                             'bedType:id,type_name',
                             'viewType:id,type_name',
-
                             'services.service:id,type_name,icon',
                             'rateDetails:id,room_id,title,is_active'
                         ]);
@@ -127,62 +78,7 @@ class ResortController extends BaseController
                 ->where('is_active', true)
                 ->findOrFail($id);
 
-            // Resort images → full URL
-            $resort->images->transform(fn($image) => getFileUrlForFrontend($image->image));
-
-
-
-            $grouped = $resort->facilities->groupBy('facility_id');
-
-            $resort->facilities = $grouped->map(function ($services, $facilityId) {
-                $parent = $services->first()->facility;
-
-                return [
-                    'name' => $parent->name ?? 'No Facility',
-                    'icon' => $parent->icon ?? null,
-                    'services' => $services->map(function ($service) {
-                        return [
-                            'type_name' => $service->type_name,
-                            'icon' => $service->icon,
-                        ];
-                    })->values(),
-                ];
-            })->values();
-
-
-            // Package type → icon, type_name, is_refundable
-            $resort->package_type = $resort->packageType ? [
-                'icon' => $resort->packageType->icon,
-                'type_name' => $resort->packageType->type_name,
-                'is_refundable' => (bool) $resort->packageType->is_refundable,
-            ] : null;
-
-
-            unset($resort->packageType);
-
-
-
-            // Rooms → transform data
-            $resort->rooms->transform(function ($room) {
-                // Room images → full URL
-                $room->images->transform(fn($image) => getFileUrlForFrontend($image->image));
-
-                // Services → name & icon
-                $room->services->transform(fn($service) => [
-                    'name' => $service->service->type_name ?? $service->type_name,
-                    'icon' => $service->service->icon ?? $service->icon,
-                ]);
-
-                // RateDetails → only id, room_id, title, is_active
-                $room->rateDetails->transform(fn($rate) => [
-                    'id' => $rate->id,
-                    'room_id' => $rate->room_id,
-                    'title' => $rate->title,
-                    'is_active' => (bool)$rate->is_active,
-                ]);
-
-                return $room;
-            });
+            $resort->transformForApi();
 
 
 

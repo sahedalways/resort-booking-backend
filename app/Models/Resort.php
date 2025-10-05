@@ -21,7 +21,7 @@ class Resort extends Model
 
     public function additionalFacts()
     {
-        return $this->hasMany(ResortAdditionalFact::class);
+        return $this->hasMany(ResortAdditionalFact::class)->select('id', 'name', 'resort_id');
     }
 
     public function packageType()
@@ -40,5 +40,66 @@ class Resort extends Model
         return $this->rooms()
             ->where('is_active', true)
             ->min('price');
+    }
+
+
+
+    public function transformForApi()
+    {
+
+        $this->images->transform(fn($image) => getFileUrlForFrontend($image->image));
+
+
+        $grouped = $this->facilities->groupBy('facility_id');
+        $this->facilities = $grouped->map(function ($services, $facilityId) {
+            $parent = $services->first()->facility;
+
+            return [
+                'name' => $parent->name ?? 'No Facility',
+                'icon' => $parent->icon ?? null,
+                'services' => $services->map(function ($service) {
+                    return [
+                        'type_name' => $service->type_name,
+                        'icon' => $service->icon,
+                    ];
+                })->values(),
+            ];
+        })->values();
+
+        // Package type → icon, type_name, is_refundable
+        $this->package_type = $this->packageType ? [
+            'icon' => $this->packageType->icon,
+            'type_name' => $this->packageType->type_name,
+            'is_refundable' => (bool) $this->packageType->is_refundable,
+        ] : null;
+
+        unset($this->packageType);
+
+        // Lowest room price
+        $this->lowest_price = $this->lowestRoomPrice();
+
+        // Rooms → transform
+        $this->rooms->transform(function ($room) {
+            // Images
+            $room->images->transform(fn($image) => getFileUrlForFrontend($image->image));
+
+            // Services
+            $room->services->transform(fn($service) => [
+                'name' => $service->service->type_name ?? $service->type_name,
+                'icon' => $service->service->icon ?? $service->icon,
+            ]);
+
+            // Rate details
+            $room->rateDetails->transform(fn($rate) => [
+                'id' => $rate->id,
+                'room_id' => $rate->room_id,
+                'title' => $rate->title,
+                'is_active' => (bool) $rate->is_active,
+            ]);
+
+            return $room;
+        });
+
+        return $this;
     }
 }
