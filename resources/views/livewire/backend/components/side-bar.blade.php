@@ -6,7 +6,7 @@
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0" href="{{ route('admin.dashboard') }}">
             <img src="{{ asset(siteSetting()->logo_url) }}" class="navbar-brand-img h-100 scale-200" alt="main_logo">
-            <span class="ms-2 h6 font-weight-bold text-uppercase">{{ siteSetting()->site_title }} </span>
+            <span class="ms-2 h6 font-weight-bold ">{{ siteSetting()->site_title }} </span>
 
         </a>
 

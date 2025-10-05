@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,12 @@ Route::middleware(['cors'])->group(function () {
         Route::post('forgot-password', 'forgotPassword');
         Route::post('match-otp', 'matchPincode');
         Route::post('change-password', 'changePassword');
+    });
+
+
+    // get home data api
+    Route::controller(HomeController::class)->group(function () {
+        Route::get('home-data', 'getHomeData');
     });
 });
 
