@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\HomeController;
+use App\Http\Controllers\API\ResortController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,12 @@ Route::middleware(['cors'])->group(function () {
     // get home data api
     Route::controller(HomeController::class)->group(function () {
         Route::get('home-data', 'getHomeData');
+    });
+
+
+    // get resort data api
+    Route::controller(ResortController::class)->group(function () {
+        Route::get('resort-data', 'getResortData');
     });
 });
 

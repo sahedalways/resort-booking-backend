@@ -12,7 +12,7 @@ class UsersManage extends BaseComponent
 {
     public $users, $user,  $user_id, $first_name, $last_name, $email, $phone_no, $password, $password_confirmation, $is_active = true, $search;
 
-    public $perPage = 1;
+    public $perPage = 10;
     public $loaded;
     public $lastId = null;
     public $hasMore = true;

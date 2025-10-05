@@ -17,7 +17,7 @@ class EventServices extends BaseComponent
 
 
     use WithFileUploads;
-    public $perPage = 1;
+    public $perPage = 10;
     public $loaded;
     public $lastId = null;
     public $hasMore = true;

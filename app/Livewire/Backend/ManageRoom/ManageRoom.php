@@ -33,7 +33,7 @@ class ManageRoom extends BaseComponent
     public $is_active = true;
 
     public $editMode = false;
-    public $perPage = 1;
+    public $perPage = 10;
     public $loaded;
     public $lastId = null;
     public $hasMore = true;

@@ -24,4 +24,18 @@ if (!function_exists('getFileUrl')) {
 
     return asset($default);
   }
+
+
+
+  if (!function_exists('getFileUrlForFrontend')) {
+    function getFileUrlForFrontend(?string $path, string $default = 'assets/img/default-image.jpg'): string
+    {
+      if (!$path) {
+        return asset($default);
+      }
+
+
+      return asset('storage/' . ltrim($path, '/'));
+    }
+  }
 }

@@ -34,4 +34,11 @@ class Resort extends Model
     {
         return $this->hasMany(ResortFacilityOptionService::class, 'resort_id', 'id');
     }
+
+    public function lowestRoomPrice()
+    {
+        return $this->rooms()
+            ->where('is_active', true)
+            ->min('price');
+    }
 }
