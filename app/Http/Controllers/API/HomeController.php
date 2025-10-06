@@ -22,7 +22,7 @@ class HomeController extends BaseController
             if ($siteInfo) {
 
                 // Remove timestamps
-                unset($siteInfo->created_at, $siteInfo->updated_at, $siteInfo->id, $siteInfo->logo, $siteInfo->favicon, $siteInfo->hero_image, $siteInfo->site_title, $siteInfo->favicon_url, $siteInfo->logo_url);
+                unset($siteInfo->created_at, $siteInfo->updated_at, $siteInfo->id, $siteInfo->logo, $siteInfo->favicon,  $siteInfo->site_title, $siteInfo->favicon_url, $siteInfo->logo_url);
             }
 
             // Resorts info
