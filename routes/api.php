@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\EventController;
+use App\Http\Controllers\API\FooterController;
+use App\Http\Controllers\API\HeaderController;
 use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\ResortController;
 use Illuminate\Http\Request;
@@ -31,6 +33,20 @@ Route::middleware(['cors'])->group(function () {
     Route::controller(HomeController::class)->group(function () {
         Route::get('home-data', 'getHomeData');
     });
+
+
+
+    // get header data api
+    Route::controller(HeaderController::class)->group(function () {
+        Route::get('header-data', 'getHeaderData');
+    });
+
+
+    // get footer data api
+    Route::controller(FooterController::class)->group(function () {
+        Route::get('footer-data', 'getFooterData');
+    });
+
 
 
     // resort data apis

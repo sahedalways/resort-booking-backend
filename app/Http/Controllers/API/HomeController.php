@@ -22,7 +22,7 @@ class HomeController extends BaseController
             if ($siteInfo) {
 
                 // Remove timestamps
-                unset($siteInfo->created_at, $siteInfo->updated_at, $siteInfo->id);
+                unset($siteInfo->created_at, $siteInfo->updated_at, $siteInfo->id, $siteInfo->logo, $siteInfo->favicon, $siteInfo->hero_image, $siteInfo->site_title, $siteInfo->favicon_url, $siteInfo->logo_url);
             }
 
             // Resorts info
@@ -41,13 +41,7 @@ class HomeController extends BaseController
                 return $resort;
             });
 
-            // Contact info
-            $contactInfo = ContactInfoSettings::first();
-            unset($contactInfo->created_at, $contactInfo->updated_at, $contactInfo->id);
 
-            // Social links
-            $socialInfo = SocialInfoSettings::first();
-            unset($socialInfo->created_at, $socialInfo->updated_at, $socialInfo->id);
 
             // Feature images
             $featureImage = FeatureImage::first();
@@ -71,9 +65,7 @@ class HomeController extends BaseController
                 'data' => [
                     'site_info' => $siteInfo,
                     'resort_info' => $resortsInfo,
-                    'contact_info' => $contactInfo,
                     'coupons' => $coupons,
-                    'social_links' => $socialInfo,
                     'feature_images' => $featureImage,
                 ],
             ], 200);
