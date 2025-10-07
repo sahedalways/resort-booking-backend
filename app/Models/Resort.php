@@ -44,7 +44,7 @@ class Resort extends Model
 
 
 
-    public function transformForApi()
+    public function transformForApiForSingleResort()
     {
 
         $this->images->transform(fn($image) => getFileUrlForFrontend($image->image));
@@ -101,5 +101,52 @@ class Resort extends Model
         });
 
         return $this;
+    }
+
+
+
+    public function transformForApiAllResorts()
+    {
+        // Images → only first image and url
+        $this->images = $this->images->take(1)->map(fn($image) => getFileUrlForFrontend($image->image));
+
+        // Group facilities
+        $grouped = $this->facilities->groupBy('facility_id');
+        $this->facilities = $grouped->map(function ($services, $facilityId) {
+            $parent = $services->first()->facility;
+
+            return [
+                'name' => $parent->name ?? 'No Facility',
+                'icon' => $parent->icon ?? null,
+                'facility' => $services->map(fn($service) => [
+                    'type_name' => $service->type_name,
+                    'icon' => $service->icon,
+                ])->values(),
+            ];
+        })->values();
+
+        // Package type → icon, type_name, is_refundable
+        $this->package_type = $this->packageType ? [
+            'icon' => $this->packageType->icon,
+            'type_name' => $this->packageType->type_name,
+            'is_refundable' => (bool) $this->packageType->is_refundable,
+        ] : null;
+
+        unset($this->packageType);
+
+        // Lowest room price
+        $this->lowest_price = $this->lowestRoomPrice();
+
+        // Keep only necessary resort fields
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'distance' => $this->distance,
+            'location' => $this->location,
+            'package_type' => $this->package_type,
+            'facilities' => $this->facilities,
+            'lowest_price' => $this->lowest_price,
+            'images' => $this->images,
+        ];
     }
 }

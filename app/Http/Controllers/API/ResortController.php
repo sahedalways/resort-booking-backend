@@ -14,19 +14,19 @@ class ResortController extends BaseController
     {
         try {
             $perPage = 5;
-
             $resorts = Resort::with([
-                'images:id,resort_id,image',
-                'packageType',
-                'facilities',
-                'facilities.facility',
-                'additionalFacts',
+                'images' => function ($query) {
+                    $query->select('id', 'resort_id', 'image')->limit(1);
+                },
+                'packageType:id,icon,type_name,is_refundable',
+                'facilities:id,type_name,icon,resort_id,facility_id',
+                'facilities.facility:id,name,icon',
             ])
                 ->where('is_active', true)
                 ->latest()
                 ->paginate($perPage);
 
-            $resorts->getCollection()->transform(fn($resort) => $resort->transformForApi());
+            $resorts->getCollection()->transform(fn($resort) => $resort->transformForApiAllResorts());
 
 
 
@@ -78,7 +78,7 @@ class ResortController extends BaseController
                 ->where('is_active', true)
                 ->findOrFail($id);
 
-            $resort->transformForApi();
+            $resort->transformForApiForSingleResort();
 
 
 
