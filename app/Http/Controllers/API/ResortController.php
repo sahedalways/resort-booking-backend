@@ -16,7 +16,9 @@ class ResortController extends BaseController
             $perPage = 5;
             $resorts = Resort::with([
                 'images' => function ($query) {
-                    $query->select('id', 'resort_id', 'image')->limit(1);
+                    $query->select('id', 'resort_id', 'image')
+                        ->orderBy('id', 'asc')
+                        ->limit(1);
                 },
                 'packageType:id,icon,type_name,is_refundable',
                 'facilities:id,type_name,icon,resort_id,facility_id',
