@@ -2,105 +2,134 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ $data['title'] ?? 'Verify Your Email Address' }}</title>
     <style>
         body {
-            font-family: sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f7fa;
             margin: 0;
+            padding: 40px 0;
         }
 
-        .email-container {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 400px;
-            padding: 20px;
-            text-align: left;
+        .email-wrapper {
+            max-width: 480px;
+            background-color: #ffffff;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
         }
 
-        .header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 15px;
-            border-radius: 8px 8px 0 0;
-            font-size: 1em;
-            margin-bottom: 20px;
+        .email-header {
+            background: linear-gradient(90deg, #164f84 0%, #0083bb 100%);
+            color: #ffffff;
             text-align: center;
+            padding: 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .email-body {
+            padding: 30px 25px;
+            color: #333333;
         }
 
         h2 {
-            color: #333;
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-size: 1.5em;
             text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
         }
 
         p {
-            color: #555;
-            line-height: 1.5;
-            margin-bottom: 10px;
-            font-size: 0.9em;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            color: #555555;
+            margin-bottom: 14px;
         }
 
-        .verification-code-container {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
+        .otp-box {
+            background-color: #f0f4f8;
+            border-radius: 8px;
+            padding: 20px;
             text-align: center;
+            margin: 25px 0;
         }
 
-        .verification-code-label {
-            color: #555;
-            font-size: 0.9em;
-            margin-bottom: 5px;
+        .otp-label {
+            color: #555555;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
         }
 
         .otp-code {
-            font-size: 1.8em;
+            font-size: 2rem;
             font-weight: bold;
-            color: #495057;
+            color: #164f84;
+            letter-spacing: 4px;
         }
 
         .footer {
-            color: #777;
-            font-size: 0.7em;
-            margin-top: 20px;
+            background-color: #f9fafc;
             text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #777777;
+            border-top: 1px solid #eaeaea;
+        }
+
+        .footer a {
+            color: #164f84;
+            text-decoration: none;
+        }
+
+        .footer strong {
+            color: #164f84;
         }
     </style>
 </head>
 
 <body>
-    <div class="email-container">
-        <div class="header">
-            This is a System Generated Email
+    <div class="email-wrapper">
+        <div class="email-header">
+            Email Verification – {{ siteSetting()->site_title ?? 'BookingXpart' }}
         </div>
-        <h2>Hello ({{ $data['username'] ?? 'User' }})</h2>
-        <p>Thanks for joining us.</p>
-        <p>{{ $data['body'] ?? 'Please use the below code to verify your email address.' }}</p>
-        <div class="verification-code-container">
-            <p class="verification-code-label">Your email verification code is:</p>
-            <div class="otp-code">
-                <strong>{{ $data['otp'] ?? '******' }}</strong>
+
+        <div class="email-body">
+            <h2>Hello {{ $data['username'] ?? 'User' }},</h2>
+            <p>
+                Thank you for joining
+                <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>!
+            </p>
+            <p>
+                {{ $data['body'] ?? 'Please use the following verification code to confirm your email address:' }}
+            </p>
+
+            <div class="otp-box">
+                <p class="otp-label">Your 6-digit verification code:</p>
+                <div class="otp-code">{{ $data['otp'] ?? '******' }}</div>
             </div>
+
+            <p>
+                For your security, this code will expire in
+                <strong>2 minutes</strong>. If you didn’t request this, please ignore
+                this message.
+            </p>
         </div>
+
         <div class="footer">
-            <p>If you have any questions regarding this transaction or need further assistance, please don’t hesitate to
-                reach out to our support team.</p>
-            <p>Thank you for using <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>.</p>
-            <p>Warm regards,<br>
-                The {{ siteSetting()->site_title ?? 'BookingXpart' }} Team<br>
-                <a href="mailto:support@bookingxpart.com">support@bookingxpart.com</a><br>
+            <p>
+                Need help? Contact us at
+                <a href="mailto:support@bookingxpart.com">support@bookingxpart.com</a>
+            </p>
+            <p>
+                &copy; {{ date('Y') }}
+                <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>. All
+                rights reserved.
+            </p>
+            <p>
                 <a href="https://www.bookingxpart.com" target="_blank">www.bookingxpart.com</a>
             </p>
         </div>

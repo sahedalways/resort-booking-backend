@@ -20,7 +20,8 @@ Route::middleware(['cors'])->group(function () {
         // for authentication routes
         Route::post('register', 'register');
         Route::post('login', 'login');
-        Route::post('verify-email-otp', 'verifyEmailOtp');
+        Route::post('verify-email-otp', 'verifyEmailConfirmOTP');
+        Route::post('resend-otp', 'resendOtp');
 
         // for for forger password routes
         Route::post('forgot-password', 'forgotPassword');
@@ -61,6 +62,12 @@ Route::middleware(['cors'])->group(function () {
     Route::controller(EventController::class)->group(function () {
         Route::get('event-data', 'getEventData');
         Route::get('single-event-data/{id}', 'getSingleEventData');
+    });
+
+
+    Route::middleware(['auth:sanctum'])->group(function () {
+        // for logout
+        Route::post('/logout', [AuthController::class, 'logout']);
     });
 });
 

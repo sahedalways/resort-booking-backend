@@ -9,6 +9,8 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\MatchPincodeRequest;
 use App\Http\Requests\RegisterEmailConfirmOTPRequest;
 use App\Http\Requests\RegisterUserRequest;
+use App\Http\Requests\ResendOtpRequest;
+use App\Models\User;
 use App\Services\API\EmailVerificationService;
 use App\Services\API\ForgotPasswordService;
 use App\Services\API\FrontAuthService;
@@ -55,6 +57,42 @@ class AuthController extends BaseController
         return $this->sendResponse([
             'email'     => $user->email,
         ], 'User registered successfully.');
+    }
+
+
+    public function resendOtp(ResendOtpRequest $request)
+    {
+        // Validate request
+        $validated = $request->validated();
+
+        $email = $validated['email'];
+
+
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            return $this->sendError('User not found.', [], 404);
+        }
+
+
+        $name = $user->f_name . ' ' . $user->l_name;
+
+
+        // Send OTP
+        try {
+            $sent = $this->emailVerificationService->sendOtp($user->email, $name);
+
+            if (!$sent) {
+                return $this->sendError('Failed to resend OTP. Please try again later.', [], 500);
+            }
+
+            return $this->sendResponse(
+                'OTP has been resent successfully.',
+                ['email' => $user->email]
+            );
+        } catch (\Exception $e) {
+            return $this->sendError('Unable to send OTP. Please try again later.', ['error' => $e->getMessage()], 500);
+        }
     }
 
 
