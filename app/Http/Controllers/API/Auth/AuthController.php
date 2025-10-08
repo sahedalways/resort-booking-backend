@@ -43,7 +43,14 @@ class AuthController extends BaseController
             'password'
         ]));
 
-        $this->emailVerificationService->sendOtp($user->email);
+        $name = $user->f_name . ' ' . $user->l_name;
+
+        $sent = $this->emailVerificationService->sendOtp($user->email, $name);
+
+        if (!$sent) {
+            $user->delete();
+            return $this->sendError('Unable to send verification email. Please try again later.');
+        }
 
         return $this->sendResponse([
             'email'     => $user->email,

@@ -40,8 +40,8 @@ class MailSettings extends BaseComponent
     {
         $this->validate();
 
-
-        $service->saveMailSettings([
+        // Prepare mail settings array
+        $mailSettings = [
             'mail_mailer'       => $this->mail_mailer,
             'mail_host'         => $this->mail_host,
             'mail_port'         => $this->mail_port,
@@ -49,12 +49,43 @@ class MailSettings extends BaseComponent
             'mail_password'     => $this->mail_password,
             'mail_encryption'   => $this->mail_encryption,
             'mail_from_address' => $this->mail_from_address,
-            'mail_from_name'    => $this->mail_from_name,
-        ]);
+            'mail_from_name'    => $this->mail_from_name ?? siteSetting()->site_title,
+        ];
+
+        // Save in database
+        $service->saveMailSettings($mailSettings);
+
+        // Update .env file
+        $envPath = base_path('.env');
+
+        foreach ($mailSettings as $key => $value) {
+            $envKey = strtoupper($key);
+            $escapedValue = trim($value);
+
+            if (file_exists($envPath)) {
+                $envContent = file_get_contents($envPath);
+
+                // Check if key already exists — replace it; otherwise, append it
+                if (preg_match("/^{$envKey}=.*/m", $envContent)) {
+                    $envContent = preg_replace(
+                        "/^{$envKey}=.*/m",
+                        "{$envKey}={$escapedValue}",
+                        $envContent
+                    );
+                } else {
+                    $envContent .= "\n{$envKey}={$escapedValue}";
+                }
+
+                file_put_contents($envPath, $envContent);
+            }
+        }
+
+
 
 
         $this->toast('Mail settings updated successfully!', 'success');
     }
+
 
 
 
