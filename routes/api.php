@@ -60,6 +60,7 @@ Route::middleware(['cors'])->group(function () {
     // get event data apis
     Route::controller(EventController::class)->group(function () {
         Route::get('event-data', 'getEventData');
+        Route::get('single-event-data/{id}', 'getSingleEventData');
     });
 });
 

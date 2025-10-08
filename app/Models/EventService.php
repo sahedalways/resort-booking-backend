@@ -18,9 +18,19 @@ class EventService extends Model
         'description',
     ];
 
+    protected $appends = ['thumbnail_url'];
+
     // Relation: one service has many images
     public function images()
     {
         return $this->hasMany(EventServiceImage::class, 'event_service_id');
+    }
+
+
+    public function getThumbnailUrlAttribute()
+    {
+        return $this->thumbnail
+            ? getFileUrlForFrontend("{$this->thumbnail}")
+            : asset('assets/img/default-image.jpg');
     }
 }

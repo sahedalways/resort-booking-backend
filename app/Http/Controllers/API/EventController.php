@@ -18,26 +18,10 @@ class EventController extends BaseController
                 ->first();
 
 
-            $eventServices = EventService::with(['images'])
-                ->select('id', 'title', 'description')
+            $eventServices = EventService::select('id', 'title', 'description', 'thumbnail')
                 ->latest()
                 ->get();
 
-
-            $eventServices->transform(function ($service) {
-                $service->thumbnail_url = $service->thumbnail
-                    ? getFileUrlForFrontend($service->thumbnail)
-                    : asset('assets/img/default-image.jpg');
-
-                $service->images->transform(function ($image) {
-                    return [
-                        'id' => $image->id,
-                        'image' => getFileUrlForFrontend($image->image),
-                    ];
-                });
-
-                return $service;
-            });
 
             return response()->json([
                 'success' => true,
@@ -51,6 +35,48 @@ class EventController extends BaseController
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch event data',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+
+
+    public function getSingleEventData($id)
+    {
+        try {
+            $eventService = EventService::with(['images'])
+                ->select('id', 'title', 'description', 'thumbnail')
+                ->findOrFail($id);
+
+            // Transform thumbnail
+            $eventService->thumbnail_url = $eventService->thumbnail
+                ? getFileUrlForFrontend($eventService->thumbnail)
+                : asset('assets/img/default-image.jpg');
+
+            // Transform images
+            $eventService->images->transform(function ($image) {
+                return [
+                    'id' => $image->id,
+                    'image' => getFileUrlForFrontend($image->image),
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Single event service data fetched successfully',
+                'data' => $eventService,
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Event service not found',
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch event service data',
                 'error' => $e->getMessage(),
             ], 500);
         }
