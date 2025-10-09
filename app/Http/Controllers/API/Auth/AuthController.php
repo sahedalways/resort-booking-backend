@@ -107,6 +107,9 @@ class AuthController extends BaseController
 
         $token = $user->createToken('Personal Access Token')->plainTextToken;
 
+        $profile = $user->profile;
+
+
         return $this->sendResponse([
             'token'     => $token,
             'id'        => $user->id,
@@ -115,6 +118,7 @@ class AuthController extends BaseController
             'email'     => $user->email,
             'phone_no'  => $user->phone_no,
             'user_type' => $user->user_type,
+            'profile'   => $profile,
         ], 'Email verified successfully.');
     }
 
@@ -153,6 +157,8 @@ class AuthController extends BaseController
 
             $newToken = $user->createToken('Personal Access Token');
 
+            $profile = $user->profile;
+
 
             return $this->sendResponse([
                 'token'     => $newToken,
@@ -162,6 +168,7 @@ class AuthController extends BaseController
                 'email'     => $user->email,
                 'phone_no'  => $user->phone_no,
                 'user_type' => $user->user_type,
+                'profile'   => $profile,
             ], 'User login successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Unauthorized', ['error' => $e->getMessage()]);

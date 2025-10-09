@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->f_name . ' ' . $this->l_name;
     }
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
 }
