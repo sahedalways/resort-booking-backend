@@ -22,9 +22,19 @@ class Profile extends Model
         'religion',
     ];
 
+    protected $appends = ['avatar_url'];
+
     // Relation: Profile belongs to a User
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar
+            ? getFileUrlForFrontend("{$this->avatar}")
+            : asset('assets/img/default-image.jpg');
     }
 }

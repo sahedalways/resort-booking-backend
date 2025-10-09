@@ -5,6 +5,7 @@ use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\FooterController;
 use App\Http\Controllers\API\HeaderController;
 use App\Http\Controllers\API\HomeController;
+use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\ResortController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,11 @@ Route::middleware(['cors'])->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         // for logout
         Route::post('/logout', [AuthController::class, 'logout']);
+
+        // change avatar route
+        Route::prefix('profile')->group(function () {
+            Route::post('change-avatar', [ProfileController::class, 'changeAvatar']);
+        });
     });
 });
 
