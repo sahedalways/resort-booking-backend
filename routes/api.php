@@ -25,7 +25,7 @@ Route::middleware(['cors'])->group(function () {
 
         // for for forger password routes
         Route::post('forgot-password', 'forgotPassword');
-        Route::post('match-otp', 'matchPincode');
+        Route::post('forgot-password/match-otp', 'matchPincode');
         Route::post('change-password', 'changePassword');
     });
 

@@ -2,35 +2,26 @@
 
 namespace App\Repositories\API;
 
-use App\Models\PasswordReset;
-
+use App\Models\PasswordResetToken;
 
 class PasswordResetRepository
 {
-  public function updateOrCreateByEmail(string $email, string $otp): PasswordReset
+  public function updateOrCreateByEmail(string $email, string $otp): PasswordResetToken
   {
-    return PasswordReset::updateOrCreate(
+    return PasswordResetToken::updateOrCreate(
       ['email' => $email],
-      ['otp' => $otp, 'created_at' => now()]
-    );
-  }
-
-  public function updateOrCreateByPhone(string $phone, string $otp): PasswordReset
-  {
-    return PasswordReset::updateOrCreate(
-      ['phone_no' => $phone],
-      ['otp' => $otp, 'created_at' => now()]
+      ['token' => $otp, 'created_at' => now()]
     );
   }
 
 
   public function findByOtp(string $otp)
   {
-    return PasswordReset::where('otp', $otp)->first(['email', 'phone_no', 'created_at']);
+    return PasswordResetToken::where('token', $otp)->first(['email', 'created_at']);
   }
 
   public function deleteByOtp(string $otp): void
   {
-    PasswordReset::where('otp', $otp)->delete();
+    PasswordResetToken::where('token', $otp)->delete();
   }
 }

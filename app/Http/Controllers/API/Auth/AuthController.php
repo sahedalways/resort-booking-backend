@@ -137,15 +137,18 @@ class AuthController extends BaseController
                 return $this->sendError('Email or Password is incorrect!', ['error' => 'Unauthorized']);
             }
 
+
+            $name = $user->f_name . ' ' . $user->l_name;
+
             if (is_null($user->email_verified_at)) {
-                $this->emailVerificationService->sendOtp($user->email);
+
+                $this->emailVerificationService->sendOtp($user->email, $name);
 
                 return $this->sendResponse(
                     ['email' => $user->email],
                     'Email not verified. OTP sent to your email.'
                 );
             }
-
 
 
             $newToken = $user->createToken('Personal Access Token');
@@ -172,12 +175,14 @@ class AuthController extends BaseController
         try {
             $result = $this->forgotPasswordService->handle(
                 $request->input('email'),
-                $request->input('phone_no')
             );
 
             return $this->sendResponse($result, 'OTP sent successfully.');
         } catch (\Exception $e) {
-            return $this->sendError('Failed to send OTP', ['error' => $e->getMessage()]);
+
+            return $this->sendError('Failed to send OTP.', [
+                'error' => $e->getMessage()
+            ], 400);
         }
     }
 

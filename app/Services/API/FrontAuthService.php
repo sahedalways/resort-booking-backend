@@ -59,7 +59,7 @@ class FrontAuthService
       throw new \Exception('OTP expired! Please request a new one.');
     }
 
-    $identifier = $record->email ?? $record->phone_no;
+    $identifier = $record->email;
 
     // ✅ Delete OTP once used
     $this->passwordResetRepo->deleteByOtp($otp);

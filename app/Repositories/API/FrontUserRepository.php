@@ -26,7 +26,6 @@ class FrontUserRepository
   public function updatePasswordByAPI(string $identifier, string $hashedPassword): bool
   {
     return User::where('email', $identifier)
-      ->orWhere('phone_no', $identifier)
       ->update(['password' => $hashedPassword]) > 0;
   }
 }

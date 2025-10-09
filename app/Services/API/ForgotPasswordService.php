@@ -23,7 +23,7 @@ class ForgotPasswordService
 
 
 
-  public function handle(?string $email, ?string $phone): array
+  public function handle(?string $email): array
   {
     $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
@@ -51,43 +51,7 @@ class ForgotPasswordService
       return ['email' => $email];
     }
 
-    if ($phone) {
-      $user = $this->authRepository->findUserByPhone($phone);
-      if (!$user) {
-        throw new \Exception('User with this phone number not found!');
-      }
 
-      // Save OTP
-      $this->passwordResetRepository->updateOrCreateByPhone($phone, $otp);
-
-      // Send SMS (dummy function)
-      $this->sendOtpToPhone($phone, $otp);
-
-      return ['phone_no' => $phone];
-    }
-
-    throw new \Exception('Email address or Phone number is required.');
-  }
-
-  protected function sendOtpToPhone(string $phone, string $otp): void
-  {
-    $sid   = env('TWILIO_SID');
-    $token = env('TWILIO_AUTH_TOKEN');
-    $from  = env('TWILIO_PHONE_NO');
-
-    $messageBody = "Your OTP for password reset is: $otp. Please use this to complete the process.";
-
-    try {
-      $client = new Client($sid, $token);
-      $client->messages->create(
-        $phone,
-        [
-          'from' => $from,
-          'body' => $messageBody,
-        ]
-      );
-    } catch (\Exception $e) {
-      throw new \Exception("Failed to send message: " . $e->getMessage());
-    }
+    throw new \Exception('Email address is required.');
   }
 }
