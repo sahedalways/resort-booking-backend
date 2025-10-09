@@ -70,9 +70,14 @@ Route::middleware(['cors'])->group(function () {
         // for logout
         Route::post('/logout', [AuthController::class, 'logout']);
 
-        // change avatar route
+
         Route::prefix('profile')->group(function () {
+            // change avatar route
             Route::post('change-avatar', [ProfileController::class, 'changeAvatar']);
+
+
+            // change profile data route
+            Route::post('/update', [ProfileController::class, 'profileDataUpdate']);
         });
     });
 });

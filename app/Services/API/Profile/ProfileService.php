@@ -2,7 +2,7 @@
 
 namespace App\Services\API\Profile;
 
-
+use App\Models\User;
 use App\Repositories\API\Profile\ProfileRepository;
 
 
@@ -20,5 +20,15 @@ class ProfileService
   public function changeAvatar($user, $avatarFile)
   {
     return $this->repository->updateAvatar($user, $avatarFile);
+  }
+
+
+
+  public function updateProfile(User $user, array $data): User
+  {
+
+    $this->repository->updateUserName($user, $data);
+
+    return $this->repository->updateProfile($user, $data);
   }
 }

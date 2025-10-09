@@ -44,4 +44,39 @@ class ProfileRepository
 
     return $profile;
   }
+
+
+  /**
+   * Update user's name in users table
+   */
+  public function updateUserName(User $user, array $data): User
+  {
+    $user->update([
+      'f_name' => $data['f_name'] ?? $user->f_name,
+      'l_name' => $data['l_name'] ?? $user->l_name,
+    ]);
+
+    return $user->fresh();
+  }
+
+
+
+  /**
+   * Update user's profile table
+   */
+  public function updateProfile(User $user, array $data): User
+  {
+    // Remove f_name & l_name since those belong to users table
+    $profileData = $data;
+    unset($profileData['f_name'], $profileData['l_name']);
+
+    $profile = $user->profile;
+    if ($profile) {
+      $profile->update($profileData);
+    } else {
+      $user->profile()->create($profileData);
+    }
+
+    return $user->fresh();
+  }
 }

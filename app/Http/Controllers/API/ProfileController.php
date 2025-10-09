@@ -4,8 +4,9 @@ namespace App\Http\Controllers\API;
 
 
 use App\Http\Requests\Profile\AvatarRequest;
+use App\Http\Requests\Profile\ProfileUpdateRequest as ProfileProfileUpdateRequest;
 use App\Services\API\Profile\ProfileService;
-use Illuminate\Http\JsonResponse;
+
 
 class ProfileController extends BaseController
 {
@@ -34,6 +35,27 @@ class ProfileController extends BaseController
             $user->load('profile');
 
             return $this->sendResponse($user, 'Avatar updated successfully!');
+        } catch (\Throwable $e) {
+            return $this->sendError('Something went wrong.', [
+                'exception' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+            ], 500);
+        }
+    }
+
+
+
+    public function profileDataUpdate(ProfileProfileUpdateRequest $request)
+    {
+        try {
+            $validated = $request->validated();
+
+            $updatedUser = $this->profileService->updateProfile(auth()->user(), $validated);
+
+            $updatedUser->load('profile');
+
+            return $this->sendResponse($updatedUser, 'Profile updated successfully!');
         } catch (\Throwable $e) {
             return $this->sendError('Something went wrong.', [
                 'exception' => $e->getMessage(),
