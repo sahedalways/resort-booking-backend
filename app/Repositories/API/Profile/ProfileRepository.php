@@ -79,4 +79,11 @@ class ProfileRepository
 
     return $user->fresh();
   }
+
+
+  public function updatePassword(User $user, string $hashedPassword): bool
+  {
+    $user->password = $hashedPassword;
+    return $user->save();
+  }
 }

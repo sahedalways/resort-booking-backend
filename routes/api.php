@@ -73,12 +73,16 @@ Route::middleware(['cors'])->group(function () {
 
 
         Route::prefix('profile')->group(function () {
-            // change avatar route
-            Route::post('change-avatar', [ProfileController::class, 'changeAvatar']);
+            Route::controller(ProfileController::class)->group(function () {
+                // change avatar route
+                Route::post('change-avatar', 'changeAvatar');
 
+                // change profile data route
+                Route::post('/update', 'profileDataUpdate');
 
-            // change profile data route
-            Route::post('/update', [ProfileController::class, 'profileDataUpdate']);
+                // change password
+                Route::post('/change-password', 'changePassword');
+            });
         });
 
 

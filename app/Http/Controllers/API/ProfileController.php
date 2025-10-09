@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 
 use App\Http\Requests\Profile\AvatarRequest;
+use App\Http\Requests\Profile\ChangePasswordRequest;
 use App\Http\Requests\Profile\ProfileUpdateRequest as ProfileProfileUpdateRequest;
 use App\Services\API\Profile\ProfileService;
 
@@ -61,6 +62,33 @@ class ProfileController extends BaseController
                 'exception' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
+            ], 500);
+        }
+    }
+
+
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        try {
+            $validated = $request->validated();
+            $user = auth()->user();
+            $updated = $this->profileService->changePassword($user, $validated);
+
+            if ($updated) {
+
+                return $this->sendResponse([], 'Password updated successfully');
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Current password is incorrect',
+            ], 422);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong.',
+                'error' => $e->getMessage()
             ], 500);
         }
     }

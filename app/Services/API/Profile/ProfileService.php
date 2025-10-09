@@ -4,7 +4,7 @@ namespace App\Services\API\Profile;
 
 use App\Models\User;
 use App\Repositories\API\Profile\ProfileRepository;
-
+use Illuminate\Support\Facades\Hash;
 
 class ProfileService
 {
@@ -30,5 +30,20 @@ class ProfileService
     $this->repository->updateUserName($user, $data);
 
     return $this->repository->updateProfile($user, $data);
+  }
+
+
+
+  public function changePassword(User $user, array $data): bool
+  {
+    if (!Hash::check($data['current_password'], $user->password)) {
+      return false;
+    }
+
+    // Hash new password
+    $newPassword = Hash::make($data['new_password']);
+
+    // Update via repository
+    return $this->repository->updatePassword($user, $newPassword);
   }
 }
