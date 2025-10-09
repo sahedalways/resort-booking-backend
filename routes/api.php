@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\FooterController;
 use App\Http\Controllers\API\HeaderController;
@@ -78,6 +79,15 @@ Route::middleware(['cors'])->group(function () {
 
             // change profile data route
             Route::post('/update', [ProfileController::class, 'profileDataUpdate']);
+        });
+
+
+
+        // booking related routes below
+        Route::prefix('booking')->group(function () {
+            Route::controller(BookingController::class)->group(function () {
+                Route::get('history', 'getBookingHistory');
+            });
         });
     });
 });
