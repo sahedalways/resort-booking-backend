@@ -6,6 +6,7 @@ use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\FooterController;
 use App\Http\Controllers\API\HeaderController;
 use App\Http\Controllers\API\HomeController;
+use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\ResortController;
 use Illuminate\Http\Request;
@@ -102,6 +103,16 @@ Route::middleware(['cors'])->group(function () {
                 Route::post('submit-booking', 'submitBooking');
 
                 Route::get('booking-status/{booking}',  'getStatus');
+            });
+        });
+
+
+        // payment routes below
+        Route::prefix('bkash/')->group(function () {
+            Route::controller(PaymentController::class)->group(function () {
+                Route::post('token', 'getToken');
+                Route::post('create-payment', 'createPayment');
+                Route::post('execute-payment',  'executePayment');
             });
         });
     });

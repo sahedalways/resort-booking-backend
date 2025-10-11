@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ResortController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Livewire\Backend\BookingInfo\BookingList;
@@ -114,3 +115,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
     Route::get('/manage', UsersManage::class)->name('manage');
   });
 });
+
+
+Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');

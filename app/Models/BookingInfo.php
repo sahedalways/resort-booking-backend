@@ -21,6 +21,7 @@ class BookingInfo extends Model
         'is_used_coupon',
         'adult',
         'child',
+        'invoice',
     ];
 
 
