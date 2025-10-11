@@ -16,6 +16,7 @@ class BookingList extends BaseComponent
 
   protected $BookingManage;
   protected $listeners = ['deleteItem'];
+  public $expandedRows = [];
 
   public function boot(BookingManageService $BookingManage)
   {
@@ -95,6 +96,17 @@ class BookingList extends BaseComponent
 
 
       return redirect()->route('admin.booking-info.confirm');
+    }
+  }
+
+
+  public function toggleRow($id)
+  {
+
+    if (isset($this->expandedRows[$id])) {
+      unset($this->expandedRows[$id]);
+    } else {
+      $this->expandedRows[$id] = true;
     }
   }
 }

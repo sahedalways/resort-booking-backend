@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Requests\Booking\CheckoutRequest;
 use App\Services\API\Booking\BookingService;
 use Illuminate\Http\Request;
 
@@ -34,6 +35,23 @@ class BookingController extends BaseController
                 ],
                 500
             );
+        }
+    }
+
+
+
+    public function submitBooking(CheckoutRequest $request)
+    {
+        try {
+            $this->bookingService->createBooking($request->validated());
+
+
+            return $this->sendResponse([], 'Booking submitted successfully!');
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 }

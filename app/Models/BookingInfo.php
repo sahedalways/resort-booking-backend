@@ -16,7 +16,14 @@ class BookingInfo extends Model
         'amount',
         'start_date',
         'end_date',
+        'booking_for',
+        'additional_comment',
+        'is_used_coupon',
+        'adult',
+        'child',
     ];
+
+
 
     // Relations
     public function resort()

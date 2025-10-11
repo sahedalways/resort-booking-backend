@@ -20,6 +20,13 @@ return new class extends Migration
             $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])->default('pending');
             $table->decimal('amount', 10, 2)->nullable();
 
+
+            $table->enum('booking_for', ['me', 'others'])->default('me');
+            $table->text('additional_comment')->nullable();
+            $table->boolean('is_used_coupon')->default(false);
+            $table->integer('adult')->default(1);
+            $table->integer('child')->default(0);
+
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

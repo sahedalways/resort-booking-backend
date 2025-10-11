@@ -30,7 +30,7 @@ class UserTableSeeder extends Seeder
       'f_name' => 'Mr',
       'l_name' => 'User',
       'email' => 'user@user.com',
-      'phone_no' => '0154xxxxxxx',
+      'phone_no' => '016165238944',
       'password' => 12345678,
       'user_type' => 'user',
     ]);

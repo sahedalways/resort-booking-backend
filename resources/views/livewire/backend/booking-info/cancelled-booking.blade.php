@@ -1,1 +1,1 @@
-<livewire:backend.booking-info.booking-list status="cancelled" />
+<livewire:backend.booking-info.booking-list key="{{ Str::uuid() }}" status="cancelled" />

@@ -13,7 +13,7 @@
             <div class="card mb-4">
                 <div class="card-header p-4">
                     <div class="row">
-                        <div class="col-md-12" wire:ignore>
+                        <div class="col-md-12">
                             <input type="text" class="form-control" placeholder="Search booking info..."
                                 wire:model="search" />
                             <button type="button" wire:click="searchBooking" class="btn btn-primary mt-2">
@@ -57,32 +57,53 @@
                                         <td>
                                             <span
                                                 class="badge 
-                        @if ($row->status == 'pending') bg-warning
-                        @elseif($row->status == 'confirmed') bg-success
-                        @elseif($row->status == 'cancelled') bg-danger
-                        @elseif($row->status == 'completed') bg-primary
-                        @else bg-secondary @endif
-                        text-white px-2 py-1">
+                @if ($row->status == 'pending') bg-warning
+                @elseif($row->status == 'confirmed') bg-success
+                @elseif($row->status == 'cancelled') bg-danger
+                @elseif($row->status == 'completed') bg-primary
+                @else bg-secondary @endif
+                text-white px-2 py-1">
                                                 {{ ucfirst($row->status) }}
                                             </span>
                                         </td>
                                         <td>
+                                            <a href="#" wire:click.prevent="toggleRow({{ $row->id }})"
+                                                class="btn btn-info btn-sm">
+                                                {{ isset($expandedRows[$row->id]) ? 'Hide' : 'View' }} Details
+                                            </a>
+
+
                                             <a href="#"
                                                 wire:click.prevent="$emit('deleteItem', {{ $row->id }})"
                                                 class="btn btn-danger btn-sm">Delete</a>
+                                            @if ($row->status === 'pending')
+                                                <a href="#"
+                                                    wire:click.prevent="confirmBooking({{ $row->id }})"
+                                                    class="btn btn-success btn-sm ms-1">Confirm</a>
+                                            @endif
                                         </td>
-
-
-                                        @if ($row->status === 'pending')
-                                            <a href="#" wire:click.prevent="confirmBooking({{ $row->id }})"
-                                                class="btn btn-success btn-sm ms-1">Confirm</a>
-                                        @endif
                                     </tr>
+
+                                    @if (isset($expandedRows[$row->id]))
+                                        <tr class="table-secondary">
+                                            <td colspan="10">
+                                                <strong>Booking For:</strong> {{ $row->booking_for ?? 'N/A' }}<br>
+                                                <strong>Adult Guests:</strong> {{ $row->adult }} <strong>Child
+                                                    Guests:</strong> {{ $row->child }}<br>
+                                                <strong>Coupon Used:</strong> {{ $row->is_used_coupon ? 'Yes' : 'No' }}
+                                                {{ $row->coupon_code ? '(' . $row->coupon_code . ')' : '' }}<br>
+                                                <strong>Comments:</strong> {{ $row->comment ?? 'N/A' }}<br>
+                                                <strong>Grand Total:</strong> {{ $row->amount }}
+                                                {{ $row->currency ?? 'BDT' }}
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @empty
                                     <tr>
                                         <td colspan="12" class="text-center">No bookings found!</td>
                                     </tr>
                                 @endforelse
+
                             </tbody>
                         </table>
 

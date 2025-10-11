@@ -88,9 +88,18 @@ Route::middleware(['cors'])->group(function () {
 
 
         // booking related routes below
-        Route::prefix('booking')->group(function () {
+        Route::prefix('booking/')->group(function () {
             Route::controller(BookingController::class)->group(function () {
                 Route::get('history', 'getBookingHistory');
+            });
+        });
+
+
+
+        // checkout related routes below
+        Route::prefix('checkout/')->group(function () {
+            Route::controller(BookingController::class)->group(function () {
+                Route::post('submit-booking', 'submitBooking');
             });
         });
     });

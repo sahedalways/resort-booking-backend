@@ -7,6 +7,8 @@ use App\Livewire\Backend\Components\BaseComponent;
 
 class PendingBooking extends BaseComponent
 {
+    public $search;
+    public $expandedRows = [];
 
 
     public function render()
