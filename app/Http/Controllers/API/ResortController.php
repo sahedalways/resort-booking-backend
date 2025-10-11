@@ -118,8 +118,7 @@ class ResortController extends BaseController
             $resort = Resort::with([
                 'images' => function ($query) {
                     $query->select('id', 'resort_id', 'image')
-                        ->orderBy('id', 'asc')
-                        ->limit(1);
+                        ->orderBy('id', 'asc');
                 },
                 'rooms' => function ($query) use ($requestedRooms, $resortId, $checkIn, $checkOut) {
                     $query->where('is_active', true)
