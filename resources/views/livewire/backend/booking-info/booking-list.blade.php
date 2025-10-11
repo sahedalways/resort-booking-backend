@@ -74,7 +74,7 @@
 
 
                                             <a href="#"
-                                                wire:click.prevent="$emit('deleteItem', {{ $row->id }})"
+                                                wire:click.prevent="$dispatch('confirmDelete', {{ $row->id }})"
                                                 class="btn btn-danger btn-sm">Delete</a>
                                             @if ($row->status === 'pending')
                                                 <a href="#"
@@ -85,19 +85,50 @@
                                     </tr>
 
                                     @if (isset($expandedRows[$row->id]))
-                                        <tr class="table-secondary">
-                                            <td colspan="10">
-                                                <strong>Booking For:</strong> {{ $row->booking_for ?? 'N/A' }}<br>
-                                                <strong>Adult Guests:</strong> {{ $row->adult }} <strong>Child
-                                                    Guests:</strong> {{ $row->child }}<br>
-                                                <strong>Coupon Used:</strong> {{ $row->is_used_coupon ? 'Yes' : 'No' }}
-                                                {{ $row->coupon_code ? '(' . $row->coupon_code . ')' : '' }}<br>
-                                                <strong>Comments:</strong> {{ $row->comment ?? 'N/A' }}<br>
-                                                <strong>Grand Total:</strong> {{ $row->amount }}
-                                                {{ $row->currency ?? 'BDT' }}
+                                        <tr class="table-light">
+                                            <td colspan="10" class="p-3">
+                                                <div
+                                                    class="d-flex flex-column flex-md-row justify-content-between gap-4">
+                                                    <!-- Booking Details -->
+                                                    <div class="p-3 border rounded shadow-sm bg-white flex-fill">
+                                                        <h6 class="text-primary mb-3"><i
+                                                                class="bi bi-person-fill me-2"></i>Booking Details</h6>
+                                                        <p class="mb-2"><strong>Booking For:</strong>
+                                                            {{ $row->booking_for === 'me' ? 'Self' : $row->booking_for }}
+                                                        </p>
+                                                        <p class="mb-2"><strong>Adult Guests:</strong>
+                                                            {{ $row->adult }}</p>
+                                                        <p class="mb-2"><strong>Child Guests:</strong>
+                                                            {{ $row->child }}</p>
+                                                        <p class="mb-2"><strong>Comments:</strong>
+                                                            {{ $row->comment ?? 'N/A' }}</p>
+                                                    </div>
+
+                                                    <!-- Payment Info -->
+                                                    <div class="p-3 border rounded shadow-sm bg-white flex-fill">
+                                                        <h6 class="text-success mb-3"><i
+                                                                class="bi bi-currency-dollar me-2"></i>Payment Info</h6>
+                                                        <p class="mb-2"><strong>Coupon Used:</strong>
+                                                            {{ $row->is_used_coupon ? 'Yes' : 'No' }}
+                                                            {{ $row->coupon_code ? '(' . $row->coupon_code . ')' : '' }}
+                                                        </p>
+                                                        <p class="mb-2"><strong>Grand Total:</strong>
+                                                            <span class="fw-bold">{{ $row->amount }}
+                                                                {{ $row->currency ?? 'BDT' }}</span>
+                                                        </p>
+                                                        <p class="mb-2"><strong>Check-In:</strong>
+                                                            {{ \Carbon\Carbon::parse($row->start_date)->format('d M, Y') }}
+                                                        </p>
+                                                        <p class="mb-2"><strong>Check-Out:</strong>
+                                                            {{ \Carbon\Carbon::parse($row->end_date)->format('d M, Y') }}
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endif
+
+
                                 @empty
                                     <tr>
                                         <td colspan="12" class="text-center">No bookings found!</td>

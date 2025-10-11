@@ -46,4 +46,17 @@ class BookingService
       throw new Exception("Booking could not be processed: " . $e->getMessage());
     }
   }
+
+
+
+  public function getBookingStatus($bookingId)
+  {
+    $booking = $this->repository->findById($bookingId);
+
+    if (!$booking) {
+      return null;
+    }
+
+    return $booking;
+  }
 }

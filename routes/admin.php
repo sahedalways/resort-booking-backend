@@ -2,10 +2,7 @@
 
 use App\Http\Controllers\Admin\ResortController;
 use App\Http\Controllers\Admin\RoomController;
-use App\Livewire\Backend\BookingInfo\CancelledBooking;
-use App\Livewire\Backend\BookingInfo\CompletedBooking;
-use App\Livewire\Backend\BookingInfo\ConfirmBooking;
-use App\Livewire\Backend\BookingInfo\PendingBooking;
+use App\Livewire\Backend\BookingInfo\BookingList;
 use App\Livewire\Backend\Coupons\ManageCoupons;
 use App\Livewire\Backend\Dashboard;
 use App\Livewire\Backend\ManageContent\FeaturesImages;
@@ -87,10 +84,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
 
   // for booking info routes
   Route::prefix('/booking-info')->name('booking-info.')->group(function () {
-    Route::get('/pending', PendingBooking::class)->name('pending');
-    Route::get('/confirm', ConfirmBooking::class)->name('confirm');
-    Route::get('/cancelled', CancelledBooking::class)->name('cancelled');
-    Route::get('/completed', CompletedBooking::class)->name('completed');
+    Route::get('/pending', BookingList::class)->name('pending')->defaults('status', 'pending');
+    Route::get('/confirm', BookingList::class)->name('confirm')->defaults('status', 'confirmed');
+    Route::get('/cancelled', BookingList::class)->name('cancelled')->defaults('status', 'cancelled');
+    Route::get('/completed', BookingList::class)->name('completed')->defaults('status', 'completed');
   });
 
 

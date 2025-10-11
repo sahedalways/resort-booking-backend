@@ -37,4 +37,23 @@ class BookingRepository
       'status'        => $data['status'],
     ]);
   }
+
+
+
+  public function findById($id)
+  {
+    $booking = BookingInfo::find($id);
+
+    if (!$booking) {
+      return null;
+    }
+
+    // If status is pending, mark it as cancelled
+    if ($booking->status === 'pending') {
+      $booking->status = 'cancelled';
+      $booking->save();
+    }
+
+    return $booking;
+  }
 }

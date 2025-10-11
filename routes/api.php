@@ -100,6 +100,8 @@ Route::middleware(['cors'])->group(function () {
         Route::prefix('checkout/')->group(function () {
             Route::controller(BookingController::class)->group(function () {
                 Route::post('submit-booking', 'submitBooking');
+
+                Route::get('booking-status/{booking}',  'getStatus');
             });
         });
     });
