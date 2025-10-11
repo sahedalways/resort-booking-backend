@@ -50,4 +50,10 @@ class Room extends Model
     {
         return $this->hasMany(RoomRateDetail::class, 'room_id');
     }
+
+
+    public function bookings()
+    {
+        return $this->hasMany(BookingInfo::class, 'room_id');
+    }
 }
