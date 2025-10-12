@@ -42,7 +42,7 @@ class ForgotPasswordService
     $this->passwordResetRepository->updateOrCreateByEmail($email, $otp);
 
     // Dispatch email job
-    dispatch(new SendPasswordResetOtpJob($email, $otp));
+    // dispatch(new SendPasswordResetOtpJob($email, $otp));
 
     return ['email' => $email];
   }

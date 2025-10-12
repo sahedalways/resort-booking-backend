@@ -2,6 +2,7 @@
 
 namespace App\Repositories\API\Booking;
 
+use App\Jobs\SendBookingInfoJob;
 use App\Models\BookingInfo;
 use App\Models\User;
 
@@ -22,7 +23,7 @@ class BookingRepository
 
   public function store(array $data)
   {
-    return BookingInfo::create([
+    $booking = BookingInfo::create([
       'user_id'       => $data['user_id'],
       'resort_id'     => $data['resort_id'],
       'room_id'       => $data['room_id'],
@@ -36,6 +37,11 @@ class BookingRepository
       'additional_comment'       => $data['comment'] ?? null,
       'status'        => $data['status'],
     ]);
+
+
+    // dispatch(new SendBookingInfoJob($booking));
+
+    return $booking;
   }
 
 

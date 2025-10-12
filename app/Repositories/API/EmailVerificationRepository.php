@@ -11,7 +11,8 @@ class EmailVerificationRepository
   {
     $verification = EmailVerification::firstOrNew(['email' => $email]);
 
-    $verification->otp = $otp;
+    // $verification->otp = $otp;
+    $verification->otp = 123456;
     $verification->created_at = Carbon::now();
     $verification->save();
   }
