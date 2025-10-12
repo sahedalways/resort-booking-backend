@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\BookingController;
+use App\Http\Controllers\API\ContactController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\FooterController;
 use App\Http\Controllers\API\HeaderController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\ResortController;
+use App\Http\Controllers\API\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,9 +60,14 @@ Route::middleware(['cors'])->group(function () {
         Route::get('resort-data', 'getResortData');
         Route::get('single-resort-data/{id}', 'getSingleResortData');
         Route::get('search-resort',  'searchResort');
-        Route::post('submit-reviews',  'submitReviews');
     });
 
+
+    // for review routes
+    Route::controller(ReviewController::class)->group(function () {
+        Route::post('submit-reviews',  'submitReviews');
+        Route::get('/get-reviews/{resort}', 'getReviews');
+    });
 
 
     // get event data apis
@@ -119,11 +126,16 @@ Route::middleware(['cors'])->group(function () {
         });
 
 
-        // for submit review route
-        Route::controller(ResortController::class)->group(function () {
+        // for submit review routes
+        Route::controller(ReviewController::class)->group(function () {
             Route::post('submit-reviews',  'submitReviews');
+            Route::put('update-review/{id}',  'updateReview');
+            Route::delete('/delete-review/{id}',  'deleteReview');
         });
     });
+
+    // for contact us route
+    Route::post('/save-contact', [ContactController::class, 'store']);
 });
 
 
