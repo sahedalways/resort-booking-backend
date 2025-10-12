@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\API\BaseController;
-use App\Http\Requests\ChangePasswordRequest;
+
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\MatchPincodeRequest;
+use App\Http\Requests\Profile\ChangePasswordRequest;
 use App\Http\Requests\RegisterEmailConfirmOTPRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\ResendOtpRequest;
