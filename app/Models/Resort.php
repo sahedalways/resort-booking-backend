@@ -149,4 +149,11 @@ class Resort extends Model
             'images' => $this->images,
         ];
     }
+
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'resort_id', 'id')
+            ->with(['user:id,f_name,l_name']);
+    }
 }

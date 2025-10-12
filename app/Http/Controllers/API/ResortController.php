@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Requests\Resort\StoreReviewRequest;
 use App\Http\Requests\SearchResortRequest;
 use App\Models\Resort;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 
@@ -61,6 +63,7 @@ class ResortController extends BaseController
     {
         try {
             $resort = Resort::with([
+                'reviews',
                 'images:id,resort_id,image',
                 'packageType',
                 'facilities',
@@ -116,6 +119,7 @@ class ResortController extends BaseController
             $checkOut = $request->check_out;
 
             $resort = Resort::with([
+                'reviews',
                 'images' => function ($query) {
                     $query->select('id', 'resort_id', 'image')
                         ->orderBy('id', 'asc');
@@ -188,6 +192,35 @@ class ResortController extends BaseController
                 'success' => false,
                 'message' => 'Failed to search resort rooms',
                 'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+
+    public function submitReviews(StoreReviewRequest $request)
+
+    {
+        $request->validated();
+
+        try {
+            $review = Review::create([
+                'resort_id' => $request->resort_id,
+                'user_id'   => auth()->id(),
+                'star'    => $request->rating,
+                'comment'   => $request->comment,
+            ]);
+
+
+            return $this->sendResponse([
+                'id'       => $review->id,
+                'rating'   => $review->star,
+                'comment'  => $review->comment,
+            ], 'Review saved successfully.');
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to submit review: ' . $e->getMessage(),
             ], 500);
         }
     }

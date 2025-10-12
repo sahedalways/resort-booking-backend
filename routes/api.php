@@ -58,6 +58,7 @@ Route::middleware(['cors'])->group(function () {
         Route::get('resort-data', 'getResortData');
         Route::get('single-resort-data/{id}', 'getSingleResortData');
         Route::get('search-resort',  'searchResort');
+        Route::post('submit-reviews',  'submitReviews');
     });
 
 
@@ -115,6 +116,12 @@ Route::middleware(['cors'])->group(function () {
                 Route::post('create-payment', 'createPayment');
                 Route::post('execute-payment',  'executePayment');
             });
+        });
+
+
+        // for submit review route
+        Route::controller(ResortController::class)->group(function () {
+            Route::post('submit-reviews',  'submitReviews');
         });
     });
 });
