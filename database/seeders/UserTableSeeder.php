@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class UserTableSeeder extends Seeder
@@ -22,6 +23,7 @@ class UserTableSeeder extends Seeder
       'phone_no' => '0177xxxxxxx',
       'password' => 12345678,
       'user_type' => 'admin',
+      'email_verified_at' => Carbon::now(),
     ]);
 
 
@@ -33,6 +35,7 @@ class UserTableSeeder extends Seeder
       'phone_no' => '016165238944',
       'password' => 12345678,
       'user_type' => 'user',
+      'email_verified_at' => Carbon::now(),
     ]);
   }
 }

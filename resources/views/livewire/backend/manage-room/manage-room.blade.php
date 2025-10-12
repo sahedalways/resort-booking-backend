@@ -260,7 +260,7 @@
 
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Price Per <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" wire:model="price_per"
+                                <input type="text" class="form-control" wire:model="price_per"
                                     placeholder="Enter per price info">
                                 @error('price_per')
                                     <span class="error text-danger">{{ $message }}</span>
@@ -442,7 +442,7 @@
 
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Price Per <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" wire:model="price_per"
+                                <input type="text" class="form-control" wire:model="price_per"
                                     placeholder="Enter per price info">
                                 @error('price_per')
                                     <span class="error text-danger">{{ $message }}</span>

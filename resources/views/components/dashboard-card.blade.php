@@ -1,5 +1,5 @@
 <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card shadow h-100 py-3" style="{{ $style }}">
+    <div class="card-dashboard shadow h-100 py-3" style="{{ $style }}">
         <div class="card-body d-flex justify-content-between align-items-center">
             <div>
                 <div class="text-xs fw-bold text-uppercase mb-1">{{ $title }}</div>

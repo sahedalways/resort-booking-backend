@@ -193,9 +193,9 @@ class RoomManageRepository
 
     foreach ($options as $item) {
       RoomRateDetail::create([
-        'room_id' => $itemId,
-        'title'            => $item['title'],
-        'is_active'            => $item['is_active'],
+        'room_id'   => $itemId,
+        'title'     => $item['title'] ?? 'Untitled',
+        'is_active' => $item['is_active'] ?? 1,
       ]);
     }
   }
