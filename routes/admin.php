@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ResortController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Livewire\Backend\BookingInfo\BookingList;
+use App\Livewire\Backend\ContactInfo;
 use App\Livewire\Backend\Coupons\ManageCoupons;
 use App\Livewire\Backend\Dashboard;
 use App\Livewire\Backend\ManageContent\FeaturesImages;
@@ -96,6 +97,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
   // for payment route below
   Route::prefix('/payments')->name('payments.')->group(function () {
     Route::get('/', Payments::class)->name('index');
+  });
+
+
+  // for contact info
+  Route::prefix('/contact-info')->name('contact-info.')->group(function () {
+    Route::get('/', ContactInfo::class)->name('index');
   });
 
 

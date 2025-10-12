@@ -3,6 +3,11 @@
     max-width: 275px;
 }
 
+.card:hover {
+    transform: translateY(-3px);
+    transition: all 0.3s ease;
+}
+
 
 .view-bills {
     font-weight: 550;
