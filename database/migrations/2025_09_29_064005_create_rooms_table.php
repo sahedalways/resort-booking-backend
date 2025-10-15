@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('package_name')->nullable();
             $table->string('desc')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_daylong')->default(false);
             $table->timestamps();
         });
     }

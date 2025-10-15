@@ -16,4 +16,15 @@ class RoomController extends BaseController
 
         return view('livewire.backend.manage-room.show', compact('room'));
     }
+
+
+
+
+    public function daylongShow($id)
+    {
+        $daylongData = Room::with(['images', 'resort', 'services.service', 'rateDetails'])->findOrFail($id);
+
+
+        return view('livewire.backend.manage-daylong.show', compact('daylongData'));
+    }
 }

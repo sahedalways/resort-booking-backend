@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Backend\ManageRoom;
+namespace App\Livewire\Backend\ManageDaylong;
 
 use App\Livewire\Backend\Components\BaseComponent;
 use App\Models\Room;
@@ -8,28 +8,23 @@ use Livewire\WithFileUploads;
 use App\Services\RoomManage\RoomManageService;
 
 
-class ManageRoom extends BaseComponent
+class ManageDaylong extends BaseComponent
 {
     public $search;
     public $items;
     public $itemId;
     public $resorts = [];
-    public $bedTypes = [];
-    public $viewTypes = [];
     public $serviceTypes = [];
     public $item;
 
     public $resort_id;
-    public $name;
+    public $name = 'Day Long';
+    public $is_daylong = 1;
+    public $capacity_type = 'none';
     public $desc;
-    public $bed_type_id;
-    public $area;
-    public $view_type_id;
     public $price;
-    public $adult_cap = 1;
-    public $child_cap = 0;
-    public $price_per;
-    public $package_name;
+
+    public $price_per =  'Per Person';
     public $is_active = true;
 
     public $editMode = false;
@@ -44,7 +39,6 @@ class ManageRoom extends BaseComponent
     public $imageInputs = [0];
 
     public $roomServices = [];
-
 
     public $roomServicesInputs = [0];
 
@@ -65,16 +59,10 @@ class ManageRoom extends BaseComponent
     public function getRules()
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
             'desc' => 'required|string|max:255',
-            'bed_type_id' => 'required|exists:room_bed_types,id',
-            'view_type_id' => 'required|exists:room_view_types,id',
-            'area' => 'required|numeric|min:0',
             'price' => 'required|numeric|min:0',
-            'adult_cap' => 'required|integer|min:1',
-            'child_cap' => 'required|integer|min:0',
-            'price_per' => 'required|string|max:255',
-            'package_name' => 'required|string|max:255',
+            'price_per' => 'nullable|string|max:255',
             'is_active'  => 'boolean',
         ];
     }
@@ -84,8 +72,6 @@ class ManageRoom extends BaseComponent
     public function mount()
     {
         $this->resorts = $this->manageRoom->getResorts();
-        $this->bedTypes = $this->manageRoom->getBedTypes();
-        $this->viewTypes = $this->manageRoom->getViewTypes();
         $this->serviceTypes = $this->manageRoom->getServicesTypes();
         $this->loaded = collect();
         $this->loadMore();
@@ -94,11 +80,10 @@ class ManageRoom extends BaseComponent
 
     public function render()
     {
-        return view('livewire.backend.manage-room.manage-room', [
+        return view('livewire.backend.manage-daylong.manage-daylong', [
             'infos' => $this->loaded
         ]);
     }
-
 
 
     /* reset input file */
@@ -106,17 +91,11 @@ class ManageRoom extends BaseComponent
     {
         // Clear all input fields
         $this->name = null;
-        $this->bed_type_id = null;
         $this->itemId = null;
-        $this->view_type_id = null;
-        $this->area = null;
         $this->price = null;
+        $this->resort_id = null;
         $this->desc = null;
-        $this->adult_cap = 1;
-        $this->resort_id = 1;
-        $this->child_cap = 0;
         $this->price_per = null;
-        $this->package_name = null;
         $this->is_active = true;
         $this->images = [];
         $this->removedImages = [];
@@ -134,19 +113,15 @@ class ManageRoom extends BaseComponent
     {
         $this->validate($this->getRules());
 
-        $this->manageRoom->saveRoomsData([
+        $this->manageRoom->saveDayLongData([
             'resort_id' => $this->resort_id,
             'name' => $this->name,
-            'bed_type_id' => $this->bed_type_id,
-            'view_type_id' => $this->view_type_id,
-            'area' => $this->area,
             'price' => $this->price,
-            'adult_cap' => $this->adult_cap,
-            'child_cap' => $this->child_cap,
             'price_per' => $this->price_per,
-            'package_name' => $this->package_name,
             'is_active' => $this->is_active,
             'desc' => $this->desc,
+            'capacity_type' => $this->capacity_type,
+            'is_daylong' => $this->is_daylong,
         ]);
 
 
@@ -155,10 +130,9 @@ class ManageRoom extends BaseComponent
         $this->resetInputFields();
         $this->dispatch('closemodal');
 
-        $this->toast('Room info saved Successfully!', 'success');
+        $this->toast('Day-Long info saved Successfully!', 'success');
         $this->resetLoaded();
     }
-
 
 
 
@@ -168,20 +142,14 @@ class ManageRoom extends BaseComponent
         $this->item = $this->manageRoom->getRoomSingleData($id);
 
         if (!$this->item) {
-            $this->toast('Room info not found!', 'error');
+            $this->toast('Day-Long info not found!', 'error');
             return;
         }
 
         $this->resort_id = $this->item->resort_id;
         $this->name = $this->item->name;
-        $this->bed_type_id = $this->item->bed_type_id;
-        $this->view_type_id = $this->item->view_type_id;
-        $this->area = $this->item->area;
         $this->price = $this->item->price;
-        $this->adult_cap = $this->item->adult_cap;
-        $this->child_cap = $this->item->child_cap;
         $this->price_per = $this->item->price_per;
-        $this->package_name = $this->item->package_name;
         $this->desc = $this->item->desc;
         $this->is_active = (bool) $this->item->is_active;
     }
@@ -191,22 +159,15 @@ class ManageRoom extends BaseComponent
         $this->validate();
 
         if (!$this->item) {
-            $this->toast('Room info not found!', 'error');
+            $this->toast('Day-Long info not found!', 'error');
             return;
         }
 
 
-        $this->manageRoom->updateRoomSingleData($this->item, [
+        $this->manageRoom->updateDayLongSingleData($this->item, [
             'resort_id'   => $this->resort_id,
-            'name'        => $this->name,
-            'bed_type_id' => $this->bed_type_id,
-            'view_type_id' => $this->view_type_id,
-            'area'        => $this->area,
             'price'       => $this->price,
-            'adult_cap'   => $this->adult_cap,
-            'child_cap'   => $this->child_cap,
             'price_per'   => $this->price_per,
-            'package_name' => $this->package_name,
             'desc' => $this->desc,
             'is_active' => $this->is_active,
         ]);
@@ -216,7 +177,7 @@ class ManageRoom extends BaseComponent
 
 
         $this->dispatch('closemodal');
-        $this->toast('Room info has been updated successfully!', 'success');
+        $this->toast('Day-Long info has been updated successfully!', 'success');
         $this->resetLoaded();
     }
 
@@ -236,11 +197,8 @@ class ManageRoom extends BaseComponent
     {
         if (!$this->hasMore) return;
 
-        $query = Room::with(['resort', 'images', 'bedType', 'viewType']);
-
-        if ($this->search && $this->search != '') {
-            $query->where('name', 'like', '%' . $this->search . '%');
-        }
+        $query = Room::with(['resort', 'images'])
+            ->where('is_daylong', true);
 
         $query->where(function ($q) {
             $q->where('name', 'like', '%' . $this->search . '%')
@@ -288,7 +246,7 @@ class ManageRoom extends BaseComponent
         $this->manageRoom->deleteRoom($id);
 
 
-        $this->toast('Room info has been deleted!', 'success');
+        $this->toast('Day-Long info has been deleted!', 'success');
         $this->resetLoaded();
     }
 
@@ -299,7 +257,7 @@ class ManageRoom extends BaseComponent
         $item = $this->manageRoom->getRoomSingleData($id);
 
         if (!$item) {
-            $this->toast('Room not found!', 'error');
+            $this->toast('Day-Long not found!', 'error');
             return;
         }
 
@@ -428,7 +386,7 @@ class ManageRoom extends BaseComponent
         $this->dispatch('closemodal');
 
 
-        $this->toast('Room services saved successfully!', 'success');
+        $this->toast('Day-Long services saved successfully!', 'success');
         $this->resetLoaded();
     }
 
@@ -493,7 +451,7 @@ class ManageRoom extends BaseComponent
         $this->dispatch('closemodal');
 
 
-        $this->toast('Room rate details saved successfully!', 'success');
+        $this->toast('Day-Long rate details saved successfully!', 'success');
         $this->resetLoaded();
     }
 }

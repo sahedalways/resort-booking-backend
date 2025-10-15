@@ -8,6 +8,7 @@ use App\Livewire\Backend\ContactInfo;
 use App\Livewire\Backend\Coupons\ManageCoupons;
 use App\Livewire\Backend\Dashboard;
 use App\Livewire\Backend\ManageContent\FeaturesImages;
+use App\Livewire\Backend\ManageDaylong\ManageDaylong;
 use App\Livewire\Backend\ManageEvent\EventHero;
 use App\Livewire\Backend\ManageEvent\EventServices;
 use App\Livewire\Backend\ManageResort\ManageFacilities;
@@ -81,6 +82,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
     Route::get('/room/{id}', [RoomController::class, 'show'])->name('room.show');
   });
 
+
+
+  // manage daylong routes
+  Route::prefix('/daylong-manage')->name('daylong-manage.')->group(function () {
+    Route::get('/', ManageDaylong::class)->name('index');
+    Route::get('/daylong/{id}', [RoomController::class, 'daylongShow'])->name('daylong.show');
+  });
 
 
 

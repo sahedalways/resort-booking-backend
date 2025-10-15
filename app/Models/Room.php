@@ -19,6 +19,7 @@ class Room extends Model
         'package_name',
         'desc',
         'is_active',
+        'is_daylong',
     ];
 
     public function resort()

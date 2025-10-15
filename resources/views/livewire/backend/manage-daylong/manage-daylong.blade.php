@@ -1,12 +1,12 @@
 <div>
     <div class="row align-items-center justify-content-between mb-4">
         <div class="col">
-            <ces class="fw-500 text-white">Rooms Management</ces>
+            <ces class="fw-500 text-white">Day-Long Management</ces>
         </div>
         <div class="col-auto">
             <a data-bs-toggle="modal" data-bs-target="#addRoom" wire:click="resetInputFields"
                 class="btn btn-icon btn-3 btn-white text-primary mb-0">
-                <i class="fa fa-plus me-2"></i> Add New Room
+                <i class="fa fa-plus me-2"></i> Add New Day Long Service
             </a>
         </div>
     </div>
@@ -16,7 +16,7 @@
                 <div class="card-header p-4">
                     <div class="row">
                         <div class="col-md-12" wire:ignore>
-                            <input type="text" class="form-control" placeholder="Search by room name or resort name."
+                            <input type="text" class="form-control" placeholder="Search by resort name."
                                 wire:model="search" />
 
                             <button type="button" wire:click="searchRoom" class="btn btn-primary mt-2">
@@ -34,7 +34,6 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xs opacity-7">#</th>
-                                    <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">Name</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">Resort</th>
 
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">Price</th>
@@ -53,9 +52,7 @@
                                 @forelse($infos as $index => $row)
                                     <tr>
                                         <td>{{ $i++ }}</td>
-                                        <td>
-                                            <p class="text-sm font-weight-bold mb-0">{{ $row->name }}</p>
-                                        </td>
+
 
                                         <td>
                                             <p class="text-sm text-muted mb-0">{{ $row->resort->name ?? 'N/A' }}</p>
@@ -91,7 +88,7 @@
                                                 class="badge badge-xs badge-secondary fw-600 text-xs"
                                                 style="color: #000;" onmouseover="this.style.color='#fff'"
                                                 onmouseout="this.style.color='#000'">
-                                                Manage Room Services
+                                                Manage Services
                                             </a>
 
 
@@ -106,7 +103,7 @@
                                             </a>
 
                                             <!-- View Details -->
-                                            <a href="{{ route('admin.room-manage.room.show', $row->id) }}"
+                                            <a href="{{ route('admin.daylong-manage.daylong.show', $row->id) }}"
                                                 class="badge badge-xs fw-600 text-xs"
                                                 style="background-color: #5acaa3; color: #000; text-decoration: none; transition: 0.3s;"
                                                 onmouseover="this.style.backgroundColor='#3aa57a'; this.style.color='#fff';"
@@ -132,7 +129,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="12" class="text-center">No rooms found!</td>
+                                        <td colspan="12" class="text-center">No services found!</td>
                                     </tr>
                                 @endforelse
 
@@ -162,7 +159,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title fw-600" id="addRoom">Add Room</h6>
+                    <h6 class="modal-title fw-600" id="addRoom">Add Day-Long Service</h6>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
                         <i class="fas fa-times" style="color:black;"></i>
                     </button>
@@ -175,12 +172,13 @@
                             {{-- Name --}}
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter Name"
-                                    wire:model="name" required>
+                                <input type="text" class="form-control" placeholder="Day Long" wire:model="name"
+                                    required readonly>
                                 @error('name')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
 
 
 
@@ -207,43 +205,8 @@
                                 @enderror
                             </div>
 
-                            {{-- Bed Type --}}
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label">Bed Type <span class="text-danger">*</span></label>
-                                <select class="form-control" wire:model="bed_type_id">
-                                    <option value="">-- Select Bed Type --</option>
-                                    @foreach ($bedTypes as $bed)
-                                        <option value="{{ $bed->id }}">{{ $bed->type_name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('bed_type_id')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
 
-                            {{-- Area --}}
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label">Area (sqm) <span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" wire:model="area"
-                                    placeholder="Enter Area">
-                                @error('area')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
 
-                            {{-- View Type --}}
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label">View Type <span class="text-danger">*</span></label>
-                                <select class="form-control" wire:model="view_type_id">
-                                    <option value="">-- Select View Type --</option>
-                                    @foreach ($viewTypes as $view)
-                                        <option value="{{ $view->id }}">{{ $view->type_name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('view_type_id')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
 
                             {{-- Price --}}
                             <div class="col-md-12 mb-2">
@@ -261,54 +224,12 @@
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Price Per <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" wire:model="price_per"
-                                    placeholder="Enter per price info">
+                                    placeholder="Per Person" readonly>
                                 @error('price_per')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
-
-
-                            {{-- Adult Capacity --}}
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">Adult Capacity <span class="text-danger">*</span></label>
-                                <select class="form-control" wire:model="adult_cap">
-                                    <option value="">-- Select Adult Capacity --</option>
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                                @error('adult_cap')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            {{-- Child Capacity --}}
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">Child Capacity <span class="text-danger">*</span></label>
-                                <select class="form-control" wire:model="child_cap">
-                                    <option value="">-- Select Child Capacity --</option>
-                                    @for ($i = 0; $i <= 5; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                                @error('child_cap')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-
-
-
-                            {{-- Package Name --}}
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label">Package Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" wire:model="package_name"
-                                    placeholder="Enter Package Name">
-                                @error('package_name')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
 
                             <div class="col-md-12 mb-1">
                                 <div class="form-check form-switch">
@@ -345,7 +266,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title fw-600" id="editRoom">Edit Room</h6>
+                    <h6 class="modal-title fw-600" id="editRoom">Edit Day-Long Service</h6>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
                         <i class="fas fa-times" style="color:black;"></i>
                     </button>
@@ -358,12 +279,14 @@
                             {{-- Name --}}
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter Name"
-                                    wire:model="name" required>
+                                <input type="text" class="form-control" placeholder="Day Long" wire:model="name"
+                                    required readonly>
                                 @error('name')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
+
 
 
                             <div class="col-md-12 mb-2">
@@ -389,43 +312,8 @@
                                 @enderror
                             </div>
 
-                            {{-- Bed Type --}}
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label">Bed Type <span class="text-danger">*</span></label>
-                                <select class="form-control" wire:model="bed_type_id">
-                                    <option value="">-- Select Bed Type --</option>
-                                    @foreach ($bedTypes as $bed)
-                                        <option value="{{ $bed->id }}">{{ $bed->type_name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('bed_type_id')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
 
-                            {{-- Area --}}
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label">Area (sqm) <span class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" wire:model="area"
-                                    placeholder="Enter Area">
-                                @error('area')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
 
-                            {{-- View Type --}}
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label">View Type <span class="text-danger">*</span></label>
-                                <select class="form-control" wire:model="view_type_id">
-                                    <option value="">-- Select View Type --</option>
-                                    @foreach ($viewTypes as $view)
-                                        <option value="{{ $view->id }}">{{ $view->type_name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('view_type_id')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
 
                             {{-- Price --}}
                             <div class="col-md-12 mb-2">
@@ -443,7 +331,7 @@
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Price Per <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" wire:model="price_per"
-                                    placeholder="Enter per price info">
+                                    placeholder="Per Person" readonly>
                                 @error('price_per')
                                     <span class="error text-danger">{{ $message }}</span>
                                 @enderror
@@ -451,46 +339,6 @@
 
 
 
-                            {{-- Adult Capacity --}}
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">Adult Capacity <span class="text-danger">*</span></label>
-                                <select class="form-control" wire:model="adult_cap">
-                                    <option value="">-- Select Adult Capacity --</option>
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                                @error('adult_cap')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            {{-- Child Capacity --}}
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">Child Capacity <span class="text-danger">*</span></label>
-                                <select class="form-control" wire:model="child_cap">
-                                    <option value="">-- Select Child Capacity --</option>
-                                    @for ($i = 0; $i <= 5; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                                @error('child_cap')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-
-
-
-                            {{-- Package Name --}}
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label">Package Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" wire:model="package_name"
-                                    placeholder="Enter Package Name">
-                                @error('package_name')
-                                    <span class="error text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
 
                             <div class="col-md-12 mb-1">
                                 <div class="form-check form-switch">
@@ -612,7 +460,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title fw-600"> Manage Room Services</h6>
+                    <h6 class="modal-title fw-600"> Manage Services</h6>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border:none;">
                         <i class="fas fa-times" style="color:black;"></i>
                     </button>
@@ -760,7 +608,7 @@
 
 <script>
     Livewire.on('confirmDelete', id => {
-        if (confirm("Are you sure you want to delete this room? This action cannot be undone.")) {
+        if (confirm("Are you sure you want to delete this Day-Long service? This action cannot be undone.")) {
             Livewire.dispatch('deleteRoom', {
                 id: id
             });

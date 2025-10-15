@@ -29,6 +29,15 @@ class RoomManageRepository
   }
 
 
+  public function getAllDayLongData()
+  {
+    return Room::with(['resort', 'images', 'bedType', 'viewType'])
+      ->where('is_daylong', true)
+      ->latest()
+      ->get();
+  }
+
+
   public function getRoomSingleData(int $id): ?Room
   {
 
@@ -49,6 +58,22 @@ class RoomManageRepository
       'child_cap'   => $data['child_cap'] ?? $item->child_cap,
       'price_per'   => $data['price_per'] ?? $item->price_per,
       'package_name' => $data['package_name'] ?? $item->package_name,
+      'desc' => $data['desc'] ?? $item->desc,
+      'is_active' => $data['is_active'] ?? $item->is_active,
+    ]);
+
+
+    return $item->fresh();
+  }
+
+
+
+  public function updateDayLongSingleData(Room $item, array $data): ?Room
+  {
+    $item->update([
+      'resort_id'   => $data['resort_id'] ?? $item->resort_id,
+      'price'       => $data['price'] ?? $item->price,
+      'price_per'   => $data['price_per'] ?? $item->price_per,
       'desc' => $data['desc'] ?? $item->desc,
       'is_active' => $data['is_active'] ?? $item->is_active,
     ]);
@@ -81,6 +106,31 @@ class RoomManageRepository
 
     return $item;
   }
+
+
+
+
+
+
+  public function saveDayLongData(array $data): ?Room
+  {
+    $item = new Room();
+
+    $item->resort_id    = $data['resort_id'] ?? null;
+    $item->name         = "Day Long";
+    $item->desc         = $data['desc'] ?? null;
+    $item->price        = $data['price'] ?? null;
+    $item->price_per    = "Per Person";
+    $item->is_active = $data['is_active'] ?? null;
+    $item->is_daylong = $data['is_daylong'] ?? 0;
+
+
+    $item->save();
+
+    return $item;
+  }
+
+
 
 
   public function deleteRoom(int $id)

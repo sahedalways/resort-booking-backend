@@ -108,6 +108,18 @@
 
 
                 <li class="nav-item">
+                    <a class="nav-link {{ Request::is('admin/daylong-manage*') ? 'active' : '' }}"
+                        href="{{ route('admin.daylong-manage.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="fas fa-sun text-warning text-sm me-2 opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Manage Day-Long</span>
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#roomManage"
                         class="nav-link {{ Request::is('admin/room-manage*') ? 'active' : '' }}"
                         aria-controls="roomManage" role="button" aria-expanded="false">
@@ -121,6 +133,7 @@
                     <div class="collapse {{ Request::is('admin/room-manage*') ? 'show' : '' }}" id="roomManage">
                         <ul class="nav ms-4">
                             <li class="nav-item">
+
                                 <a class="nav-link {{ Request::is('admin/room-manage') ? 'active' : '' }}"
                                     href="{{ route('admin.room-manage.index') }}">
                                     <i class="fas fa-door-open text-danger text-sm opacity-10"></i>
@@ -243,14 +256,6 @@
                         </ul>
                     </div>
                 </li>
-
-
-
-
-
-
-
-
 
 
 

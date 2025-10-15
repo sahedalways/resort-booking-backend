@@ -23,6 +23,12 @@ class RoomManageService
     return $this->repository->getAllRoomsData();
   }
 
+  public function getAllDayLongData()
+  {
+
+    return $this->repository->getAllDayLongData();
+  }
+
 
   public function getRoomSingleData(int $id): ?Room
   {
@@ -37,10 +43,23 @@ class RoomManageService
   }
 
 
+  public function updateDayLongSingleData(Room $item, array $data): Room
+  {
+    return $this->repository->updateDayLongSingleData($item, $data);
+  }
+
+
+
   public function saveRoomsData(array $data): Room
   {
 
     return $this->repository->saveRoomsData($data);
+  }
+
+  public function saveDayLongData(array $data): Room
+  {
+
+    return $this->repository->saveDayLongData($data);
   }
 
 
