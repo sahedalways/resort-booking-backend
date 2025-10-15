@@ -85,24 +85,18 @@ Route::middleware(['cors'])->group(function () {
         Route::prefix('profile')->group(function () {
             Route::controller(ProfileController::class)->group(function () {
                 // change avatar route
-                Route::post('change-avatar', 'changeAvatar');
+                Route::post('/change-avatar', 'changeAvatar');
 
                 // change profile data route
                 Route::post('/update', 'profileDataUpdate');
 
                 // change password
                 Route::post('/change-password', 'changePassword');
+
+                Route::get('/overview', 'getProfileOverview');
             });
         });
 
-
-
-        // booking related routes below
-        Route::prefix('booking/')->group(function () {
-            Route::controller(BookingController::class)->group(function () {
-                Route::get('history', 'getBookingHistory');
-            });
-        });
 
 
 

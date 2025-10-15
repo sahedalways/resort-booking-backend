@@ -17,6 +17,13 @@ class ProfileService
 
 
 
+  public function getProfileOverview($user)
+  {
+    return $this->repository->getProfileOverview($user);
+  }
+
+
+
   public function changeAvatar($user, $avatarFile)
   {
     return $this->repository->updateAvatar($user, $avatarFile);

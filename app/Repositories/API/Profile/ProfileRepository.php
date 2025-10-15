@@ -86,4 +86,21 @@ class ProfileRepository
     $user->password = $hashedPassword;
     return $user->save();
   }
+
+
+  public function getProfileOverview(User $user)
+  {
+    $profile = $user->profile;
+
+
+    $bookings = $user->bookings()
+      ->with('resort', 'room')
+      ->orderBy('created_at', 'desc')
+      ->get();
+
+    return [
+      'profile' => $profile,
+      'bookings' => $bookings,
+    ];
+  }
 }

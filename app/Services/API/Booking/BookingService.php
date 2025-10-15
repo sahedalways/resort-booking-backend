@@ -18,14 +18,6 @@ class BookingService
   }
 
 
-
-  public function getBookingHistory($user)
-  {
-    return $this->repository->getBookingHistory($user);
-  }
-
-
-
   public function createBooking(array $data)
   {
     DB::beginTransaction();

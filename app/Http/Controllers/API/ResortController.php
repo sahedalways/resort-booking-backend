@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Requests\Resort\StoreReviewRequest;
 use App\Http\Requests\SearchResortRequest;
-use App\Http\Requests\UpdateReviewRequest;
 use App\Models\Resort;
-use App\Models\Review;
 use Illuminate\Http\Request;
 
 
@@ -71,7 +68,7 @@ class ResortController extends BaseController
                 'additionalFacts',
                 'rooms' => function ($query) {
                     $query->where('is_active', true)
-                        ->select('id', 'resort_id', 'name', 'price', 'bed_type_id', 'area', 'view_type_id', 'adult_cap', 'child_cap', 'package_name', 'desc', 'is_active')
+                        ->select('id', 'resort_id', 'name', 'price', 'bed_type_id', 'area', 'view_type_id', 'adult_cap', 'child_cap', 'package_name', 'desc', 'is_active', 'is_daylong')
                         ->with([
                             'images:id,room_id,image',
                             'bedType:id,type_name',
@@ -125,7 +122,7 @@ class ResortController extends BaseController
                 },
                 'rooms' => function ($query) use ($requestedRooms, $resortId, $checkIn, $checkOut) {
                     $query->where('is_active', true)
-                        ->select('id', 'resort_id', 'name', 'price', 'bed_type_id', 'area', 'view_type_id', 'adult_cap', 'child_cap', 'package_name', 'desc', 'is_active')
+                        ->select('id', 'resort_id', 'name', 'price', 'bed_type_id', 'area', 'view_type_id', 'adult_cap', 'child_cap', 'package_name', 'desc', 'is_active', 'is_daylong')
                         ->with([
                             'images:id,room_id,image',
                             'bedType:id,type_name',

@@ -39,6 +39,17 @@ class BookingRepository
     ]);
 
 
+    $user = User::find($data['user_id']);
+    if ($user && !$user->profile) {
+      $user->profile()->create([
+        'gender'        => $data['gender'] ?? null,
+        'date_of_birth' => isset($data['dob'])
+          ? date('Y-m-d', strtotime($data['dob']))
+          : null,
+      ]);
+    }
+
+
     // dispatch(new SendBookingInfoJob($booking));
 
     return $booking;

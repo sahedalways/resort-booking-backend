@@ -43,6 +43,14 @@ class Resort extends Model
     }
 
 
+    public function highestRoomPrice()
+    {
+        return $this->rooms()
+            ->where('is_active', true)
+            ->max('price');
+    }
+
+
 
     public function transformForApiForSingleResort()
     {
@@ -77,6 +85,7 @@ class Resort extends Model
 
         // Lowest room price
         $this->lowest_price = $this->lowestRoomPrice();
+        $this->highest_price = $this->highestRoomPrice();
 
         // Rooms → transform
         $this->rooms->transform(function ($room) {
@@ -136,6 +145,7 @@ class Resort extends Model
 
         // Lowest room price
         $this->lowest_price = $this->lowestRoomPrice();
+        $this->highest_price = $this->highestRoomPrice();
 
         // Keep only necessary resort fields
         return [
@@ -146,6 +156,7 @@ class Resort extends Model
             'package_type' => $this->package_type,
             'facilities' => $this->facilities,
             'lowest_price' => $this->lowest_price,
+            'highest_price' => $this->highest_price,
             'images' => $this->images,
         ];
     }

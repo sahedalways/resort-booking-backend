@@ -22,8 +22,8 @@
 
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table align-items-center mb-0 text-center">
-                            <thead class="bg-light">
+                        <table class="table table-bordered text-center align-middle text-center">
+                            <thead class="table-light">
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>

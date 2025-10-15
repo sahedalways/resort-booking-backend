@@ -7,7 +7,7 @@ use App\Http\Requests\Profile\AvatarRequest;
 use App\Http\Requests\Profile\ChangePasswordRequest;
 use App\Http\Requests\Profile\ProfileUpdateRequest as ProfileProfileUpdateRequest;
 use App\Services\API\Profile\ProfileService;
-
+use Illuminate\Http\Request;
 
 class ProfileController extends BaseController
 {
@@ -90,6 +90,29 @@ class ProfileController extends BaseController
                 'message' => 'Something went wrong.',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+
+
+    public function getProfileOverview(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            $data = $this->profileService->getProfileOverview($user);
+
+            return $this->sendResponse($data, 'Profile overview fetched successfully.');
+        } catch (\Throwable $e) {
+            return $this->sendError(
+                'Something went wrong.',
+                [
+                    'exception' => $e->getMessage(),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile(),
+                ],
+                500
+            );
         }
     }
 }

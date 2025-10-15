@@ -30,8 +30,8 @@
 
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table align-items-center mb-0">
-                            <thead class="bg-light">
+                        <table class="table table-bordered text-center align-middle">
+                            <thead class="table-light">
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xs opacity-7">#</th>
                                     <th class="text-uppercase text-secondary text-xs opacity-7 ps-2">Resort</th>
