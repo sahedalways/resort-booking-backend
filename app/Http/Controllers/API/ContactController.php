@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Requests\ContactRequest;
-use App\Models\Contact;
-
+use App\Jobs\SendEventContactMessageJob;
+use App\Models\EventContact;
 
 class ContactController extends BaseController
 {
@@ -14,7 +14,12 @@ class ContactController extends BaseController
         $validated = $request->validated();
 
         // Save to database
-        $contact = Contact::create($validated);
+        $contact = EventContact::create($validated);
+
+
+        // if ($contact) {
+        //     SendEventContactMessageJob::dispatch($contact);
+        // }
 
         return response()->json([
             'success' => true,

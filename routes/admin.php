@@ -4,9 +4,9 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ResortController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Livewire\Backend\BookingInfo\BookingList;
-use App\Livewire\Backend\ContactInfo;
 use App\Livewire\Backend\Coupons\ManageCoupons;
 use App\Livewire\Backend\Dashboard;
+use App\Livewire\Backend\EventContactInfo;
 use App\Livewire\Backend\ManageContent\FeaturesImages;
 use App\Livewire\Backend\ManageDaylong\ManageDaylong;
 use App\Livewire\Backend\ManageEvent\EventHero;
@@ -109,8 +109,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
 
 
   // for contact info
-  Route::prefix('/contact-info')->name('contact-info.')->group(function () {
-    Route::get('/', ContactInfo::class)->name('index');
+  Route::prefix('/event-contact-info')->name('event-contact-info.')->group(function () {
+    Route::get('/', EventContactInfo::class)->name('index');
   });
 
 

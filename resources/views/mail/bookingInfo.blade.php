@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ $data['title'] ?? 'Password Reset Request' }}</title>
+    <title>{{ $data['title'] ?? 'New Booking Received' }}</title>
     <style>
         body {
             font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -50,25 +50,20 @@
             margin-bottom: 14px;
         }
 
-        .otp-box {
+        .booking-info {
             background-color: #f0f4f8;
             border-radius: 8px;
             padding: 20px;
-            text-align: center;
             margin: 25px 0;
         }
 
-        .otp-label {
-            color: #555555;
-            font-size: 0.9rem;
-            margin-bottom: 6px;
+        .info-row {
+            margin-bottom: 10px;
         }
 
-        .otp-code {
-            font-size: 2rem;
-            font-weight: bold;
+        .info-label {
+            font-weight: 600;
             color: #164f84;
-            letter-spacing: 4px;
         }
 
         .footer {
@@ -94,41 +89,40 @@
 <body>
     <div class="email-wrapper">
         <div class="email-header">
-            Password Reset – {{ siteSetting()->site_title ?? 'BookingXpart' }}
+            New Booking Notification – {{ siteSetting()->site_title ?? 'BookingXpart' }}
         </div>
 
         <div class="email-body">
-            <h2>Hello,</h2>
-            <p>
-                We received a request to reset the password for your
-                <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>
-                account ({{ $data['email'] ?? 'your email' }}).
-            </p>
+            <h2>Hello Admin,</h2>
+            <p>A new booking has been made on <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>.</p>
 
-            <p>{{ $data['body'] ?? 'Use the OTP below to reset your password:' }}</p>
-
-            <div class="otp-box">
-                <p class="otp-label">Your password reset OTP:</p>
-                <div class="otp-code">{{ $data['otp'] ?? '******' }}</div>
+            <div class="booking-info">
+                <div class="info-row"><span class="info-label">User:</span> {{ $data['user']->f_name }}
+                    {{ $data['user']->l_name }} ({{ $data['user']->email }})
+                </div>
+                <div class="info-row"><span class="info-label">Resort:</span> {{ $data['resort']->name }}</div>
+                <div class="info-row"><span class="info-label">Room:</span> {{ $data['room']->name }}</div>
+                <div class="info-row"><span class="info-label">Booking Dates:</span> {{ $data['booking']->start_date }}
+                    to
+                    {{ $data['booking']->end_date }}
+                </div>
+                <div class="info-row"><span class="info-label">Guests:</span> {{ $data['booking']->adult }} Adult(s),
+                    {{ $data['booking']->child }} Child(ren)
+                </div>
+                <div class="info-row"><span class="info-label">Amount:</span>
+                    ৳{{ number_format($data['booking']->amount, 2) }}
+                </div>
+                <div class="info-row"><span class="info-label">Additional Comment:</span>
+                    {{ $data['booking']->additional_comment ?? 'N/A' }}
+                </div>
             </div>
 
-            <p>
-                This OTP will expire in <strong>2 minutes</strong>. If you didn’t
-                request a password reset, please ignore this email or contact support
-                immediately.
-            </p>
-
-            <p>Thank you, <br /><strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong> Team</p>
+            <p>Please check the booking details in the admin panel for further actions.</p>
         </div>
 
         <div class="footer">
             <p>
-                Need help? Contact us at
-                <a href="mailto:support@bookingxpart.com">support@bookingxpart.com</a>
-            </p>
-            <p>
-                &copy; {{ date('Y') }}
-                <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>. All
+                &copy; {{ date('Y') }} <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>. All
                 rights reserved.
             </p>
             <p>

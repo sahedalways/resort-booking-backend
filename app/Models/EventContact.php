@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Contact extends Model
+class EventContact extends Model
 {
     protected $fillable = [
         'name',
@@ -14,5 +14,6 @@ class Contact extends Model
         'preferred_location',
         'budget',
         'message',
+        'is_read',
     ];
 }

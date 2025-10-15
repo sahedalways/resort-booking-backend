@@ -329,13 +329,19 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('admin/contact-info*') ? 'active' : '' }}"
-                        href="{{ route('admin.contact-info.index') }}">
+                    <a class="nav-link {{ Request::is('admin/event-contact-info*') ? 'active' : '' }}"
+                        href="{{ route('admin.event-contact-info.index') }}">
+
                         <div
                             class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
                             <i class="fa-solid fa-envelope text-primary text-sm opacity-10"></i>
                         </div>
-                        <span class="nav-link-text ms-1">Contact Us Info</span>
+
+                        <span class="nav-link-text ms-1">Event Inquiries</span>
+
+                        @if (isset($unreadContacts) && $unreadContacts > 0)
+                            <span class="badge bg-danger ms-auto">{{ $unreadContacts }}</span>
+                        @endif
                     </a>
                 </li>
 

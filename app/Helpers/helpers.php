@@ -87,4 +87,12 @@ if (!function_exists('siteSetting')) {
       }
     }
   }
+
+
+  if (!function_exists('getSiteEmail')) {
+    function getSiteEmail()
+    {
+      return \DB::table('site_settings')->value('site_email');
+    }
+  }
 }

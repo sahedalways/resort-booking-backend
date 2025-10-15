@@ -130,7 +130,7 @@
                 rights reserved.
             </p>
             <p>
-                <a href="https://www.bookingxpart.com" target="_blank">www.bookingxpart.com</a>
+                <a href="https://www.bookingxpart.org" target="_blank">www.bookingxpart.org</a>
             </p>
         </div>
     </div>

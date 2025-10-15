@@ -3,9 +3,9 @@
 namespace App\Livewire\Backend;
 
 use App\Livewire\Backend\Components\BaseComponent;
-use App\Models\Contact;
+use App\Models\EventContact;
 
-class ContactInfo extends BaseComponent
+class EventContactInfo extends BaseComponent
 {
     public $search;
     public $perPage = 10;
@@ -31,7 +31,7 @@ class ContactInfo extends BaseComponent
 
     public function render()
     {
-        return view('livewire.backend.contact-info', [
+        return view('livewire.backend.event-contact-info', [
             'infos' => $this->loaded
         ]);
     }
@@ -47,7 +47,7 @@ class ContactInfo extends BaseComponent
     {
         if (!$this->hasMore) return;
 
-        $query = Contact::query();
+        $query = EventContact::query();
 
         if ($this->search && $this->search != '') {
             $search = $this->search;
@@ -73,6 +73,8 @@ class ContactInfo extends BaseComponent
         if ($items->count()) {
             $this->lastId = $items->last()->id;
             $this->loaded = $this->loaded->merge($items);
+
+            EventContact::whereIn('id', $items->pluck('id'))->update(['is_read' => true]);
         }
     }
 
@@ -83,39 +85,5 @@ class ContactInfo extends BaseComponent
         $this->lastId = null;
         $this->hasMore = true;
         $this->loadMore();
-    }
-
-
-    // Edit contact info
-    public function edit($id)
-    {
-        $contact = Contact::findOrFail($id);
-
-        $this->contactId = $contact->id;
-        $this->name = $contact->name;
-        $this->phone = $contact->phone;
-        $this->date_of_function = $contact->date_of_function;
-        $this->gathering_size = $contact->gathering_size;
-        $this->preferred_location = $contact->preferred_location;
-        $this->budget = $contact->budget;
-        $this->message = $contact->message;
-
-        $this->editMode = true;
-    }
-
-
-
-    // Reset form fields
-    private function resetForm()
-    {
-        $this->contactId = null;
-        $this->name = null;
-        $this->phone = null;
-        $this->date_of_function = null;
-        $this->gathering_size = null;
-        $this->preferred_location = null;
-        $this->budget = null;
-        $this->message = null;
-        $this->editMode = false;
     }
 }
