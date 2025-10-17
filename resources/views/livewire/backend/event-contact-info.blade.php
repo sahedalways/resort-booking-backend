@@ -1,7 +1,7 @@
 <div>
     <div class="row align-items-center justify-content-between mb-4">
         <div class="col">
-            <h5 class="fw-500 text-white">Event Contact Info</h5>
+            <h5 class="fw-500 text-white">Contact Inquiries</h5>
         </div>
     </div>
 

@@ -109,7 +109,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'as' => 'a
 
 
   // for contact info
-  Route::prefix('/event-contact-info')->name('event-contact-info.')->group(function () {
+  Route::prefix('/contact-info')->name('contact-info.')->group(function () {
     Route::get('/', EventContactInfo::class)->name('index');
   });
 
