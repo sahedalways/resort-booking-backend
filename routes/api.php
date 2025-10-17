@@ -23,15 +23,15 @@ Route::get('/user', function (Request $request) {
 Route::middleware(['cors'])->group(function () {
     Route::controller(AuthController::class)->group(function () {
         // for authentication routes
-        Route::post('register', 'register');
-        Route::post('login', 'login');
-        Route::post('verify-email-otp', 'verifyEmailConfirmOTP');
-        Route::post('resend-otp', 'resendOtp');
+        Route::post('register', 'register')->middleware('throttle:5,1');
+        Route::post('login', 'login')->middleware('throttle:5,1');
+        Route::post('verify-email-otp', 'verifyEmailConfirmOTP')->middleware('throttle:5,1');
+        Route::post('resend-otp', 'resendOtp')->middleware('throttle:3,1');
 
         // for for forger password routes
-        Route::post('forgot-password', 'forgotPassword');
-        Route::post('forgot-password/match-otp', 'matchPincode');
-        Route::post('change-password', 'changePassword');
+        Route::post('forgot-password', 'forgotPassword')->middleware('throttle:5,1');
+        Route::post('forgot-password/match-otp', 'matchPincode')->middleware('throttle:5,1');
+        Route::post('change-password', 'changePassword')->middleware('throttle:5,1');
     });
 
 
@@ -65,7 +65,7 @@ Route::middleware(['cors'])->group(function () {
 
     // for review routes
     Route::controller(ReviewController::class)->group(function () {
-        Route::post('submit-reviews',  'submitReviews');
+        Route::post('submit-reviews',  'submitReviews')->middleware('throttle:3,1');
         Route::get('/get-reviews/{resort}', 'getReviews');
     });
 
@@ -85,13 +85,13 @@ Route::middleware(['cors'])->group(function () {
         Route::prefix('profile')->group(function () {
             Route::controller(ProfileController::class)->group(function () {
                 // change avatar route
-                Route::post('/change-avatar', 'changeAvatar');
+                Route::post('/change-avatar', 'changeAvatar')->middleware('throttle:5,1');
 
                 // change profile data route
-                Route::post('/update', 'profileDataUpdate');
+                Route::post('/update', 'profileDataUpdate')->middleware('throttle:5,1');
 
                 // change password
-                Route::post('/change-password', 'changePassword');
+                Route::post('/change-password', 'changePassword')->middleware('throttle:3,1');
 
                 Route::get('/overview', 'getProfileOverview');
             });
@@ -122,14 +122,14 @@ Route::middleware(['cors'])->group(function () {
 
         // for submit review routes
         Route::controller(ReviewController::class)->group(function () {
-            Route::post('submit-reviews',  'submitReviews');
+            Route::post('submit-reviews',  'submitReviews')->middleware('throttle:5,1');
             Route::put('update-review/{id}',  'updateReview');
             Route::delete('/delete-review/{id}',  'deleteReview');
         });
     });
 
     // for contact us route
-    Route::post('/save-contact', [ContactController::class, 'store']);
+    Route::post('/save-contact', [ContactController::class, 'store'])->middleware('throttle:2,1');
 });
 
 

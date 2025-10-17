@@ -25,7 +25,7 @@ class SendEventContactMessageJob implements ShouldQueue
     public function handle(): void
     {
         // Get support email from site settings
-        $supportEmail = SiteSetting::value('site_email');
+        $supportEmail = getSiteEmail();
         if (!$supportEmail) return;
 
         Mail::send('mail.eventContactMessage', [

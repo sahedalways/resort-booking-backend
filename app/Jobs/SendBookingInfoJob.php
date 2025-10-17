@@ -24,7 +24,7 @@ class SendBookingInfoJob implements ShouldQueue
 
     public function handle(): void
     {
-        $siteEmail = SiteSetting::value('site_email');
+        $siteEmail = getSiteEmail();
 
         $user = $this->booking->user;
         $resort = $this->booking->resort;
