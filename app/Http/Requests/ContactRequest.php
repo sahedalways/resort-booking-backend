@@ -16,8 +16,8 @@ class ContactRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
-            'email' => 'required|string|max:20',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|string|max:255',
             'date_of_function' => 'required|string|max:255',
             'gathering_size' => 'required|integer',
             'message' => 'nullable|string|max:1000',
