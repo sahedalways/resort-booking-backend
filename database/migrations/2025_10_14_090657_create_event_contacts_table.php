@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
+            $table->string('email');
             $table->string('date_of_function');
             $table->integer('gathering_size');
-            $table->string('preferred_location');
-            $table->string('budget');
             $table->text('message')->nullable();
             $table->boolean('is_read')->default(false);
             $table->timestamps();

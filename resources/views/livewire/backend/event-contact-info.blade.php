@@ -28,10 +28,9 @@
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Phone</th>
+                                    <th>Email</th>
                                     <th>Date of Function</th>
                                     <th>Gathering Size</th>
-                                    <th>Preferred Location</th>
-                                    <th>Budget</th>
                                     <th>Message</th>
                                     <th>Created At</th>
                                 </tr>
@@ -43,10 +42,9 @@
                                         <td>{{ $i++ }}</td>
                                         <td>{{ $row->name }}</td>
                                         <td>{{ $row->phone }}</td>
+                                        <td>{{ $row->email }}</td>
                                         <td>{{ $row->date_of_function }}</td>
                                         <td>{{ $row->gathering_size }}</td>
-                                        <td>{{ $row->preferred_location }}</td>
-                                        <td>{{ $row->budget }}</td>
                                         <td>{{ $row->message ?? '-' }}</td>
                                         <td>{{ $row->created_at?->format('d M, Y h:i A') }}</td>
                                     </tr>

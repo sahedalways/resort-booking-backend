@@ -124,7 +124,9 @@
         <div class="footer">
             <p>
                 Need help? Contact us at
-                <a href="mailto:support@bookingxpart.com">support@bookingxpart.com</a>
+                <a href="mailto:{{ getSiteEmail() ?? 'support@bookingxpart.com' }}">
+                    {{ getSiteEmail() ?? 'support@bookingxpart.com' }}
+                </a>
             </p>
             <p>
                 &copy; {{ date('Y') }}
@@ -132,7 +134,7 @@
                 rights reserved.
             </p>
             <p>
-                <a href="https://www.bookingxpart.org" target="_blank">www.bookingxpart.org</a>
+                <a href="https://www.bookingxpert.org" target="_blank">www.bookingxpert.org</a>
             </p>
         </div>
     </div>

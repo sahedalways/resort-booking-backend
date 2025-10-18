@@ -19,8 +19,8 @@ class EventContactInfo extends BaseComponent
     public $phone;
     public $date_of_function;
     public $gathering_size;
-    public $preferred_location;
-    public $budget;
+    public $email;
+
     public $message;
 
     public function mount()

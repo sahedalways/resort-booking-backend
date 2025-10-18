@@ -99,11 +99,10 @@
 
             <div class="contact-info">
                 <p><span class="label">Name:</span> {{ $contact->name }}</p>
+                <p><span class="label">Email:</span> {{ $contact->email }}</p>
                 <p><span class="label">Phone:</span> {{ $contact->phone }}</p>
                 <p><span class="label">Date of Function:</span> {{ $contact->date_of_function }}</p>
                 <p><span class="label">Gathering Size:</span> {{ $contact->gathering_size }}</p>
-                <p><span class="label">Preferred Location:</span> {{ $contact->preferred_location }}</p>
-                <p><span class="label">Budget:</span> {{ $contact->budget }}</p>
                 <p><span class="label">Message:</span> {{ $contact->message ?? '-' }}</p>
             </div>
 
@@ -113,8 +112,8 @@
         <div class="footer">
             <p>
                 Need help? Contact us at
-                <a href="mailto:{{ siteSetting()->site_email ?? 'support@bookingxpart.com' }}">
-                    {{ siteSetting()->site_email ?? 'support@bookingxpart.com' }}
+                <a href="mailto:{{ getSiteEmail() ?? 'support@bookingxpart.com' }}">
+                    {{ getSiteEmail() ?? 'support@bookingxpart.com' }}
                 </a>
             </p>
             <p>
@@ -123,7 +122,7 @@
                 reserved.
             </p>
             <p>
-                <a href="https://www.bookingxpart.org" target="_blank">www.bookingxpart.org</a>
+                <a href="https://www.bookingxpert.org" target="_blank">www.bookingxpert.org</a>
             </p>
         </div>
     </div>

@@ -11,9 +11,8 @@ class EventContact extends Model
         'phone',
         'date_of_function',
         'gathering_size',
-        'preferred_location',
-        'budget',
         'message',
+        'email',
         'is_read',
     ];
 }

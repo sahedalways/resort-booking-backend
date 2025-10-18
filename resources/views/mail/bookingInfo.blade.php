@@ -126,7 +126,7 @@
                 rights reserved.
             </p>
             <p>
-                <a href="https://www.bookingxpart.org" target="_blank">www.bookingxpart.org</a>
+                <a href="https://www.bookingxpert.org" target="_blank">www.bookingxpert.org</a>
             </p>
         </div>
     </div>

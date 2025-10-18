@@ -129,7 +129,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="12" class="text-center">No services found!</td>
+                                        <td colspan="12" class="text-center">No packages found!</td>
                                     </tr>
                                 @endforelse
 
