@@ -15,6 +15,7 @@ class ContactRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'userCaptcha' => 'required|string|max:5',
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'email' => 'required|string|max:255',
