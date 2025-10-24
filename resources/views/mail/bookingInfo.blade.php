@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ $data['title'] ?? 'New Booking Received' }}</title>
+    <title>New Booking Received</title>
     <style>
         body {
             font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -29,7 +29,6 @@
             padding: 20px;
             font-size: 1.1rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
         }
 
         .email-body {
@@ -97,37 +96,27 @@
             <p>A new booking has been made on <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>.</p>
 
             <div class="booking-info">
-                <div class="info-row"><span class="info-label">User:</span> {{ $data['user']->f_name }}
-                    {{ $data['user']->l_name }} ({{ $data['user']->email }})
-                </div>
-                <div class="info-row"><span class="info-label">Resort:</span> {{ $data['resort']->name }}</div>
-                <div class="info-row"><span class="info-label">Room:</span> {{ $data['room']->name }}</div>
-                <div class="info-row"><span class="info-label">Booking Dates:</span> {{ $data['booking']->start_date }}
-                    to
-                    {{ $data['booking']->end_date }}
-                </div>
-                <div class="info-row"><span class="info-label">Guests:</span> {{ $data['booking']->adult }} Adult(s),
-                    {{ $data['booking']->child }} Child(ren)
-                </div>
-                <div class="info-row"><span class="info-label">Amount:</span>
-                    ৳{{ number_format($data['booking']->amount, 2) }}
+                <div class="info-row"><span class="info-label">User:</span> {{ $user->f_name }} {{ $user->l_name }}
+                    ({{ $user->email }})</div>
+                <div class="info-row"><span class="info-label">Resort:</span> {{ $resort->name }}</div>
+                <div class="info-row"><span class="info-label">Room:</span> {{ $room->name }}</div>
+                <div class="info-row"><span class="info-label">Booking Dates:</span> {{ $booking->start_date }} to
+                    {{ $booking->end_date }}</div>
+                <div class="info-row"><span class="info-label">Guests:</span> {{ $booking->adult }} Adult(s),
+                    {{ $booking->child }} Child(ren)</div>
+                <div class="info-row"><span class="info-label">Amount:</span> ৳{{ number_format($booking->amount, 2) }}
                 </div>
                 <div class="info-row"><span class="info-label">Additional Comment:</span>
-                    {{ $data['booking']->additional_comment ?? 'N/A' }}
-                </div>
+                    {{ $booking->additional_comment ?? 'N/A' }}</div>
             </div>
 
             <p>Please check the booking details in the admin panel for further actions.</p>
         </div>
 
         <div class="footer">
-            <p>
-                &copy; {{ date('Y') }} <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>. All
-                rights reserved.
-            </p>
-            <p>
-                <a href="https://www.bookingxpert.org" target="_blank">www.bookingxpert.org</a>
-            </p>
+            <p>&copy; {{ date('Y') }} <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>. All
+                rights reserved.</p>
+            <p><a href="https://www.bookingxpert.org" target="_blank">www.bookingxpert.org</a></p>
         </div>
     </div>
 </body>

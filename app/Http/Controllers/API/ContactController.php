@@ -17,9 +17,9 @@ class ContactController extends BaseController
         $contact = EventContact::create($validated);
 
 
-        // if ($contact) {
-        //     SendEventContactMessageJob::dispatch($contact);
-        // }
+        if ($contact) {
+            SendEventContactMessageJob::dispatch($contact);
+        }
 
         return response()->json([
             'success' => true,

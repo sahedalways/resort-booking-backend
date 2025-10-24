@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\BookingInfo;
-use App\Models\SiteSetting;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -33,9 +32,9 @@ class SendBookingInfoJob implements ShouldQueue
         if (!$siteEmail) return;
 
         Mail::send('mail.bookingInfo', [
-            'user'   => $user,
-            'resort' => $resort,
-            'room'   => $room,
+            'user'    => $user,
+            'resort'  => $resort,
+            'room'    => $room,
             'booking' => $this->booking,
         ], function ($message) use ($siteEmail) {
             $message->to($siteEmail)
