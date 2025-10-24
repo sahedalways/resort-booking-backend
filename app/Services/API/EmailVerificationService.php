@@ -28,7 +28,7 @@ class EmailVerificationService
 
     try {
       // Dispatch email job to queue
-      dispatch(new SendOtpEmailJob($email, $name, $otp));
+      dispatch(new SendOtpEmailJob($email, $name, $otp))->onConnection('sync')->onQueue('urgent');
 
       return true;
     } catch (\Exception $e) {

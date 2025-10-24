@@ -50,7 +50,7 @@ class BookingRepository
     }
 
 
-    dispatch(new SendBookingInfoJob($booking));
+    dispatch(new SendBookingInfoJob($booking))->onConnection('sync')->onQueue('urgent');
 
     return $booking;
   }
