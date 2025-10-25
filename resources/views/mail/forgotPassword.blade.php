@@ -94,14 +94,14 @@
 <body>
     <div class="email-wrapper">
         <div class="email-header">
-            Password Reset – {{ siteSetting()->site_title ?? 'BookingXpart' }}
+            Password Reset – {{ siteSetting()->site_title ?? 'BookingXpert' }}
         </div>
 
         <div class="email-body">
             <h2>Hello,</h2>
             <p>
                 We received a request to reset the password for your
-                <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>
+                <strong>{{ siteSetting()->site_title ?? 'BookingXpert' }}</strong>
                 account ({{ $data['email'] ?? 'your email' }}).
             </p>
 
@@ -118,19 +118,19 @@
                 immediately.
             </p>
 
-            <p>Thank you, <br /><strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong> Team</p>
+            <p>Thank you, <br /><strong>{{ siteSetting()->site_title ?? 'BookingXpert' }}</strong> Team</p>
         </div>
 
         <div class="footer">
             <p>
                 Need help? Contact us at
-                <a href="mailto:{{ getSiteEmail() ?? 'support@bookingxpart.com' }}">
-                    {{ getSiteEmail() ?? 'support@bookingxpart.com' }}
+                <a href="mailto:{{ getSiteEmail() ?? 'support@BookingXpert.com' }}">
+                    {{ getSiteEmail() ?? 'support@BookingXpert.com' }}
                 </a>
             </p>
             <p>
                 &copy; {{ date('Y') }}
-                <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>. All
+                <strong>{{ siteSetting()->site_title ?? 'BookingXpert' }}</strong>. All
                 rights reserved.
             </p>
             <p>

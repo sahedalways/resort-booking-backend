@@ -90,7 +90,7 @@
 <body>
     <div class="email-wrapper">
         <div class="email-header">
-            New Contact Message – {{ siteSetting()->site_title ?? 'BookingXpart' }}
+            New Contact Message – {{ siteSetting()->site_title ?? 'BookingXpert' }}
         </div>
 
         <div class="email-body">
@@ -101,8 +101,8 @@
                 <p><span class="label">Name:</span> {{ $contact->name }}</p>
                 <p><span class="label">Email:</span> {{ $contact->email }}</p>
                 <p><span class="label">Phone:</span> {{ $contact->phone }}</p>
-                <p><span class="label">Date of Function:</span> {{ $contact->date_of_function }}</p>
-                <p><span class="label">Gathering Size:</span> {{ $contact->gathering_size }}</p>
+                <p><span class="label">Date of Function:</span> {{ $contact->date_of_function ?? 'N/A' }}</p>
+                <p><span class="label">Gathering Size:</span> {{ $contact->gathering_size ?? 'N/A' }}</p>
                 <p><span class="label">Message:</span> {{ $contact->message ?? '-' }}</p>
             </div>
 
@@ -112,13 +112,13 @@
         <div class="footer">
             <p>
                 Need help? Contact us at
-                <a href="mailto:{{ getSiteEmail() ?? 'support@bookingxpart.com' }}">
-                    {{ getSiteEmail() ?? 'support@bookingxpart.com' }}
+                <a href="mailto:{{ getSiteEmail() ?? 'support@BookingXpert.com' }}">
+                    {{ getSiteEmail() ?? 'support@BookingXpert.com' }}
                 </a>
             </p>
             <p>
                 &copy; {{ date('Y') }}
-                <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>. All rights
+                <strong>{{ siteSetting()->site_title ?? 'BookingXpert' }}</strong>. All rights
                 reserved.
             </p>
             <p>

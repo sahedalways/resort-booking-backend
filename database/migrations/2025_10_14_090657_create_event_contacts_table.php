@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('email');
-            $table->string('date_of_function');
-            $table->integer('gathering_size');
+            $table->string('date_of_function')->nullable();
+            $table->integer('gathering_size')->nullable();
             $table->text('message')->nullable();
             $table->boolean('is_read')->default(false);
             $table->timestamps();

@@ -94,14 +94,14 @@
 <body>
     <div class="email-wrapper">
         <div class="email-header">
-            Email Verification – {{ siteSetting()->site_title ?? 'BookingXpart' }}
+            Email Verification – {{ siteSetting()->site_title ?? 'BookingXpert' }}
         </div>
 
         <div class="email-body">
             <h2>Hello {{ $data['username'] ?? 'User' }},</h2>
             <p>
                 Thank you for joining
-                <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>!
+                <strong>{{ siteSetting()->site_title ?? 'BookingXpert' }}</strong>!
             </p>
             <p>
                 {{ $data['body'] ?? 'Please use the following verification code to confirm your email address:' }}
@@ -122,13 +122,13 @@
         <div class="footer">
             <p>
                 Need help? Contact us at
-                <a href="mailto:{{ getSiteEmail() ?? 'support@bookingxpart.com' }}">
-                    {{ getSiteEmail() ?? 'support@bookingxpart.com' }}
+                <a href="mailto:{{ getSiteEmail() ?? 'support@BookingXpert.com' }}">
+                    {{ getSiteEmail() ?? 'support@BookingXpert.com' }}
                 </a>
             </p>
             <p>
                 &copy; {{ date('Y') }}
-                <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>. All
+                <strong>{{ siteSetting()->site_title ?? 'BookingXpert' }}</strong>. All
                 rights reserved.
             </p>
             <p>

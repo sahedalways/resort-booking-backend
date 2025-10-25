@@ -88,12 +88,12 @@
 <body>
     <div class="email-wrapper">
         <div class="email-header">
-            New Booking Notification – {{ siteSetting()->site_title ?? 'BookingXpart' }}
+            New Booking Notification – {{ siteSetting()->site_title ?? 'BookingXpert' }}
         </div>
 
         <div class="email-body">
             <h2>Hello Admin,</h2>
-            <p>A new booking has been made on <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>.</p>
+            <p>A new booking has been made on <strong>{{ siteSetting()->site_title ?? 'BookingXpert' }}</strong>.</p>
 
             <div class="booking-info">
                 <div class="info-row"><span class="info-label">User:</span> {{ $user->f_name }} {{ $user->l_name }}
@@ -114,7 +114,7 @@
         </div>
 
         <div class="footer">
-            <p>&copy; {{ date('Y') }} <strong>{{ siteSetting()->site_title ?? 'BookingXpart' }}</strong>. All
+            <p>&copy; {{ date('Y') }} <strong>{{ siteSetting()->site_title ?? 'BookingXpert' }}</strong>. All
                 rights reserved.</p>
             <p><a href="https://www.bookingxpert.org" target="_blank">www.bookingxpert.org</a></p>
         </div>
