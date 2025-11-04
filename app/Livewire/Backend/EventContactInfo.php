@@ -22,6 +22,7 @@ class EventContactInfo extends BaseComponent
     public $email;
 
     public $message;
+    protected $listeners = ['deleteItem'];
 
     public function mount()
     {
@@ -85,5 +86,24 @@ class EventContactInfo extends BaseComponent
         $this->lastId = null;
         $this->hasMore = true;
         $this->loadMore();
+    }
+
+
+    public function deleteItem($id)
+    {
+
+        $item = EventContact::find($id);
+
+        if ($item) {
+
+            $item->delete();
+
+            $this->toast('Contact item has been deleted!', 'success');
+
+            $this->resetLoaded();
+        } else {
+            // Show error if item not found
+            $this->toast('Contact item not found!', 'error');
+        }
     }
 }

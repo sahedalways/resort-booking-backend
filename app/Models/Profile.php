@@ -34,7 +34,7 @@ class Profile extends Model
     public function getAvatarUrlAttribute()
     {
         return $this->avatar
-            ? getFileUrlForFrontend("{$this->avatar}")
-            : asset('assets/img/default-image.jpg');
+            ? getAvatarUrlForFrontend("{$this->avatar}")
+            : null;
     }
 }

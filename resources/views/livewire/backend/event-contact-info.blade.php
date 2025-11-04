@@ -32,7 +32,8 @@
                                     <th>Date of Function</th>
                                     <th>Gathering Size</th>
                                     <th>Message</th>
-                                    <th>Created At</th>
+                                    <th>Sent At</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -42,11 +43,32 @@
                                         <td>{{ $i++ }}</td>
                                         <td>{{ $row->name }}</td>
                                         <td>{{ $row->phone }}</td>
-                                        <td>{{ $row->email }}</td>
-                                        <td>{{ $row->date_of_function }}</td>
-                                        <td>{{ $row->gathering_size }}</td>
-                                        <td>{{ $row->message ?? '-' }}</td>
+                                        <td>{{ $row->email ?? 'N/A' }}</td>
+                                        <td>{{ $row->date_of_function ?? 'N/A' }}</td>
+                                        <td>{{ $row->gathering_size ?? 'N/A' }}</td>
+                                        <td>
+                                            <div x-data="{ expanded: false }">
+                                                <span
+                                                    x-text="expanded ? '{{ addslashes($row->message ?? '-') }}' : '{{ addslashes(strlen($row->message ?? '-') > 55 ? substr($row->message, 0, 5) . '...' : $row->message ?? '-') }}'"></span>
+                                                <template x-if="{{ strlen($row->message ?? '') }} > 55">
+                                                    <a href="javascript:;" @click="expanded = !expanded"
+                                                        class="btn btn-link p-0 mt-3"
+                                                        style="font-size: 0.75rem; text-decoration: underline;">
+                                                        <span x-text="expanded ? 'See less' : 'See more'"></span>
+                                                    </a>
+
+                                                </template>
+                                            </div>
+                                        </td>
+
                                         <td>{{ $row->created_at?->format('d M, Y h:i A') }}</td>
+
+                                        <td>
+                                            <a href="#" class="badge badge-xs badge-danger fw-600 text-xs"
+                                                wire:click.prevent="$dispatch('confirmDelete', {{ $row->id }})">
+                                                Delete
+                                            </a>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -71,3 +93,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    Livewire.on('confirmDelete', id => {
+        if (confirm("Are you sure you want to delete this contact? This action cannot be undone.")) {
+            Livewire.dispatch('deleteItem', {
+                id: id
+            });
+        }
+    });
+</script>

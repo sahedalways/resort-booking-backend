@@ -38,4 +38,17 @@ if (!function_exists('getFileUrl')) {
       return asset('storage/' . ltrim($path, '/'));
     }
   }
+
+
+  if (!function_exists('getAvatarUrlForFrontend')) {
+    function getAvatarUrlForFrontend(?string $path, string $default = null): string
+    {
+      if (!$path) {
+        return asset($default);
+      }
+
+
+      return asset('storage/' . ltrim($path, '/'));
+    }
+  }
 }
