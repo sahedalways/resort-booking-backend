@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\EventContact;
-use App\Models\SiteSetting;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,7 +24,13 @@ class SendEventContactMessageJob implements ShouldQueue
     public function handle(): void
     {
         // Get support email from site settings
-        $supportEmail = getSiteEmail();
+        if ($this->contact->isEvent) {
+            $supportEmail = getEventContactMail();
+        } else {
+            $supportEmail = getSiteEmail();
+        }
+
+
         if (!$supportEmail) return;
 
         Mail::send('mail.eventContactMessage', [

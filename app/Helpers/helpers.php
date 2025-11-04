@@ -95,4 +95,12 @@ if (!function_exists('siteSetting')) {
       return \DB::table('contact_info_settings')->value('email');
     }
   }
+
+
+  if (!function_exists('getEventContactMail')) {
+    function getEventContactMail()
+    {
+      return \DB::table('site_settings')->value('site_email');
+    }
+  }
 }

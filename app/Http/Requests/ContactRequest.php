@@ -18,7 +18,7 @@ class ContactRequest extends FormRequest
             'userCaptcha' => 'required|string|max:5',
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'email' => 'required|string|max:255',
+            'email' => 'nullable|string|max:255',
             'date_of_function' => 'nullable|string|max:255',
             'gathering_size' => 'nullable|integer',
             'message' => 'nullable|string|max:1000',

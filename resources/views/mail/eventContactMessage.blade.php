@@ -99,7 +99,7 @@
 
             <div class="contact-info">
                 <p><span class="label">Name:</span> {{ $contact->name }}</p>
-                <p><span class="label">Email:</span> {{ $contact->email }}</p>
+                <p><span class="label">Email:</span> {{ $contact->email ?? 'N/A' }}</p>
                 <p><span class="label">Phone:</span> {{ $contact->phone }}</p>
                 <p><span class="label">Date of Function:</span> {{ $contact->date_of_function ?? 'N/A' }}</p>
                 <p><span class="label">Gathering Size:</span> {{ $contact->gathering_size ?? 'N/A' }}</p>

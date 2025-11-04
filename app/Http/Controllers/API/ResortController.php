@@ -171,10 +171,10 @@ class ResortController extends BaseController
                     ]);
                 }
 
-                $resort = $resort->transformForApiForSingleResort();
+
                 return response()->json([
                     'success' => true,
-                    'data' => $resort,
+                    'data' => $resort->id,
                     'message' => 'Resort found successfully.'
                 ]);
             } else {
