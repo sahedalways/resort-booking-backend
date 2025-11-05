@@ -22,6 +22,10 @@ class Room extends Model
         'is_daylong',
     ];
 
+    protected $casts = [
+        'is_daylong' => 'boolean',
+    ];
+
     public function resort()
     {
         return $this->belongsTo(Resort::class);

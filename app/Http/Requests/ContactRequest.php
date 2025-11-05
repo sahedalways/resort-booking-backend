@@ -22,6 +22,7 @@ class ContactRequest extends FormRequest
             'date_of_function' => 'nullable|string|max:255',
             'gathering_size' => 'nullable|integer',
             'message' => 'nullable|string|max:1000',
+            'isEvent' => 'nullable|boolean',
         ];
     }
 }

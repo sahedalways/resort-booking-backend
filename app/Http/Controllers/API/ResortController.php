@@ -105,8 +105,6 @@ class ResortController extends BaseController
     }
 
 
-
-
     public function searchResort(SearchResortRequest $request)
     {
         try {
