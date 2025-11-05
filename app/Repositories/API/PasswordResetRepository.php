@@ -11,7 +11,7 @@ class PasswordResetRepository
     return PasswordResetToken::updateOrCreate(
       ['email' => $email],
       // ['token' => $otp, 'created_at' => now()]
-      ['token' => 123456, 'created_at' => now()]
+      ['token' => $otp, 'created_at' => now()]
     );
   }
 

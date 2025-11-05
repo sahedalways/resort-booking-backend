@@ -101,26 +101,28 @@ class AuthController extends BaseController
 
     public function verifyEmailConfirmOTP(RegisterEmailConfirmOTPRequest $request)
     {
-        $request->validated();
+        try {
+            $request->validated();
 
+            $user = $this->emailVerificationService->verifyOtp($request->email, $request->otp);
 
-        $user =  $this->emailVerificationService->verifyOtp($request->email, $request->otp);
+            $token = $user->createToken('Personal Access Token')->plainTextToken;
+            $profile = $user->profile;
 
-        $token = $user->createToken('Personal Access Token')->plainTextToken;
-
-        $profile = $user->profile;
-
-
-        return $this->sendResponse([
-            'token'     => $token,
-            'id'        => $user->id,
-            'f_name'    => $user->f_name,
-            'l_name'    => $user->l_name,
-            'email'     => $user->email,
-            'phone_no'  => $user->phone_no,
-            'user_type' => $user->user_type,
-            'profile'   => $profile,
-        ], 'Email verified successfully.');
+            return $this->sendResponse([
+                'token'     => $token,
+                'id'        => $user->id,
+                'f_name'    => $user->f_name,
+                'l_name'    => $user->l_name,
+                'email'     => $user->email,
+                'phone_no'  => $user->phone_no,
+                'user_type' => $user->user_type,
+                'profile'   => $profile,
+            ], 'Email verified successfully.');
+        } catch (\Exception $e) {
+            // Return error message to frontend
+            return $this->sendError($e->getMessage(), [], 400);
+        }
     }
 
 

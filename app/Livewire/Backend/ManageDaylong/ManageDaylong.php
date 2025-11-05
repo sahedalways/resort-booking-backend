@@ -369,13 +369,15 @@ class ManageDaylong extends BaseComponent
     public function saveRoomService()
     {
 
-        $this->validate([
-            'roomServices' => 'required|array',
-            'roomServices.*' => 'required|distinct',
-        ], [
-            'roomServices.*.distinct' => 'Duplicate services are not allowed.',
-            'roomServices.*.required' => 'Please select a service.',
-        ]);
+        if (!empty($this->roomServices)) {
+            $this->validate([
+                'roomServices' => 'array',
+                'roomServices.*' => 'required|distinct',
+            ], [
+                'roomServices.*.distinct' => 'Duplicate services are not allowed.',
+                'roomServices.*.required' => 'Please select a service.',
+            ]);
+        }
 
         $this->manageRoom->saveRoomServices($this->itemId, $this->roomServices);
 
