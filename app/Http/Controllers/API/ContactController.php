@@ -15,10 +15,10 @@ class ContactController extends BaseController
 
         // Save to database
         $contact = EventContact::create($validated);
-
+        $isEvent = $request->input('isEvent', false);
 
         if ($contact) {
-            SendEventContactMessageJob::dispatch($contact);
+            SendEventContactMessageJob::dispatch($contact, $isEvent);
         }
 
         return response()->json([

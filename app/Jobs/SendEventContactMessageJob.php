@@ -15,29 +15,31 @@ class SendEventContactMessageJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected EventContact $contact;
-
-    public function __construct(EventContact $contact)
+    protected bool $isEvent;
+    public function __construct(EventContact $contact, bool $isEvent = false)
     {
         $this->contact = $contact;
+        $this->isEvent = $isEvent;
     }
-
     public function handle(): void
     {
-        // Get support email from site settings
-        if ($this->contact->isEvent) {
-            $supportEmail = getEventContactMail();
-        } else {
-            $supportEmail = getSiteEmail();
-        }
 
+        $supportEmail = $this->isEvent
+            ? getEventContactMail()
+            : getSiteEmail();
 
         if (!$supportEmail) return;
 
+        $subject = $this->isEvent
+            ? 'New Event Contact Message Received'
+            : 'New Contact Message Received';
+
         Mail::send('mail.eventContactMessage', [
             'contact' => $this->contact,
-        ], function ($message) use ($supportEmail) {
+            'isEvent' => $this->isEvent,
+        ], function ($message) use ($supportEmail, $subject) {
             $message->to($supportEmail)
-                ->subject('New Event Contact Message Received');
+                ->subject($subject);
         });
     }
 }
